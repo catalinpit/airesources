@@ -1,0 +1,47 @@
+---
+import ResourceCard from './resource-card.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  items: Array<{
+    name: string;
+    description: string;
+    link: string;
+    iconUrl: string;
+  }>;
+  categorySlug: string;
+}
+
+const { title, description, items, categorySlug } = Astro.props;
+---
+
+<section class="space-y-6 p-10 w-full bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
+  <div class="flex justify-between items-center">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
+        {title}
+      </h2>
+      <p class="text-gray-600 dark:text-gray-300">
+        {description}
+      </p>
+    </div>
+    <a 
+      href={`/category/${categorySlug}`}
+      class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
+    >
+      View all
+    </a>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    {items.slice(0, 5).map((item) => (
+      <ResourceCard
+        name={item.name}
+        description={item.description}
+        link={item.link}
+        iconUrl={item.iconUrl}
+      />
+    ))}
+  </div>
+</section> 

@@ -1,0 +1,66 @@
+---
+import '../../styles/global.css';
+import ThemeToggle from '../../components/theme-toggle.astro';
+import { categories } from '../../data/categories';
+
+export async function getStaticPaths() {
+  return categories.map(category => ({
+    params: { slug: category.categorySlug },
+    props: { category }
+  }));
+}
+
+const { category } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{category.title} - AI Resources Directory</title>
+	</head>
+
+	<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+		<ThemeToggle />
+		
+		<main class="container mx-auto px-4 py-8">
+			<header class="text-center mb-12">
+				<a 
+					href="/" 
+					class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mb-8"
+				>
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+						<path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+					</svg>
+					Back to Directory
+				</a>
+				<h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+					{category.title}
+				</h1>
+				<p class="text-xl text-gray-600 dark:text-gray-300">
+					{category.description}
+				</p>
+			</header>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+				{category.items.map((item) => (
+					<a 
+						href={item.link}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow duration-200"
+					>
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+							{item.name}
+						</h2>
+						<p class="text-sm text-gray-600 dark:text-gray-300">
+							{item.description}
+						</p>
+					</a>
+				))}
+			</div>
+		</main>
+	</body>
+</html> 
