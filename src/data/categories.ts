@@ -3,6 +3,8 @@ interface CategoryItem {
   description: string;
   link: string;
   iconUrl: string;
+  previewImage?: string;
+  type?: string;
 }
 
 interface Category {
@@ -23,24 +25,23 @@ export const categories: Category[] = [
         description: "AI-powered code editor with built-in AI assistance",
         link: "https://cursor.sh",
         iconUrl: "https://www.cursor.com/favicon.ico",
+        type: "editor",
+        previewImage: "https://cursor.sh/cursor-hero.png",
       },
       {
         name: "Visual Studio Code",
         description: "Popular code editor with extensive AI extensions",
         link: "https://code.visualstudio.com",
         iconUrl: "https://code.visualstudio.com/favicon.ico",
+        type: "editor",
+        previewImage:
+          "https://code.visualstudio.com/assets/home/home-screenshot-win.png",
       },
       {
         name: "JetBrains AI Assistant",
         description: "AI coding assistant integrated into JetBrains IDEs",
         link: "https://www.jetbrains.com/ai/",
         iconUrl: "https://www.jetbrains.com/favicon.ico",
-      },
-      {
-        name: "GitHub Copilot",
-        description: "AI pair programmer that works in your editor",
-        link: "https://github.com/features/copilot",
-        iconUrl: "https://github.com/favicon.ico",
       },
       {
         name: "Amazon CodeWhisperer",
@@ -55,10 +56,49 @@ export const categories: Category[] = [
         iconUrl: "https://www.tabnine.com/favicon.ico",
       },
       {
-        name: "Kite",
-        description: "AI-powered code completion for Python",
-        link: "https://kite.com",
-        iconUrl: "https://kite.com/favicon.ico",
+        name: "Windsurf IDE",
+        description:
+          "The first agentic IDE with AI flows and deep contextual awareness",
+        link: "https://codeium.com/windsurf",
+        iconUrl: "https://codeium.com/favicon.ico",
+        type: "editor",
+        previewImage: "https://codeium.com/windsurf-hero.png",
+      },
+    ],
+  },
+  {
+    title: "Extensions",
+    description: "AI-powered extensions and plugins for your favorite editors",
+    categorySlug: "extensions",
+    items: [
+      {
+        name: "GitHub Copilot",
+        description: "AI pair programmer that works in your editor",
+        link: "https://github.com/features/copilot",
+        iconUrl: "https://github.com/favicon.ico",
+        type: "extension",
+      },
+      {
+        name: "Cline",
+        description:
+          "Open-source collaborative AI coding agent with frontier model access",
+        link: "https://cline.bot",
+        iconUrl: "https://cline.bot/favicon.ico",
+        type: "extension",
+      },
+      {
+        name: "Zencoder AI",
+        description: "AI code completion and refactoring assistant",
+        link: "https://zencoder.ai",
+        iconUrl: "https://zencoder.ai/favicon.ico",
+        type: "extension",
+      },
+      {
+        name: "Sourcegraph Cody",
+        description: "AI code assistant powered by semantic code search",
+        link: "https://about.sourcegraph.com/cody",
+        iconUrl: "https://sourcegraph.com/favicon.ico",
+        type: "extension",
       },
     ],
   },

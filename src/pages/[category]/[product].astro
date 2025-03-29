@@ -1,0 +1,99 @@
+---
+import '../../styles/global.css';
+import { categories } from '../../data/categories';
+import ThemeToggle from '../../components/theme-toggle.astro';
+
+export async function getStaticPaths() {
+  return categories.flatMap(category => 
+    category.items.map(item => ({
+      params: {
+        category: category.categorySlug,
+        product: item.name.toLowerCase().replace(/\s+/g, '-'),
+      },
+      props: {
+        category,
+        item,
+      },
+    }))
+  );
+}
+
+const { category, item } = Astro.props;
+
+const tags = [
+  { label: 'design', href: '#' },
+  { label: item.type || 'tool', href: '#' },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{item.name} - AI Resources Directory</title>
+  </head>
+
+  <body class="bg-neutral-100 dark:bg-neutral-900 min-h-screen">
+    <ThemeToggle />
+    
+    <main class="container mx-auto px-4 py-8">
+      <nav class="mb-8">
+        <div class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+          <a href="/" class="hover:text-neutral-900 dark:hover:text-neutral-100">Products</a>
+          <span>/</span>
+          <a href={`/category/${category.categorySlug}`} class="hover:text-neutral-900 dark:hover:text-neutral-100">{category.title}</a>
+          <span>/</span>
+          <span class="text-neutral-900 dark:text-neutral-100">{item.name}</span>
+        </div>
+      </nav>
+
+      <div class="max-w-3xl mx-auto">
+        <div class="space-y-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <img 
+                src={item.iconUrl} 
+                alt={`${item.name} icon`}
+                class="w-12 h-12 rounded-lg object-contain bg-white dark:bg-neutral-800 p-2 border border-neutral-200 dark:border-neutral-700"
+              />
+              <h1 class="text-4xl font-bold text-neutral-900 dark:text-white">
+                {item.name}
+              </h1>
+            </div>
+            
+            <div class="flex gap-2">
+              {tags.map(tag => (
+                <a
+                  href={tag.href}
+                  class="inline-flex items-center justify-center rounded-md px-3 py-1 text-sm bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors"
+                >
+                  {tag.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div class="border rounded-lg bg-gradient-to-br from-neutral-100 to-neutral-100/60 border-neutral-300 shadow-[2px_0_8px_rgba(0,_0,_0,_0.15)] dark:from-neutral-800 dark:to-neutral-800/60 dark:border-neutral-800 dark:shadow-[2px_0_8px_rgba(0,_0,_0,_0.3)] p-8">
+            <p class="text-lg text-neutral-700 dark:text-neutral-300 mb-6">
+              {item.description}
+            </p>
+
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center rounded-lg px-6 py-3 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-colors font-medium"
+            >
+              Check out site
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html> 
