@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
-import ThemeToggle from '../components/theme-toggle.astro';
 import CategoryCard from '../components/category-card.astro';
+import Tag from '../components/tag.astro';
 import { categories } from '../data/categories';
 ---
 
@@ -14,9 +14,7 @@ import { categories } from '../data/categories';
 		<title>AI Resources Directory</title>
 	</head>
 
-	<body class="bg-neutral-100 dark:bg-neutral-900 min-h-screen">
-		<ThemeToggle />
-		
+	<body class="bg-neutral-100 dark:bg-neutral-900 min-h-screen">		
 		<main class="container mx-auto px-4 py-8">
 			<header class="text-center mb-12">
 				<h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -26,6 +24,14 @@ import { categories } from '../data/categories';
 					Discover the best tools, courses, and people in AI
 				</p>
 			</header>
+
+			<nav class="flex flex-wrap gap-2 justify-center mb-12" aria-label="Categories">
+				{categories.map((category) => (
+					<Tag href={`/category/${category.categorySlug}`}>
+						{category.title} ({category.items.length})
+					</Tag>
+				))}
+			</nav>
 
 			<div class="space-y-16">
 				{categories.map((category) => (

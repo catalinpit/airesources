@@ -1,7 +1,6 @@
 ---
 import '../../styles/global.css';
 import { categories } from '../../data/categories';
-import ThemeToggle from '../../components/theme-toggle.astro';
 
 export async function getStaticPaths() {
   return categories.flatMap(category => 
@@ -35,9 +34,7 @@ const tags = [
     <title>{item.name} - AI Resources Directory</title>
   </head>
 
-  <body class="bg-neutral-100 dark:bg-neutral-900 min-h-screen">
-    <ThemeToggle />
-    
+  <body class="bg-neutral-100 dark:bg-neutral-900 min-h-screen">    
     <main class="container mx-auto px-4 py-8">
       <nav class="mb-8">
         <div class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
