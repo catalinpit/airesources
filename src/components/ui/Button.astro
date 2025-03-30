@@ -1,19 +1,27 @@
 ---
-// Click button, get confetti!
-// Styled by Tailwind :)
+interface Props {
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  class?: string;
+}
+
+const { href, type = 'button', class: className = '' } = Astro.props;
 ---
 
-<button
-	class="appearance-none py-2 px-4 bg-purple-500 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75"
->
-	<slot />
-</button>
-
-<script>
-	import confetti from 'canvas-confetti';
-	const button = document.body.querySelector('button');
-
-	if (button) {
-		button.addEventListener('click', () => confetti());
-	}
-</script>
+{
+  href ? (
+    <a
+      href={href}
+      class={`bg-gradient-to-b from-white to-neutral-50 text-black/80 dark:from-neutral-900 dark:to-neutral-900/60 dark:text-white/90 dark:border-[1px] dark:border-black/30 hover:from-neutral-100 hover:to-neutral-200 dark:hover:from-neutral-800 dark:hover:to-neutral-700/60 hover:text-black dark:hover:text-white h-9 px-4 py-2 relative inline-flex items-center text-base font-medium leading-6 rounded-[9px] shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset] hover:shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_1px_1px_rgba(0,0,0,0.1)_inset,0_-1px_1px_rgba(0,0,0,0.1)_inset,0_2px_4px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset,0_1px_2px_rgba(0,0,0,0.3)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 ${className}`}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button
+      type={type}
+      class={`bg-gradient-to-b from-white to-neutral-50 text-black/80 dark:from-neutral-900 dark:to-neutral-900/60 dark:text-white/90 dark:border-[1px] dark:border-black/30 hover:from-neutral-100 hover:to-neutral-200 dark:hover:from-neutral-800 dark:hover:to-neutral-700/60 hover:text-black dark:hover:text-white h-9 px-4 py-2 relative inline-flex items-center text-base font-medium leading-6 rounded-[9px] shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset] hover:shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_1px_1px_rgba(0,0,0,0.1)_inset,0_-1px_1px_rgba(0,0,0,0.1)_inset,0_2px_4px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.1)_inset,0_1px_2px_rgba(0,0,0,0.3)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 ${className}`}
+    >
+      <slot />
+    </button>
+  )
+}

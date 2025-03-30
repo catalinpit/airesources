@@ -5,6 +5,7 @@ interface CategoryItem {
   iconUrl: string;
   previewImage?: string;
   type?: string;
+  models?: string[];
 }
 
 interface Category {
@@ -21,12 +22,35 @@ export const categories: Category[] = [
     categorySlug: "ides",
     items: [
       {
+        name: "Trae",
+        description:
+          "Adaptive AI IDE that transforms how you work, collaborating with you to run faster",
+        link: "https://www.trae.ai/",
+        iconUrl:
+          "https://lf-cdn.trae.ai/obj/trae-ai-us/trae_website_prod/favicon.png",
+        type: "editor",
+        previewImage: "https://www.trae.ai/preview.png",
+        models: ["GPT-4", "Claude 3"],
+      },
+      {
+        name: "Zed",
+        description:
+          "Next-generation code editor designed for high-performance collaboration with humans and AI",
+        link: "https://zed.dev/",
+        iconUrl:
+          "https://zed.dev/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo_icon.d67dc948.webp&w=64&q=100",
+        type: "editor",
+        previewImage: "https://zed.dev/preview.png",
+        models: ["GPT-4"],
+      },
+      {
         name: "Cursor",
         description: "AI-powered code editor with built-in AI assistance",
         link: "https://cursor.sh",
         iconUrl: "https://www.cursor.com/favicon.ico",
         type: "editor",
         previewImage: "https://cursor.sh/cursor-hero.png",
+        models: ["GPT-4", "Claude 3"],
       },
       {
         name: "Visual Studio Code",
@@ -36,24 +60,28 @@ export const categories: Category[] = [
         type: "editor",
         previewImage:
           "https://code.visualstudio.com/assets/home/home-screenshot-win.png",
+        models: ["GPT-4", "Claude 3", "CodeLlama"],
       },
       {
         name: "JetBrains AI Assistant",
         description: "AI coding assistant integrated into JetBrains IDEs",
         link: "https://www.jetbrains.com/ai/",
         iconUrl: "https://www.jetbrains.com/favicon.ico",
+        models: ["GPT-4", "Claude 3"],
       },
       {
         name: "Amazon CodeWhisperer",
         description: "AI-powered code suggestions and security scanning",
         link: "https://aws.amazon.com/codewhisperer/",
         iconUrl: "https://aws.amazon.com/favicon.ico",
+        models: ["CodeWhisperer", "CodeWhisperer Pro"],
       },
       {
         name: "Tabnine",
         description: "AI code completion tool supporting multiple languages",
         link: "https://www.tabnine.com",
         iconUrl: "https://www.tabnine.com/favicon.ico",
+        models: ["Tabnine Pro", "Tabnine Enterprise"],
       },
       {
         name: "Windsurf IDE",
@@ -63,6 +91,24 @@ export const categories: Category[] = [
         iconUrl: "https://codeium.com/favicon.ico",
         type: "editor",
         previewImage: "https://codeium.com/windsurf-hero.png",
+        models: ["GPT-4", "Claude 3"],
+      },
+    ],
+  },
+  {
+    title: "Terminals",
+    description: "Modern terminal emulators with AI capabilities",
+    categorySlug: "terminals",
+    items: [
+      {
+        name: "Warp",
+        description:
+          "The intelligent terminal that combines AI and your dev team's knowledge in one fast, intuitive terminal",
+        link: "https://www.warp.dev/",
+        iconUrl: "https://www.warp.dev/favicon.png",
+        type: "terminal",
+        previewImage: "https://www.warp.dev/preview.png",
+        models: ["GPT-4", "Claude 3"],
       },
     ],
   },
@@ -77,14 +123,16 @@ export const categories: Category[] = [
         link: "https://github.com/features/copilot",
         iconUrl: "https://github.com/favicon.ico",
         type: "extension",
+        models: ["Codex", "GPT-4"],
       },
       {
         name: "Cline",
         description:
           "Open-source collaborative AI coding agent with frontier model access",
         link: "https://cline.bot",
-        iconUrl: "https://cline.bot/favicon.ico",
+        iconUrl: "https://cline.bot/assets/icons/favicon-32x32.png",
         type: "extension",
+        models: ["GPT-4", "Claude 3", "Gemini Pro"],
       },
       {
         name: "Zencoder AI",
@@ -92,6 +140,7 @@ export const categories: Category[] = [
         link: "https://zencoder.ai",
         iconUrl: "https://zencoder.ai/favicon.ico",
         type: "extension",
+        models: ["GPT-4", "Claude 3"],
       },
       {
         name: "Sourcegraph Cody",
@@ -99,6 +148,31 @@ export const categories: Category[] = [
         link: "https://about.sourcegraph.com/cody",
         iconUrl: "https://sourcegraph.com/favicon.ico",
         type: "extension",
+        models: ["Claude 3", "GPT-4"],
+      },
+    ],
+  },
+  {
+    title: "Chat Bots",
+    description: "AI-powered chat interfaces and assistants",
+    categorySlug: "chat-bots",
+    items: [
+      {
+        name: "TypingMind",
+        description:
+          "A better UI for ChatGPT with features like chat history, prompt templates, and more",
+        link: "https://www.typingmind.com/",
+        iconUrl: "https://www.typingmind.com/favicon.ico",
+        type: "chat",
+        models: ["GPT-4", "GPT-3.5", "Claude 3", "Claude 2"],
+      },
+      {
+        name: "T3 Chat",
+        description: "A modern chat interface for interacting with AI models",
+        link: "https://t3.chat/chat",
+        iconUrl: "https://t3.chat/favicon.ico",
+        type: "chat",
+        models: ["GPT-4", "Claude 3", "Gemini Pro"],
       },
     ],
   },
@@ -113,99 +187,65 @@ export const categories: Category[] = [
         link: "https://www.fast.ai",
         iconUrl:
           "https://raw.githubusercontent.com/fastai/logos/refs/heads/main/fastai_small.png",
+        models: ["Custom Models", "PyTorch"],
       },
       {
         name: "DeepLearning.AI",
         description: "Comprehensive AI and machine learning courses",
         link: "https://www.deeplearning.ai",
         iconUrl: "https://www.deeplearning.ai/favicon.ico",
+        models: ["TensorFlow", "PyTorch", "Keras"],
       },
       {
         name: "Coursera Machine Learning",
         description: "Stanford's machine learning course",
         link: "https://www.coursera.org/learn/machine-learning",
         iconUrl: "https://www.coursera.org/favicon.ico",
+        models: ["Octave", "MATLAB"],
       },
       {
         name: "Hugging Face Course",
         description: "Learn about transformers and NLP",
         link: "https://huggingface.co/course",
         iconUrl: "https://huggingface.co/favicon.ico",
+        models: ["Transformers", "PyTorch", "TensorFlow"],
       },
       {
         name: "MIT OpenCourseWare",
         description: "Free AI and machine learning courses",
         link: "https://ocw.mit.edu/search/?d=Electrical%20Engineering%20and%20Computer%20Science",
         iconUrl: "https://ocw.mit.edu/favicon.ico",
+        models: ["Python", "TensorFlow", "PyTorch"],
       },
       {
         name: "Udacity AI Nanodegree",
         description: "Comprehensive AI program with industry projects",
         link: "https://www.udacity.com/course/ai-artificial-intelligence-nanodegree--nd898",
         iconUrl: "https://www.udacity.com/favicon.ico",
+        models: ["TensorFlow", "PyTorch", "Keras"],
       },
       {
         name: "Deep Learning Book",
         description: "The definitive textbook on deep learning",
         link: "https://www.deeplearningbook.org",
         iconUrl: "https://www.deeplearningbook.org/favicon.ico",
+        models: ["Theoretical Models", "Mathematical Foundations"],
       },
     ],
   },
   {
-    title: "Leaders to Follow",
-    description: "Influential figures in AI and machine learning",
-    categorySlug: "leaders",
+    title: "People",
+    description: "Influential figures in AI and technology",
+    categorySlug: "people",
     items: [
       {
-        name: "Andrew Ng",
-        description: "Co-founder of Coursera and DeepLearning.AI",
-        link: "https://twitter.com/AndrewYNg",
-        iconUrl:
-          "https://pbs.twimg.com/profile_images/1234567890/andrew_ng_400x400.jpg",
-      },
-      {
-        name: "Yann LeCun",
-        description: "Chief AI Scientist at Meta, Turing Award winner",
-        link: "https://twitter.com/ylecun",
-        iconUrl:
-          "https://pbs.twimg.com/profile_images/1234567890/yann_lecun_400x400.jpg",
-      },
-      {
-        name: "Fei-Fei Li",
-        description: "Co-director of Stanford's Human-Centered AI Institute",
-        link: "https://twitter.com/drfeifei",
-        iconUrl:
-          "https://pbs.twimg.com/profile_images/1234567890/fei_fei_li_400x400.jpg",
-      },
-      {
-        name: "Demis Hassabis",
-        description: "CEO of DeepMind",
-        link: "https://twitter.com/demishassabis",
-        iconUrl:
-          "https://pbs.twimg.com/profile_images/1234567890/demis_hassabis_400x400.jpg",
-      },
-      {
-        name: "Stuart Russell",
-        description: "Professor at UC Berkeley, author of Human Compatible",
-        link: "https://twitter.com/stuartrussell",
-        iconUrl:
-          "https://pbs.twimg.com/profile_images/1234567890/stuart_russell_400x400.jpg",
-      },
-      {
-        name: "Geoffrey Hinton",
+        name: "Simon Willison",
         description:
-          "Turing Award winner, known as the 'Godfather of Deep Learning'",
-        link: "https://twitter.com/geoffreyhinton",
+          "Creator of Datasette, co-creator of Django, and prolific AI experimenter",
+        link: "https://x.com/simonw",
         iconUrl:
-          "https://pbs.twimg.com/profile_images/1234567890/geoffrey_hinton_400x400.jpg",
-      },
-      {
-        name: "Yoshua Bengio",
-        description: "Turing Award winner, founder of Mila",
-        link: "https://twitter.com/YoshuaBengio",
-        iconUrl:
-          "https://pbs.twimg.com/profile_images/1234567890/yoshua_bengio_400x400.jpg",
+          "https://pbs.twimg.com/profile_images/378800000261649705/be9cc55e64014e6d7663c50d7cb9fc75_400x400.jpeg",
+        type: "person",
       },
     ],
   },

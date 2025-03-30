@@ -1,0 +1,22 @@
+---
+import '../styles/global.css';
+import Footer from '../components/footer.astro';
+const { siteTitle = 'AI Resources', description = 'Discover the best tools, courses, and people in AI', pageTitle } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{pageTitle ? `${siteTitle} - ${pageTitle}` : siteTitle}</title>
+		<meta name="description" content={description} />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+	</head>
+	<body class="bg-neutral-100 dark:bg-neutral-900 min-h-screen flex flex-col">
+		<main class="flex-grow">
+			<slot />
+		</main>
+		<Footer />
+	</body>
+</html>

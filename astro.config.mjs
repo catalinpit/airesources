@@ -1,10 +1,13 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from "astro/config";
+import tailwindcss from "@tailwindcss/vite";
 
-// https://astro.build/config
+import sitemap from "@astrojs/sitemap";
+
 export default defineConfig({
-	vite: {
-		plugins: [tailwindcss()]
-	}
+  site: "https://airesources.dev",
+  vite: {
+    plugins: [tailwindcss()],
+  },
+  integrations: [sitemap()],
 });

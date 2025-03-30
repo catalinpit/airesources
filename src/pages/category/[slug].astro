@@ -1,7 +1,10 @@
 ---
 import '../../styles/global.css';
+import Layout from '../../layouts/layout.astro';
 import { categories } from '../../data/categories';
 import ResourceCard from '../../components/resource-card.astro';
+import Button from '../../components/ui/Button.astro';
+import Header from '../../components/ui/Header.astro';
 
 export async function getStaticPaths() {
   return categories.map(category => ({
@@ -13,51 +16,34 @@ export async function getStaticPaths() {
 const { category } = Astro.props;
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{category.title} - AI Resources Directory</title>
-	</head>
+<Layout description={category.description} pageTitle={category.title}>
+	<main class="container mx-auto px-4 py-8">
+		<nav class="mb-8">
+			<Button href="/">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
+					<path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+				</svg>
+				Back to Directory
+			</Button>
+		</nav>
 
-	<body class="bg-gradient-to-br from-neutral-50 to-neutral-100 dark:from-neutral-900 dark:to-neutral-950 min-h-screen">		
-		<main class="container mx-auto px-4 py-8">
-			<nav class="mb-8">
-				<a 
-					href="/" 
-					class="bg-gradient-to-b from-white to-gray-50 text-black/80 dark:from-neutral-900 dark:to-neutral-900/60 dark:text-white/90 dark:border-[1px] dark:border-black/30 hover:text-black/60 dark:hover:text-white h-9 px-4 py-2 relative inline-flex items-center text-base font-medium leading-6 rounded-[9px] shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)] dark:hover:shadow-[0_0_0_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.4),0_1px_2px_rgba(0,0,0,0.5)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
-				>
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
-						<path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-					</svg>
-					Back to Directory
-				</a>
-			</nav>
+		<Header
+			title={`${category.title} (${category.items.length})`}
+			description={category.description}
+		/>
 
-			<section class="space-y-6 p-10 w-full bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
-				<div class="text-center mb-12">
-					<h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-						{category.title} ({category.items.length})
-					</h1>
-					<p class="text-xl text-gray-600 dark:text-gray-300">
-						{category.description}
-					</p>
-				</div>
-
-				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-					{category.items.map((item) => (
-						<ResourceCard
-							name={item.name}
-							description={item.description}
-							link={item.link}
-							iconUrl={item.iconUrl}
-							categorySlug={category.categorySlug}
-						/>
-					))}
-				</div>
-			</section>
-		</main>
-	</body>
-</html> 
+		<section class="space-y-6 p-10 w-full bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+				{category.items.map((item) => (
+					<ResourceCard
+						name={item.name}
+						description={item.description}
+						link={item.link}
+						iconUrl={item.iconUrl}
+						categorySlug={category.categorySlug}
+					/>
+				))}
+			</div>
+		</section>
+	</main>
+</Layout>

@@ -2,14 +2,15 @@
 interface Props {
   href: string;
   isActive?: boolean;
+  class?: string;
 }
 
-const { href, isActive = false } = Astro.props;
+const { href, isActive = false, class: className = '' } = Astro.props;
 ---
 
 <a 
   href={href}
-  class={`bg-gradient-to-b from-white to-gray-50 text-black/80 dark:from-neutral-900 dark:to-neutral-900/60 dark:text-white/90 dark:border-[1px] dark:border-black/30 hover:text-black/60 dark:hover:text-white h-9 px-4 py-2 relative inline-flex items-center text-base font-medium leading-6 rounded-[9px] shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)] dark:hover:shadow-[0_0_0_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.4),0_1px_2px_rgba(0,0,0,0.5)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed ${isActive ? 'from-blue-500 to-blue-600 text-white hover:text-white dark:from-blue-500 dark:to-blue-600 dark:text-white dark:hover:text-white' : ''}`}
+  class={`bg-gradient-to-br from-neutral-50 to-neutral-50/60 dark:from-neutral-800 dark:to-neutral-800/60 text-black/80 dark:text-white/90 h-9 px-4 py-2 relative inline-flex items-center text-base font-medium leading-6 rounded-[9px] shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)] hover:border-neutral-400 dark:hover:border-neutral-700/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed ${isActive ? 'from-blue-500 to-blue-600 text-white hover:text-white dark:from-blue-500 dark:to-blue-600 dark:text-white dark:hover:text-white' : ''} ${className}`}
 >
   <slot />
 </a> 

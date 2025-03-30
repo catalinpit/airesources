@@ -1,48 +1,36 @@
 ---
 import '../styles/global.css';
+import Layout from '../layouts/layout.astro';
 import CategoryCard from '../components/category-card.astro';
 import Tag from '../components/tag.astro';
+import Header from '../components/ui/Header.astro';
 import { categories } from '../data/categories';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>AI Resources Directory</title>
-	</head>
+<Layout>
+	<main class="container mx-auto px-4 py-8">
+		<Header
+			title="AI Resources Directory"
+			description="A curated collection of the best AI tools, courses, and resources. From code editors to learning platforms, find everything you need to build, learn, and innovate with AI."
+		/>
 
-	<body class="bg-neutral-100 dark:bg-neutral-900 min-h-screen">		
-		<main class="container mx-auto px-4 py-8">
-			<header class="text-center mb-12">
-				<h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-					AI Resources Directory
-				</h1>
-				<p class="text-xl text-gray-600 dark:text-gray-300">
-					Discover the best tools, courses, and people in AI
-				</p>
-			</header>
+		<nav class="flex flex-wrap gap-2 justify-center mb-12" aria-label="Categories">
+			{categories.map((category) => (
+				<Tag href={`/category/${category.categorySlug}`}>
+					{category.title} ({category.items.length})
+				</Tag>
+			))}
+		</nav>
 
-			<nav class="flex flex-wrap gap-2 justify-center mb-12" aria-label="Categories">
-				{categories.map((category) => (
-					<Tag href={`/category/${category.categorySlug}`}>
-						{category.title} ({category.items.length})
-					</Tag>
-				))}
-			</nav>
-
-			<div class="space-y-16">
-				{categories.map((category) => (
-					<CategoryCard
-						title={category.title}
-						description={category.description}
-						items={category.items}
-						categorySlug={category.categorySlug}
-					/>
-				))}
-			</div>
-		</main>
-	</body>
-</html>
+		<div class="space-y-16">
+			{categories.map((category) => (
+				<CategoryCard
+					title={category.title}
+					description={category.description}
+					items={category.items}
+					categorySlug={category.categorySlug}
+				/>
+			))}
+		</div>
+	</main>
+</Layout>
