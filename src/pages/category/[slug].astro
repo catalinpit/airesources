@@ -3,7 +3,6 @@ import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
 import { categories } from '../../data/categories';
 import ResourceCard from '../../components/ui/Resource-Card.astro';
-import Button from '../../components/ui/Button.astro';
 import Header from '../../components/Header.astro';
 
 export async function getStaticPaths() {
@@ -18,21 +17,20 @@ const { category } = Astro.props;
 
 <Layout description={category.description} pageTitle={category.title}>
 	<main class="container mx-auto px-4 py-8">
-		<nav class="mb-8">
-			<Button href="/">
-				<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
-					<path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-				</svg>
-				Back to Directory
-			</Button>
-		</nav>
-
 		<Header
 			title={`${category.title} (${category.items.length})`}
 			description={category.description}
 		/>
 
 		<section class="space-y-6 p-10 w-full bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
+			<nav class="mb-8">
+				<div class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
+					<a href="/" class="hover:text-neutral-900 dark:hover:text-neutral-100">Resources</a>
+					<span>/</span>
+					<span class="text-neutral-900 dark:text-neutral-100">{category.title}</span>
+				</div>
+			</nav>
+
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 				{category.items.map((item) => (
 					<ResourceCard
