@@ -1,9 +1,9 @@
 ---
 import '../styles/global.css';
 import Layout from '../layouts/layout.astro';
-import CategoryCard from '../components/category-card.astro';
-import Tag from '../components/tag.astro';
-import Header from '../components/ui/Header.astro';
+import CategoryCard from '../components/ui/Category-Card.astro';
+import Tag from '../components/ui/Tag.astro';
+import Header from '../components/Header.astro';
 import { categories } from '../data/categories';
 ---
 
@@ -12,6 +12,7 @@ import { categories } from '../data/categories';
 		<Header
 			title="AI Resources Directory"
 			description="A curated collection of the best AI tools, courses, and resources. From code editors to learning platforms, find everything you need to build, learn, and innovate with AI."
+			class="mb-20"
 		/>
 
 		<nav class="flex flex-wrap gap-2 justify-center mb-12" aria-label="Categories">

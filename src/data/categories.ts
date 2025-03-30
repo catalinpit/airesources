@@ -247,6 +247,24 @@ export const categories: Category[] = [
           "https://pbs.twimg.com/profile_images/378800000261649705/be9cc55e64014e6d7663c50d7cb9fc75_400x400.jpeg",
         type: "person",
       },
+      {
+        name: "Andrew Ng",
+        description:
+          "Co-founder of Coursera and DeepLearning.AI, leading AI educator and researcher",
+        link: "https://x.com/AndrewYNg",
+        iconUrl:
+          "https://pbs.twimg.com/profile_images/733174243714682880/oyG30NEH_400x400.jpg",
+        type: "person",
+      },
+      {
+        name: "Andrej Karpathy",
+        description:
+          "Former Director of AI at Tesla, founder of Karpathy.ai, and influential AI researcher",
+        link: "https://x.com/karpathy",
+        iconUrl:
+          "https://pbs.twimg.com/profile_images/1296667294148382721/9Pr6XrPB_400x400.jpg",
+        type: "person",
+      },
     ],
   },
 ];

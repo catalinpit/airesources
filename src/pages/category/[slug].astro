@@ -2,9 +2,9 @@
 import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
 import { categories } from '../../data/categories';
-import ResourceCard from '../../components/resource-card.astro';
+import ResourceCard from '../../components/ui/Resource-Card.astro';
 import Button from '../../components/ui/Button.astro';
-import Header from '../../components/ui/Header.astro';
+import Header from '../../components/Header.astro';
 
 export async function getStaticPaths() {
   return categories.map(category => ({

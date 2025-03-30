@@ -3,8 +3,8 @@ import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
 import { categories } from '../../data/categories';
 import Button from '../../components/ui/Button.astro';
-import Tag from '../../components/tag.astro';
-import Header from '../../components/ui/Header.astro';
+import Tag from '../../components/ui/Tag.astro';
+import Header from '../../components/Header.astro';
 
 export async function getStaticPaths() {
   return categories.flatMap(category => 

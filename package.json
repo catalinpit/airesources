@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.2",
+    "@astrojs/partytown": "^2.1.4",
     "@astrojs/sitemap": "^3.3.0",
     "@tailwindcss/vite": "^4.0.15",
     "@types/canvas-confetti": "^1.9.0",
