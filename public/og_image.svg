@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#F5F5F5"/>
+  
+  <!-- Decorative elements -->
+  <g opacity="0.1">
+    <path d="M1200 0L0 315L1200 630V0Z" fill="#000"/>
+    <path d="M0 0L1200 315L0 630V0Z" fill="#000"/>
+  </g>
+  
+  <!-- Main content -->
+  <g transform="translate(100, 100)">
+    <!-- Logo -->
+    <g transform="translate(0, 0)">
+      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 17L12 22L22 17" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M2 12L12 17L22 12" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    
+    <!-- Title -->
+    <text x="40" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="bold" fill="#000">
+      AI Resources
+    </text>
+    
+    <!-- Description -->
+    <text x="40" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#666" max-width="800">
+      A curated collection of the best AI tools, courses, and resources. From code editors to learning platforms, find everything you need to build, learn, and innovate with AI.
+    </text>
+  </g>
+  
+  <!-- Bottom gradient -->
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="630" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#000" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#gradient)"/>
+</svg> 
