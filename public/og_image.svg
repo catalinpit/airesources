@@ -1,40 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
   <!-- Background -->
-  <rect width="1200" height="630" fill="#F5F5F5"/>
+  <rect width="1200" height="630" fill="#09090B"/>
   
-  <!-- Decorative elements -->
-  <g opacity="0.1">
-    <path d="M1200 0L0 315L1200 630V0Z" fill="#000"/>
-    <path d="M0 0L1200 315L0 630V0Z" fill="#000"/>
+  <!-- Grid Pattern -->
+  <pattern id="smallGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#27272A" stroke-width="0.3" opacity="0.5"/>
+  </pattern>
+  <pattern id="grid" width="200" height="200" patternUnits="userSpaceOnUse">
+    <rect width="200" height="200" fill="url(#smallGrid)"/>
+    <path d="M 200 0 L 0 0 0 200" fill="none" stroke="#27272A" stroke-width="0.5" opacity="0.5"/>
+  </pattern>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+
+  <!-- Gradient Overlay -->
+  <defs>
+    <radialGradient id="radialGlow" cx="50%" cy="0%" r="100%" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#27272A" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#09090B" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#radialGlow)"/>
+
+  <!-- Background Circles -->
+  <circle cx="100" cy="100" r="200" fill="#27272A" opacity="0.03"/>
+  <circle cx="1100" cy="500" r="300" fill="#27272A" opacity="0.03"/>
+  
+  <!-- Wavy Background Pattern -->
+  <g opacity="0.2">
+    <path d="M0 530C200 530 300 600 500 600S800 530 1000 530s200 70 400 70" stroke="#27272A" stroke-width="0.5"/>
+    <path d="M0 540C200 540 300 610 500 610S800 540 1000 540s200 70 400 70" stroke="#27272A" stroke-width="0.5"/>
+    <path d="M0 550C200 550 300 620 500 620S800 550 1000 550s200 70 400 70" stroke="#27272A" stroke-width="0.5"/>
+    <path d="M0 560C200 560 300 630 500 630S800 560 1000 560s200 70 400 70" stroke="#27272A" stroke-width="0.5"/>
+    <path d="M0 570C200 570 300 640 500 640S800 570 1000 570s200 70 400 70" stroke="#27272A" stroke-width="0.5"/>
+    <path d="M0 580C200 580 300 650 500 650S800 580 1000 580s200 70 400 70" stroke="#27272A" stroke-width="0.5"/>
   </g>
-  
-  <!-- Main content -->
-  <g transform="translate(100, 100)">
-    <!-- Logo -->
-    <g transform="translate(0, 0)">
-      <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M2 17L12 22L22 17" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M2 12L12 17L22 12" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    </g>
-    
+
+  <!-- Diagonal Lines -->
+  <g opacity="0.1">
+    <path d="M0 0L1200 630" stroke="#27272A" stroke-width="1"/>
+    <path d="M1200 0L0 630" stroke="#27272A" stroke-width="1"/>
+  </g>
+
+  <!-- Main Content Container -->
+  <g transform="translate(600, 160)">
     <!-- Title -->
-    <text x="40" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="bold" fill="#000">
-      AI Resources
+    <text x="0" y="0" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="600" fill="white" text-anchor="middle">
+      AI Resources Directory
     </text>
     
     <!-- Description -->
-    <text x="40" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#666" max-width="800">
-      A curated collection of the best AI tools, courses, and resources. From code editors to learning platforms, find everything you need to build, learn, and innovate with AI.
+    <text x="0" y="60" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#A1A1AA" text-anchor="middle">
+      A curated collection of the best AI tools and resources
     </text>
+    
+    <!-- Cards Container -->
+    <g transform="translate(-480, 120)">
+      <!-- Card 1 -->
+      <rect x="0" y="0" width="220" height="160" rx="12" fill="#18181B"/>
+      <g transform="translate(24, 32)">
+        <!-- IDE Icon -->
+        <rect x="0" y="0" width="28" height="28" rx="6" fill="#27272A"/>
+        <path d="M7 7L14 14L7 21M21 7L14 14L21 21" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- Title next to icon -->
+        <text x="40" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="white">
+          IDEs &amp; Editors
+        </text>
+      </g>
+      <text x="24" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#A1A1AA">
+        Development environments
+      </text>
+      <text x="24" y="115" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#A1A1AA">
+        optimized for AI development
+      </text>
+      
+      <!-- Card 2 -->
+      <rect x="240" y="0" width="220" height="160" rx="12" fill="#18181B"/>
+      <g transform="translate(264, 32)">
+        <!-- Chat Icon -->
+        <rect x="0" y="0" width="28" height="28" rx="6" fill="#27272A"/>
+        <path d="M7 21H21L14 7L7 21Z" fill="white"/>
+        <!-- Title next to icon -->
+        <text x="40" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="white">
+          Chat Bots
+        </text>
+      </g>
+      <text x="264" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#A1A1AA">
+        AI-powered chat interfaces
+      </text>
+      <text x="264" y="115" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#A1A1AA">
+        and assistants
+      </text>
+      
+      <!-- Card 3 -->
+      <rect x="480" y="0" width="220" height="160" rx="12" fill="#18181B"/>
+      <g transform="translate(504, 32)">
+        <!-- Book Icon -->
+        <rect x="0" y="0" width="28" height="28" rx="6" fill="#27272A"/>
+        <path d="M8 8H20C21.1 8 22 8.9 22 10V18C22 19.1 21.1 20 20 20H8C6.9 20 6 19.1 6 18V10C6 8.9 6.9 8 8 8Z" stroke="white" stroke-width="1.5"/>
+        <path d="M10 12H18M10 16H14" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Title next to icon -->
+        <text x="40" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="white">
+          Learning
+        </text>
+      </g>
+      <text x="504" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#A1A1AA">
+        Educational resources in AI
+      </text>
+      <text x="504" y="115" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#A1A1AA">
+        and machine learning
+      </text>
+
+      <!-- Card 4 (More) -->
+      <rect x="720" y="0" width="220" height="160" rx="12" fill="#18181B"/>
+      <g transform="translate(744, 32)">
+        <!-- More Icon -->
+        <rect x="0" y="0" width="28" height="28" rx="6" fill="#27272A"/>
+        <circle cx="9" cy="14" r="2" fill="white"/>
+        <circle cx="14" cy="14" r="2" fill="white"/>
+        <circle cx="19" cy="14" r="2" fill="white"/>
+        <!-- Title next to icon -->
+        <text x="40" y="20" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="500" fill="white">
+          And More
+        </text>
+      </g>
+      <text x="744" y="95" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#A1A1AA">
+        Discover more AI tools
+      </text>
+      <text x="744" y="115" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#A1A1AA">
+        and resources
+      </text>
+    </g>
   </g>
-  
-  <!-- Bottom gradient -->
-  <defs>
-    <linearGradient id="gradient" x1="0" y1="630" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#000" stop-opacity="0.05"/>
-      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-  <rect width="1200" height="630" fill="url(#gradient)"/>
 </svg> 
