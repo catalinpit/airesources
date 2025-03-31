@@ -30,17 +30,6 @@ export const categories: Category[] = [
     categorySlug: "ides",
     items: [
       {
-        name: "Trae",
-        description:
-          "Adaptive AI IDE that transforms how you work, collaborating with you to run faster",
-        link: "https://www.trae.ai/",
-        iconUrl:
-          "https://lf-cdn.trae.ai/obj/trae-ai-us/trae_website_prod/favicon.png",
-        type: "editor",
-        previewImage: "https://www.trae.ai/preview.png",
-        models: ["GPT-4", "Claude 3"],
-      },
-      {
         name: "Zed",
         description:
           "Next-generation code editor designed for high-performance collaboration with humans and AI",
@@ -89,7 +78,7 @@ export const categories: Category[] = [
           type: "freemium",
           tiers: [
             {
-              name: "Free",
+              name: "Hobby",
               price: "$0",
             },
             {
@@ -98,10 +87,11 @@ export const categories: Category[] = [
             },
             {
               name: "Business",
-              price: "Custom",
+              price: "$40/user/month",
             },
           ],
-          details: "Free tier available with limited features",
+          details:
+            "Free tier includes 2000 completions and 50 slow premium requests. Pro includes unlimited completions and 500 fast premium requests per month.",
         },
         models: [
           "claude-3.7-sonnet",
@@ -122,6 +112,58 @@ export const categories: Category[] = [
           "o1-mini",
           "o3-mini",
           "grok-2",
+        ],
+      },
+      {
+        name: "Windsurf IDE",
+        description:
+          "The first agentic IDE with AI flows and deep contextual awareness",
+        link: "https://codeium.com/windsurf",
+        iconUrl: "https://codeium.com/favicon.ico",
+        type: "editor",
+        previewImage: "https://codeium.com/windsurf-hero.png",
+        pricing: {
+          type: "freemium",
+          tiers: [
+            {
+              name: "Free",
+              price: "$0",
+            },
+            {
+              name: "Pro",
+              price: "$15/month",
+            },
+            {
+              name: "Pro Ultimate",
+              price: "$60/month",
+            },
+            {
+              name: "Teams",
+              price: "$35/user/month",
+            },
+            {
+              name: "Teams Ultimate",
+              price: "$90/user/month",
+            },
+            {
+              name: "Enterprise",
+              price: "Custom",
+            },
+          ],
+          details:
+            "Free tier includes 5 premium model credits and basic features. Pro includes 500 User Prompt and 1,500 Flow Action credits. Pro Ultimate includes infinite User Prompt credits and 3,000 Flow Action credits.",
+        },
+        models: [
+          "GPT-4o",
+          "Claude 3.5 Sonnet",
+          "Claude 3.7 Sonnet",
+          "Claude 3.7 Sonnet (Thinking)",
+          "DeepSeek-V3",
+          "DeepSeek-R1",
+          "o3-mini (medium reasoning)",
+          "Gemini 2.0 Flash",
+          "Gemini 2.5 Pro",
+          "Cascade Base ⚡",
         ],
       },
       {
@@ -149,31 +191,49 @@ export const categories: Category[] = [
         models: ["CodeWhisperer", "CodeWhisperer Pro"],
       },
       {
-        name: "Tabnine",
-        description: "AI code completion tool supporting multiple languages",
-        link: "https://www.tabnine.com",
-        iconUrl: "https://www.tabnine.com/favicon.ico",
-        models: ["Tabnine Pro", "Tabnine Enterprise"],
-      },
-      {
-        name: "Windsurf IDE",
+        name: "Trae",
         description:
-          "The first agentic IDE with AI flows and deep contextual awareness",
-        link: "https://codeium.com/windsurf",
-        iconUrl: "https://codeium.com/favicon.ico",
+          "Adaptive AI IDE that transforms how you work, collaborating with you to run faster",
+        link: "https://www.trae.ai/",
+        iconUrl:
+          "https://lf-cdn.trae.ai/obj/trae-ai-us/trae_website_prod/favicon.png",
         type: "editor",
-        previewImage: "https://codeium.com/windsurf-hero.png",
+        previewImage: "https://www.trae.ai/preview.png",
+        pricing: {
+          type: "free",
+          tiers: [
+            {
+              name: "Free",
+              price: "$0",
+            },
+          ],
+          details: "Currently free to use",
+        },
         models: [
-          "GPT-4o",
-          "Claude 3.5 Sonnet",
-          "Claude 3.7 Sonnet",
-          "Claude 3.7 Sonnet (Thinking)",
-          "DeepSeek-V3",
-          "DeepSeek-R1",
-          "o3-mini (medium reasoning)",
-          "Gemini 2.0 Flash",
-          "Gemini 2.5 Pro",
-          "Cascade Base ⚡",
+          "GPT-4",
+          "GPT-4 Turbo",
+          "GPT-3.5 Turbo",
+          "Claude 3 Opus",
+          "Claude 3 Sonnet",
+          "Claude 3 Haiku",
+          "Gemini 1.5 Pro",
+          "Gemini 1.5 Flash",
+          "DeepSeek Chat",
+          "DeepSeek Reasoner",
+          "Mistral Large",
+          "Mistral Medium",
+          "Mistral Small",
+          "CodeLlama 70B",
+          "CodeLlama 34B",
+          "CodeLlama 13B",
+          "CodeLlama 7B",
+          "StarCoder 2",
+          "StarCoder 1",
+          "Phi-2",
+          "Phi-1.5",
+          "Phi-1",
+          "Ollama Models",
+          "LM Studio Models",
         ],
       },
     ],
@@ -191,7 +251,30 @@ export const categories: Category[] = [
         iconUrl: "https://www.warp.dev/favicon.png",
         type: "terminal",
         previewImage: "https://www.warp.dev/preview.png",
-        models: ["GPT-4", "Claude 3"],
+        pricing: {
+          type: "freemium",
+          tiers: [
+            {
+              name: "Free",
+              price: "$0",
+            },
+            {
+              name: "Pro",
+              price: "$15/user/mo",
+            },
+            {
+              name: "Turbo",
+              price: "$40/user/mo",
+            },
+            {
+              name: "Enterprise",
+              price: "Custom",
+            },
+          ],
+          details:
+            "Free tier includes 150 AI requests per month. Pro includes 1,000 AI requests and 35M token limit. Turbo includes unlimited AI requests and 100M token limit. Teams of 3+ get discounts on Turbo plan.",
+        },
+        models: ["Claude 3.5 Sonnet", "Claude 3.5 Haiku", "GPT-4o"],
       },
     ],
   },
@@ -255,6 +338,14 @@ export const categories: Category[] = [
         iconUrl: "https://supermaven.com/favicon-32x32.png",
         type: "extension",
         models: ["GPT-4o", "GPT-4", "Claude 3"],
+      },
+      {
+        name: "Tabnine",
+        description: "AI code completion tool supporting multiple languages",
+        link: "https://www.tabnine.com",
+        iconUrl: "https://www.tabnine.com/favicon.ico",
+        type: "extension",
+        models: ["Tabnine Pro", "Tabnine Enterprise"],
       },
     ],
   },
