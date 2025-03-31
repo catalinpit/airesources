@@ -5,29 +5,29 @@
   
   <!-- Grid Pattern -->
   <pattern id="smallGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#27272A" stroke-width="0.3" opacity="0.5"/>
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#27272A" stroke-width="0.3" opacity="0.95"/>
   </pattern>
   <pattern id="grid" width="200" height="200" patternUnits="userSpaceOnUse">
     <rect width="200" height="200" fill="url(#smallGrid)"/>
-    <path d="M 200 0 L 0 0 0 200" fill="none" stroke="#27272A" stroke-width="0.5" opacity="0.5"/>
+    <path d="M 200 0 L 0 0 0 200" fill="none" stroke="#27272A" stroke-width="0.5" opacity="0.95"/>
   </pattern>
   <rect width="100%" height="100%" fill="url(#grid)"/>
 
   <!-- Gradient Overlay -->
   <defs>
     <radialGradient id="radialGlow" cx="50%" cy="0%" r="100%" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" stop-color="#27272A" stop-opacity="0.4"/>
+      <stop offset="0%" stop-color="#27272A" stop-opacity="0.8"/>
       <stop offset="100%" stop-color="#09090B" stop-opacity="0"/>
     </radialGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#radialGlow)"/>
 
   <!-- Background Circles -->
-  <circle cx="100" cy="100" r="200" fill="#27272A" opacity="0.03"/>
-  <circle cx="1100" cy="500" r="300" fill="#27272A" opacity="0.03"/>
+  <circle cx="100" cy="100" r="200" fill="#27272A" opacity="0.2"/>
+  <circle cx="1100" cy="500" r="300" fill="#27272A" opacity="0.2"/>
   
   <!-- Wavy Background Pattern -->
-  <g opacity="0.2">
+  <g opacity="0.6">
     <path d="M0 530C200 530 300 600 500 600S800 530 1000 530s200 70 400 70" stroke="#27272A" stroke-width="0.5"/>
     <path d="M0 540C200 540 300 610 500 610S800 540 1000 540s200 70 400 70" stroke="#27272A" stroke-width="0.5"/>
     <path d="M0 550C200 550 300 620 500 620S800 550 1000 550s200 70 400 70" stroke="#27272A" stroke-width="0.5"/>
@@ -37,7 +37,7 @@
   </g>
 
   <!-- Diagonal Lines -->
-  <g opacity="0.1">
+  <g opacity="0.3">
     <path d="M0 0L1200 630" stroke="#27272A" stroke-width="1"/>
     <path d="M1200 0L0 630" stroke="#27272A" stroke-width="1"/>
   </g>
@@ -132,4 +132,4 @@
       </text>
     </g>
   </g>
-</svg> 
+</svg>

@@ -158,6 +158,42 @@ export const categories: Category[] = [
     categorySlug: "chat-bots",
     items: [
       {
+        name: "ChatGPT",
+        description:
+          "OpenAI's powerful language model for natural conversations and assistance",
+        link: "https://chat.openai.com/",
+        iconUrl: "https://chat.openai.com/favicon.ico",
+        type: "chat",
+        models: ["GPT-4", "GPT-3.5"],
+      },
+      {
+        name: "Claude",
+        description:
+          "Anthropic's advanced AI assistant with strong analytical and creative capabilities",
+        link: "https://claude.ai/",
+        iconUrl: "https://claude.ai/favicon.ico",
+        type: "chat",
+        models: ["Claude 3 Opus", "Claude 3 Sonnet", "Claude 2"],
+      },
+      {
+        name: "Perplexity",
+        description:
+          "AI-powered search engine that combines real-time information with conversational AI",
+        link: "https://www.perplexity.ai/",
+        iconUrl: "https://www.perplexity.ai/favicon.ico",
+        type: "chat",
+        models: ["GPT-4", "Claude 3", "Gemini Pro"],
+      },
+      {
+        name: "Google AI Studio",
+        description:
+          "Google's platform for experimenting with and building AI applications",
+        link: "https://aistudio.google.com/welcome",
+        iconUrl: "https://www.gstatic.com/aistudio/ai_studio_favicon_32x32.png",
+        type: "chat",
+        models: ["Gemini Pro", "Gemini Ultra"],
+      },
+      {
         name: "TypingMind",
         description:
           "A better UI for ChatGPT with features like chat history, prompt templates, and more",
@@ -264,6 +300,69 @@ export const categories: Category[] = [
         iconUrl:
           "https://pbs.twimg.com/profile_images/1296667294148382721/9Pr6XrPB_400x400.jpg",
         type: "person",
+      },
+    ],
+  },
+  {
+    title: "Image Generation",
+    description: "AI-powered tools for creating and editing images",
+    categorySlug: "image-generation",
+    items: [
+      {
+        name: "Midjourney",
+        description: "AI-powered image generation from text descriptions",
+        link: "https://www.midjourney.com/",
+        iconUrl: "https://www.midjourney.com/favicon.ico",
+        type: "image",
+        models: ["Midjourney v6", "Midjourney v5"],
+      },
+      {
+        name: "Stable Diffusion",
+        description: "Open-source image generation model",
+        link: "https://stability.ai/",
+        iconUrl: "https://stability.ai/favicon.ico",
+        type: "image",
+        models: ["SDXL", "SD 2.1", "SD 1.5"],
+      },
+    ],
+  },
+  {
+    title: "Voice Generation",
+    description: "AI-powered tools for text-to-speech and voice synthesis",
+    categorySlug: "voice-generation",
+    items: [
+      {
+        name: "ElevenLabs",
+        description: "AI voice generation and text-to-speech platform",
+        link: "https://elevenlabs.io/",
+        iconUrl: "https://elevenlabs.io/favicon.ico",
+        type: "audio",
+        models: ["Eleven Multilingual v2", "Eleven English v2"],
+      },
+    ],
+  },
+  {
+    title: "Miscellaneous",
+    description: "Various AI tools and resources for different purposes",
+    categorySlug: "misc",
+    items: [
+      {
+        name: "Aidbase",
+        description:
+          "AI-powered support ecosystem for SaaS startups with chatbot, knowledge base, and ticketing",
+        link: "https://www.aidbase.ai/",
+        iconUrl: "https://www.aidbase.ai/images/favicon.webp",
+        type: "support",
+        models: ["GPT-4", "Claude 3"],
+      },
+      {
+        name: "Blog Recorder",
+        description:
+          "Create blog posts 10x faster by talking out loud, with AI-powered transcription and structuring",
+        link: "https://blogrecorder.com/",
+        iconUrl: "https://blogrecorder.com/_astro/favicon.3wOwjXYg.ico",
+        type: "content",
+        models: ["GPT-4", "Whisper"],
       },
     ],
   },
