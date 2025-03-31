@@ -6,6 +6,14 @@ interface CategoryItem {
   previewImage?: string;
   type?: string;
   models?: string[];
+  pricing?: {
+    type: "free" | "paid" | "freemium" | "byok" | "top-up";
+    tiers: {
+      name: string;
+      price: string;
+    }[];
+    details?: string;
+  };
 }
 
 interface Category {
@@ -41,7 +49,34 @@ export const categories: Category[] = [
           "https://zed.dev/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogo_icon.d67dc948.webp&w=64&q=100",
         type: "editor",
         previewImage: "https://zed.dev/preview.png",
-        models: ["GPT-4"],
+        pricing: {
+          type: "free",
+          tiers: [
+            {
+              name: "Free",
+              price: "$0",
+            },
+          ],
+          details: "Open source and free to use",
+        },
+        models: [
+          "Claude 3.5 Sonnet",
+          "Claude 3.7 Sonnet",
+          "Claude 3.7 Sonnet (Thinking)",
+          "GPT-4o",
+          "GPT-4",
+          "GPT-3.5 Turbo",
+          "GPT-4 Turbo",
+          "GPT-4o mini",
+          "o1-mini",
+          "Gemini 1.5 Pro",
+          "Gemini 1.5 Flash",
+          "DeepSeek Chat",
+          "DeepSeek Reasoner",
+          "GitHub Copilot Chat",
+          "Ollama Models",
+          "LM Studio Models",
+        ],
       },
       {
         name: "Cursor",
@@ -50,7 +85,44 @@ export const categories: Category[] = [
         iconUrl: "https://www.cursor.com/favicon.ico",
         type: "editor",
         previewImage: "https://cursor.sh/cursor-hero.png",
-        models: ["GPT-4", "Claude 3"],
+        pricing: {
+          type: "freemium",
+          tiers: [
+            {
+              name: "Free",
+              price: "$0",
+            },
+            {
+              name: "Pro",
+              price: "$20/month",
+            },
+            {
+              name: "Business",
+              price: "Custom",
+            },
+          ],
+          details: "Free tier available with limited features",
+        },
+        models: [
+          "claude-3.7-sonnet",
+          "claude-3.7-sonnet MAX",
+          "claude-3.5-sonnet",
+          "claude-3.5-haiku",
+          "claude-3-opus",
+          "cursor-small",
+          "deepseek-v3",
+          "deepseek-r1",
+          "gemini-2.5-pro-exp",
+          "gemini-2.5-pro-exp MAX",
+          "gemini-2.0-pro-exp",
+          "gpt-4o",
+          "gpt-4o-mini",
+          "gpt-4.5-preview",
+          "o1",
+          "o1-mini",
+          "o3-mini",
+          "grok-2",
+        ],
       },
       {
         name: "Visual Studio Code",
@@ -91,7 +163,18 @@ export const categories: Category[] = [
         iconUrl: "https://codeium.com/favicon.ico",
         type: "editor",
         previewImage: "https://codeium.com/windsurf-hero.png",
-        models: ["GPT-4", "Claude 3"],
+        models: [
+          "GPT-4o",
+          "Claude 3.5 Sonnet",
+          "Claude 3.7 Sonnet",
+          "Claude 3.7 Sonnet (Thinking)",
+          "DeepSeek-V3",
+          "DeepSeek-R1",
+          "o3-mini (medium reasoning)",
+          "Gemini 2.0 Flash",
+          "Gemini 2.5 Pro",
+          "Cascade Base ⚡",
+        ],
       },
     ],
   },
@@ -123,6 +206,20 @@ export const categories: Category[] = [
         link: "https://github.com/features/copilot",
         iconUrl: "https://github.com/favicon.ico",
         type: "extension",
+        pricing: {
+          type: "paid",
+          tiers: [
+            {
+              name: "Individual",
+              price: "$10/month",
+            },
+            {
+              name: "Business",
+              price: "$19/user/month",
+            },
+          ],
+          details: "Free for verified students and open source maintainers",
+        },
         models: ["Codex", "GPT-4"],
       },
       {
@@ -150,6 +247,15 @@ export const categories: Category[] = [
         type: "extension",
         models: ["Claude 3", "GPT-4"],
       },
+      {
+        name: "Supermaven",
+        description:
+          "The fastest copilot with a 1 million token context window, 3x faster than competitors, and built-in chat interface for GPT-4 and Claude 3",
+        link: "https://supermaven.com",
+        iconUrl: "https://supermaven.com/favicon-32x32.png",
+        type: "extension",
+        models: ["GPT-4o", "GPT-4", "Claude 3"],
+      },
     ],
   },
   {
@@ -164,6 +270,28 @@ export const categories: Category[] = [
         link: "https://chat.openai.com/",
         iconUrl: "https://chat.openai.com/favicon.ico",
         type: "chat",
+        pricing: {
+          type: "freemium",
+          tiers: [
+            {
+              name: "Free",
+              price: "$0",
+            },
+            {
+              name: "Plus",
+              price: "$20/month",
+            },
+            {
+              name: "Team",
+              price: "$30/user/month",
+            },
+            {
+              name: "Enterprise",
+              price: "Custom",
+            },
+          ],
+          details: "GPT-3.5 is free, GPT-4 requires subscription",
+        },
         models: ["GPT-4", "GPT-3.5"],
       },
       {
