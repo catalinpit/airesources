@@ -30,28 +30,30 @@ const tags = [
 ---
 
 <Layout description={item.description} pageTitle={item.name}>
-  <div class="container mx-auto px-4 py-8">
-    <nav class="max-w-3xl mx-auto mb-8">
+  <div class="container mx-auto px-4 py-12">
+    <nav class="max-w-3xl mx-auto mb-6">
       <div class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-        <a href="/" class="hover:text-neutral-900 dark:hover:text-neutral-100">Resources</a>
+        <a href="/" class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">Resources</a>
         <span>/</span>
-        <a href={`/category/${category.categorySlug}`} class="hover:text-neutral-900 dark:hover:text-neutral-100">{category.title}</a>
+        <a href={`/category/${category.categorySlug}`} class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">{category.title}</a>
         <span>/</span>
-        <span class="text-neutral-900 dark:text-neutral-100">{item.name}</span>
+        <span class="text-neutral-900 dark:text-neutral-100 font-medium">{item.name}</span>
       </div>
     </nav>
 
     <main>
       <div class="max-w-3xl mx-auto">
-        <div class="bg-gradient-to-br from-neutral-50 to-neutral-50/60 dark:from-neutral-800 dark:to-neutral-800/60 rounded-lg shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
-          <div class="p-8">
-            <div class="flex items-start gap-3">
+        <div class="bg-gradient-to-br from-neutral-50 to-neutral-50/60 dark:from-neutral-800 dark:to-neutral-800/60 rounded-lg shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1),0_4px_12px_-2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4),0_4px_12px_-2px_rgba(0,0,0,0.3)]">
+          <div class="p-10">
+            <div class="flex items-start gap-4">
               <div class="flex-shrink-0">
-                <img 
-                  src={item.iconUrl} 
-                  alt={`${item.name} icon`}
-                  class="w-12 h-12 rounded-lg object-contain bg-white dark:bg-neutral-800 p-2 border border-neutral-200 dark:border-neutral-700"
-                />
+                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900 p-2.5 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3),0_0_0_1px_rgba(255,255,255,0.05)]">
+                  <img 
+                    src={item.iconUrl} 
+                    alt={`${item.name} icon`}
+                    class="w-full h-full rounded-lg object-contain"
+                  />
+                </div>
               </div>
               <div class="flex-1">
                 <Header
@@ -63,10 +65,10 @@ const tags = [
             </div>
 
             {item.models && item.models.length > 0 && (
-              <Divider class="mb-6" />
-                <div class="flex items-center gap-2 mb-3">
-                  <h3 class="text-md leading-6 tracking-wide text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <Divider class="my-8" />
+                <div class="flex items-center gap-2 mb-4">
+                  <h3 class="text-lg font-semibold leading-6 tracking-wide text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
                       <circle cx="12" cy="12" r="3"/>
                     </svg>
@@ -75,7 +77,7 @@ const tags = [
                 </div>
                 <div class="flex flex-wrap gap-2">
                   {item.models.map(model => (
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gradient-to-r from-neutral-100 to-neutral-50 dark:from-neutral-700/70 dark:to-neutral-800/50 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-600 shadow-sm">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-gradient-to-br from-white to-neutral-50/50 dark:from-neutral-700/70 dark:to-neutral-800/50 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-600 shadow-[0_2px_4px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.1),0_0_0_1px_rgba(255,255,255,0.5)_inset] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
                       {model}
                     </span>
                   ))}
@@ -83,11 +85,11 @@ const tags = [
             )}
 
             {item.pricing && (
-              <Divider class="my-6" />
+              <Divider class="my-8" />
               <div class="space-y-6">
                 <div class="flex items-center gap-2">
-                  <h3 class="text-md leading-6 tracking-wide text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <h3 class="text-lg font-semibold leading-6 tracking-wide text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                     </svg>
                     Pricing
@@ -95,28 +97,28 @@ const tags = [
                 </div>
                 <div class="flex flex-col gap-4">
                   <div class="flex items-center gap-2">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-neutral-100 to-neutral-50 dark:from-neutral-700/70 dark:to-neutral-800/50 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-600 shadow-sm">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-br from-white to-neutral-50/50 dark:from-neutral-700/70 dark:to-neutral-800/50 text-neutral-800 dark:text-neutral-200 border border-neutral-200 dark:border-neutral-600 shadow-[0_2px_4px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.1),0_0_0_1px_rgba(255,255,255,0.5)_inset] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
                       {item.pricing.type.charAt(0).toUpperCase() + item.pricing.type.slice(1)}
                     </span>
                   </div>
                   <div class="grid gap-3">
                     {item.pricing.tiers.map(tier => (
-                      <div class="group relative flex items-center justify-between p-4 rounded-lg bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800/50 dark:to-neutral-800/30 border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-all duration-200">
+                      <div class="group relative flex items-center justify-between p-4 rounded-xl bg-gradient-to-br from-white to-neutral-50/50 dark:from-neutral-800/50 dark:to-neutral-800/30 border border-neutral-200/80 dark:border-neutral-700/80 shadow-[0_2px_4px_rgba(0,0,0,0.05),0_0_0_1px_rgba(0,0,0,0.05)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]">
                         <div class="flex items-center gap-3">
-                          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-neutral-100 to-neutral-50 dark:from-neutral-700/70 dark:to-neutral-800/50 flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-neutral-600 dark:text-neutral-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <div class="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-800/20 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                               <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                             </svg>
                           </div>
                           <span class="font-medium text-neutral-900 dark:text-neutral-100">{tier.name}</span>
                         </div>
-                        <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100 bg-neutral-100 dark:bg-neutral-700/50 px-3 py-1 rounded-full">{tier.price}</span>
+                        <span class="text-sm font-semibold text-neutral-900 dark:text-neutral-100 bg-gradient-to-br from-neutral-100 to-white dark:from-neutral-700/50 dark:to-neutral-800 px-3.5 py-1.5 rounded-full shadow-[0_2px_4px_rgba(0,0,0,0.05)] dark:shadow-[0_2px_4px_rgba(0,0,0,0.2)]">{tier.price}</span>
                       </div>
                     ))}
                   </div>
                   {item.pricing.details && (
-                    <div class="flex items-start gap-2 text-sm text-neutral-600 dark:text-neutral-400 bg-neutral-50 dark:bg-neutral-800/30 p-3 rounded-lg">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-0.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <div class="flex items-start gap-2.5 text-sm text-neutral-600 dark:text-neutral-400 p-4 rounded-xl">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-0.5 flex-shrink-0 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
                         <path d="M12 16v-4"/>
                         <path d="M12 8h.01"/>
@@ -128,7 +130,7 @@ const tags = [
               </div>
             )}
 
-            <div class="flex items-center justify-between mt-8">
+            <div class="flex items-center justify-between mt-10">
               <div class="flex flex-wrap gap-2">
                 {tags.map(tag => (
                   <Tag href={`/category/${category.categorySlug}`}>
@@ -136,7 +138,7 @@ const tags = [
                   </Tag>
                 ))}
               </div>
-              <Button href={item.link} class="inline-flex items-center">
+              <Button href={item.link} class="inline-flex items-center px-6 py-2.5 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-xl shadow-[0_2px_4px_rgba(59,130,246,0.3)] hover:shadow-[0_4px_8px_rgba(59,130,246,0.4)] transition-all duration-200">
                 Check out site
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd" />
