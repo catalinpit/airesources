@@ -9,14 +9,14 @@ const { title, description, class: className = '' } = Astro.props;
 ---
 
 <header class:list={[
-  'text-center mb-12 max-w-2xl mx-auto',
+  'text-center mb-12 max-w-3xl mx-auto',
   className
 ]}>
-  <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+  <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-4">
     {title}
   </h1>
   {description && (
-    <p class="text-lg text-neutral-500 dark:text-neutral-400">
+    <p class="text-xl text-neutral-500 dark:text-neutral-400">
       {description}
     </p>
   )}

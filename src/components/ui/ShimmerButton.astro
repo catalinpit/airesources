@@ -1,0 +1,21 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  href?: string;
+  class?: string;
+}
+
+const { href, class: className = '' } = Astro.props;
+
+---
+
+<div class="relative overflow-hidden rounded-full dark:bg-indigo-950 bg-white shadow border dark:border-indigo-800 group border-indigo-200 p-0.5">
+  <span class="absolute inset-[-1000%] animate-[spin_5s_linear_infinite_reverse] dark:bg-[conic-gradient(from_90deg_at_50%_50%,#818CF8_0%,#312E81_7%)] bg-[conic-gradient(from_90deg_at_50%_50%,#E0E7FF_0%,#818CF8_5%)] group-hover:bg-none" />
+  <Button
+    href={href}
+    class:list={[`h-10 px-2 rounded-full font-semibold text-indigo-800 dark:text-indigo-200 backdrop-blur-xl bg-indigo-50 dark:bg-indigo-950`, className]}
+  >
+    <slot />
+  </Button>
+</div> 
