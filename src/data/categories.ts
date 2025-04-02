@@ -174,6 +174,24 @@ export const categories: Category[] = [
     categorySlug: "terminals",
     items: [
       {
+        name: "Wave",
+        description:
+          "Open-source terminal with superpowers, integrating file previews, file editing, AI, web browsing, and workspace organization",
+        link: "https://www.waveterm.dev",
+        iconUrl:
+          "https://github.com/wavetermdev/waveterm/blob/main/assets/waveterm-logo-with-bg.png?raw=true",
+        type: "terminal",
+        previewImage:
+          "https://raw.githubusercontent.com/wavetermdev/waveterm/refs/heads/main/assets/waveterm-logo-with-bg.ico",
+        models: [
+          "Claude 3.5 Sonnet",
+          "Ollama Llama 3.2",
+          "Azure GPT-4",
+          "Perplexity Sonar",
+          "Gemini 2.0",
+        ],
+      },
+      {
         name: "Warp",
         description:
           "The intelligent terminal that combines AI and your dev team's knowledge in one fast, intuitive terminal",
