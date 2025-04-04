@@ -4,6 +4,7 @@ import Layout from '../../layouts/layout.astro';
 import { categories } from '../../data/categories';
 import ResourceCard from '../../components/ui/Resource-Card.astro';
 import Header from '../../components/Header.astro';
+import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
 
 export async function getStaticPaths() {
   return categories.map(category => ({
@@ -13,14 +14,25 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.props;
+
+const allItems = categories.flatMap(cat => 
+  cat.items.map(item => ({
+    ...item,
+    categorySlug: cat.categorySlug
+  }))
+);
+
+const categoryItems = category.items.filter(item => !item.sponsored || item.sponsored === "small");
 ---
 
 <Layout description={category.description} pageTitle={category.title}>
 	<main class="container mx-auto px-4 py-8">
 		<Header
-			title={`${category.title} (${category.items.length})`}
+			title={`${category.title} (${categoryItems.length})`}
 			description={category.description}
 		/>
+
+		<SponsoredProducts items={allItems} />
 
 		<section class="space-y-6 p-10 w-full bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
 			<nav class="mb-8">
@@ -32,13 +44,14 @@ const { category } = Astro.props;
 			</nav>
 
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-				{category.items.map((item) => (
+				{categoryItems.map((item) => (
 					<ResourceCard
 						name={item.name}
 						description={item.description}
 						link={item.link}
 						iconUrl={item.iconUrl}
 						categorySlug={category.categorySlug}
+						sponsored={item.sponsored}
 					/>
 				))}
 			</div>

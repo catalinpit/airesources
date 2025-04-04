@@ -5,26 +5,66 @@ interface Props {
   link: string;
   iconUrl: string;
   categorySlug: string;
+  sponsored?: "small" | "big";
+  class?: string;
 }
 
-const { name, description, link, iconUrl, categorySlug } = Astro.props;
+const { name, description, link, iconUrl, categorySlug, sponsored, class: className } = Astro.props;
 
 const productSlug = name.toLowerCase().replace(/\s+/g, '-');
 ---
 
 <a 
   href={`/${categorySlug}/${productSlug}`}
-  class="group w-full relative hover:border-neutral-400 dark:hover:border-neutral-700/50 transition-all duration-200 h-full flex flex-col"
+  class:list={[
+    "group w-full relative hover:border-neutral-400 dark:hover:border-neutral-700/50 transition-all duration-200 h-full flex flex-col",
+    className
+  ]}
 >
-  <div class="bg-gradient-to-br from-neutral-50 to-neutral-50/60 dark:from-neutral-800 dark:to-neutral-800/60 rounded-lg shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)] flex-1 flex flex-col group-hover:scale-[1.05] transition-transform duration-200">
+  <div class:list={[
+    "rounded-lg flex-1 flex flex-col group-hover:scale-[1.03] transition-transform duration-200",
+    sponsored === "big" 
+      ? [
+          "bg-gradient-to-br from-indigo-50 to-indigo-100/60 dark:from-indigo-500/40 dark:to-indigo-700/30",
+          "shadow-[0_0_0_1px_rgba(79,70,229,0.1)_inset,0_0.5px_0.5px_rgba(79,70,229,0.05)_inset,0_-0.5px_0.5px_rgba(79,70,229,0.05)_inset,0_1px_2px_rgba(79,70,229,0.1)]",
+          "dark:shadow-[0_0_0_0.5px_rgba(99,102,241,0.2)_inset,0_0.5px_0.5px_rgba(99,102,241,0.1)_inset,0_-0.5px_0.5px_rgba(99,102,241,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]"
+        ]
+      : [
+          "bg-gradient-to-br from-neutral-50 to-neutral-50/60 dark:from-neutral-800 dark:to-neutral-800/60",
+          "shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)]",
+          "dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]"
+        ]
+  ]}>
+    {sponsored && (
+      <div class="absolute top-2 right-2 z-10 transition-transform duration-200">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gradient-to-b from-indigo-100 to-indigo-200/50 dark:from-indigo-400/50 dark:to-indigo-400/20 text-indigo-700 dark:text-indigo-300 border border-indigo-300/30 dark:border-indigo-700/30 shadow-sm">
+          Sponsored
+        </span>
+      </div>
+    )}
     <div class="p-6 flex-1 flex flex-col">
       <div class="flex items-center gap-3 mb-3">
         <div class="flex-shrink-0">
-          <img 
-            src={iconUrl} 
-            alt={`${name} icon`}
-            class="w-8 h-8 rounded-lg object-contain bg-white dark:bg-neutral-800 p-1.5 border border-neutral-200 dark:border-neutral-700"
-          />
+          <div class:list={[
+            "w-10 h-10 rounded-xl p-2",
+            sponsored === "big"
+              ? [
+                  "bg-gradient-to-br from-white to-indigo-50 dark:from-indigo-900 dark:to-indigo-950",
+                  "shadow-[0_4px_12px_-2px_rgba(79,70,229,0.1),0_0_0_1px_rgba(79,70,229,0.05)]",
+                  "dark:shadow-[0_4px_12px_-2px_rgba(99,102,241,0.2),0_0_0_1px_rgba(99,102,241,0.1)]"
+                ]
+              : [
+                  "bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900",
+                  "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.05)]",
+                  "dark:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3),0_0_0_1px_rgba(255,255,255,0.05)]"
+                ]
+          ]}>
+            <img 
+              src={iconUrl} 
+              alt={`${name} icon`}
+              class="w-full h-full rounded-lg object-contain"
+            />
+          </div>
         </div>
         <h3 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
           {name}

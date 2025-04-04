@@ -1,0 +1,40 @@
+---
+import ResourceCard from './Resource-Card.astro';
+
+interface Props {
+	items: Array<{
+		name: string;
+		description: string;
+		link: string;
+		iconUrl: string;
+		categorySlug: string;
+		sponsored?: "small" | "big";
+	}>;
+	class?: string;
+}
+
+const { items, class: className } = Astro.props;
+
+const sponsoredItems = items.filter((item) => item.sponsored === "big");
+
+---
+
+{sponsoredItems.length > 0 && (
+	<section class:list={[
+		"mb-8",
+		className
+	]}>
+    <div class="max-w-3xl mx-auto">
+        {sponsoredItems.map((item) => (
+            <ResourceCard
+                name={item.name}
+                description={item.description}
+                link={item.link}
+                iconUrl={item.iconUrl}
+                categorySlug={item.categorySlug}
+                sponsored={item.sponsored}
+            />
+        ))}
+    </div>
+	</section>
+)}

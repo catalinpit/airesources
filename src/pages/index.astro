@@ -5,13 +5,24 @@ import CategoryCard from '../components/ui/Category-Card.astro';
 import Tag from '../components/ui/Tag.astro';
 import Header from '../components/Header.astro';
 import { categories } from '../data/categories';
+import SponsoredProducts from '../components/ui/Sponsored-Products.astro';
+
+const siteTitle = 'AI Resources';
+const description = 'A curated collection of the best AI tools, courses, and resources. From code editors to learning platforms, find everything you need to build, learn, and innovate with AI.';
+
+const allItems = categories.flatMap(cat => 
+	cat.items.map(item => ({
+		...item,
+		categorySlug: cat.categorySlug
+	}))
+);
 ---
 
-<Layout>
+<Layout description={description} pageTitle={siteTitle}>
 	<main class="container mx-auto px-4 py-8">
 		<Header
 			title="AI Resources Directory"
-			description="A curated collection of the best AI tools, courses, and resources. From code editors to learning platforms, find everything you need to build, learn, and innovate with AI."
+			description={description}
 			class="mb-20"
 		/>
 
@@ -22,6 +33,8 @@ import { categories } from '../data/categories';
 				</Tag>
 			))}
 		</nav>
+
+		<SponsoredProducts items={allItems} class="w-full" />
 
 		<div class="space-y-16">
 			{categories.map((category) => (

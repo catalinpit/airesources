@@ -12,4 +12,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   integrations: [sitemap(), partytown()],
+  redirects: {
+    "/category/ides": "/category/coding-tools",
+  },
 });

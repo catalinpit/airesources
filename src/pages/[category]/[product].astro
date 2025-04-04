@@ -6,6 +6,7 @@ import Button from '../../components/ui/Button.astro';
 import Tag from '../../components/ui/Tag.astro';
 import Header from '../../components/Header.astro';
 import Divider from '../../components/ui/Divider.astro';
+import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
 
 export async function getStaticPaths() {
   return categories.flatMap(category => 
@@ -27,6 +28,17 @@ const { category, item } = Astro.props;
 const tags = [
   { label: item.type || 'tool', href: '#' },
 ];
+
+const allItems = categories.flatMap(cat => 
+  cat.items.map(item => ({
+    ...item,
+    categorySlug: cat.categorySlug
+  }))
+);
+
+const filteredItems = allItems.filter(product => 
+  product.name !== item.name || product.categorySlug !== category.categorySlug
+);
 ---
 
 <Layout description={item.description} pageTitle={item.name}>
@@ -40,6 +52,8 @@ const tags = [
         <span class="text-neutral-900 dark:text-neutral-100 font-medium">{item.name}</span>
       </div>
     </nav>
+
+    {filteredItems.length > 0 && <SponsoredProducts items={filteredItems} class="max-w-3xl mx-auto" />}
 
     <main>
       <div class="max-w-3xl mx-auto">

@@ -14,6 +14,7 @@ interface CategoryItem {
     }[];
     details?: string;
   };
+  sponsored?: "small" | "big";
 }
 
 interface Category {
@@ -25,10 +26,35 @@ interface Category {
 
 export const categories: Category[] = [
   {
-    title: "IDEs & Code Editors",
-    description: "Development environments optimized for AI development",
-    categorySlug: "ides",
+    title: "Coding Tools",
+    description:
+      "Development environments and tools optimized for AI development",
+    categorySlug: "coding-tools",
     items: [
+      // {
+      //   name: "AI Studio Pro",
+      //   description:
+      //     "Advanced AI-powered development environment with integrated model training and deployment capabilities",
+      //   link: "https://example.com/ai-studio-pro",
+      //   iconUrl: "https://via.placeholder.com/64",
+      //   type: "editor",
+      //   sponsored: "big",
+      //   models: ["GPT-4", "Claude 3", "Gemini Pro"],
+      //   pricing: {
+      //     type: "paid",
+      //     tiers: [
+      //       {
+      //         name: "Pro",
+      //         price: "$49/month",
+      //       },
+      //       {
+      //         name: "Enterprise",
+      //         price: "Custom",
+      //       },
+      //     ],
+      //     details: "14-day free trial available",
+      //   },
+      // },
       {
         name: "Zed",
         description:
@@ -166,36 +192,11 @@ export const categories: Category[] = [
           "Cascade Base ⚡",
         ],
       },
-    ],
-  },
-  {
-    title: "Terminals",
-    description: "Modern terminal emulators with AI capabilities",
-    categorySlug: "terminals",
-    items: [
-      {
-        name: "Wave",
-        description:
-          "Open-source terminal with superpowers, integrating file previews, file editing, AI, web browsing, and workspace organization",
-        link: "https://www.waveterm.dev",
-        iconUrl:
-          "https://github.com/wavetermdev/waveterm/blob/main/assets/waveterm-logo-with-bg.png?raw=true",
-        type: "terminal",
-        previewImage:
-          "https://raw.githubusercontent.com/wavetermdev/waveterm/refs/heads/main/assets/waveterm-logo-with-bg.ico",
-        models: [
-          "Claude 3.5 Sonnet",
-          "Ollama Llama 3.2",
-          "Azure GPT-4",
-          "Perplexity Sonar",
-          "Gemini 2.0",
-        ],
-      },
       {
         name: "Warp",
         description:
-          "The intelligent terminal that combines AI and your dev team's knowledge in one fast, intuitive terminal",
-        link: "https://www.warp.dev/",
+          "The agentic command line that can perform any coding task for you",
+        link: "https://www.warp.dev/?utm_source=ai-resources-dev&ref=airesources.dev",
         iconUrl: "https://www.warp.dev/favicon.png",
         type: "terminal",
         previewImage: "https://www.warp.dev/preview.png",
@@ -222,7 +223,42 @@ export const categories: Category[] = [
           details:
             "Free tier includes 150 AI requests per month. Pro includes 1,000 AI requests and 35M token limit. Turbo includes unlimited AI requests and 100M token limit. Teams of 3+ get discounts on Turbo plan.",
         },
-        models: ["Claude 3.5 Sonnet", "Claude 3.5 Haiku", "GPT-4o"],
+        models: [
+          "Claude 3.7 Sonnet",
+          "Claude 3.5 Haiku",
+          "GPT-4o",
+          "o3-mini",
+          "Claude 3.5 Sonnet",
+          "Gemini 2.0 Flash",
+          "DeepSeek R1 (US hosted)",
+          "DeepSeek V3 (US hosted)",
+        ],
+        sponsored: "big",
+      },
+    ],
+  },
+  {
+    title: "Terminals",
+    description: "Modern terminal emulators with AI capabilities",
+    categorySlug: "terminals",
+    items: [
+      {
+        name: "Wave",
+        description:
+          "Open-source terminal with superpowers, integrating file previews, file editing, AI, web browsing, and workspace organization",
+        link: "https://www.waveterm.dev",
+        iconUrl:
+          "https://github.com/wavetermdev/waveterm/blob/main/assets/waveterm-logo-with-bg.png?raw=true",
+        type: "terminal",
+        previewImage:
+          "https://raw.githubusercontent.com/wavetermdev/waveterm/refs/heads/main/assets/waveterm-logo-with-bg.ico",
+        models: [
+          "Claude 3.5 Sonnet",
+          "Ollama Llama 3.2",
+          "Azure GPT-4",
+          "Perplexity Sonar",
+          "Gemini 2.0",
+        ],
       },
     ],
   },
