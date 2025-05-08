@@ -5,9 +5,7 @@ import Navbar from '../components/ui/Navbar.astro';
 
 const { siteTitle = 'AI Resources', description = 'A curated collection of the best AI tools, courses, and resources. From code editors to learning platforms, find everything you need to build, learn, and innovate with AI.', pageTitle, page } = Astro.props;
 
-const canonicalUrl = Astro.url.href;
-console.log('canonicalUrl', canonicalUrl);
-console.log('page.url.current', page.url.current)
+const canonicalUrl = page.url.current;
 ---
 
 <html lang="en">
