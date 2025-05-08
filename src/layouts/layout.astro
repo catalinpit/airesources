@@ -4,6 +4,9 @@ import Footer from '../components/footer.astro';
 import Navbar from '../components/ui/Navbar.astro';
 
 const { siteTitle = 'AI Resources', description = 'A curated collection of the best AI tools, courses, and resources. From code editors to learning platforms, find everything you need to build, learn, and innovate with AI.', pageTitle } = Astro.props;
+
+const canonicalUrl = Astro.url.href;
+console.log(canonicalUrl);
 ---
 
 <html lang="en">
@@ -13,8 +16,9 @@ const { siteTitle = 'AI Resources', description = 'A curated collection of the b
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<title>{pageTitle ? `${siteTitle} - ${pageTitle}` : siteTitle}</title>
 		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalUrl} />
 		<meta property="og:title" content={pageTitle ? `${siteTitle} - ${pageTitle}` : siteTitle} />
-		<meta property="og:url" content="https://airesources.dev" />
+		<meta property="og:url" content={canonicalUrl} />
 		<meta property="og:image" content="/og_image_final.png" />
 		<meta property="og:description" content={description} />
 		<meta name="twitter:card" content="summary_large_image" />
