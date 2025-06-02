@@ -25,7 +25,8 @@ const canonicalUrl = Astro.url.href;
 		<meta name="twitter:title" content={pageTitle ? `${siteTitle} - ${pageTitle}` : siteTitle} />
 		<meta name="twitter:description" content={description} />
 		<link rel="sitemap" href="/sitemap-index.xml" />
-		<script type="text/partytown" defer data-domain="airesources.dev" src="https://plausible.io/js/script.outbound-links.pageview-props.tagged-events.js"></script>
+		<script type="text/partytown" defer data-domain="airesources.dev" src="https://plausible.self-host.tech/js/script.file-downloads.hash.outbound-links.pageview-props.tagged-events.js"></script>
+		<script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 	</head>
 	<body class="bg-neutral-100 dark:bg-neutral-900 min-h-screen flex flex-col">
 		<Navbar />
