@@ -233,7 +233,6 @@ export const categories: Category[] = [
           "DeepSeek R1 (US hosted)",
           "DeepSeek V3 (US hosted)",
         ],
-        sponsored: "big",
       },
     ],
   },
