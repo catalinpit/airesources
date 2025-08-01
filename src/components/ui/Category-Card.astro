@@ -18,12 +18,13 @@ interface Props {
 const { title, description, items, categorySlug } = Astro.props;
 
 const filteredItems = items.filter(item => !item.sponsored || item.sponsored === "small");
+const hasMoreItems = filteredItems.length > 10;
 ---
 
 <section class="space-y-6 p-10 w-full bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
   <div>
     <h2 class="text-2xl leading-10 font-bold text-gray-900 dark:text-white">
-      {title}
+      {title} ({filteredItems.length})
     </h2>
     <p class="text-neutral-500 dark:text-neutral-400">
       {description}
@@ -31,7 +32,7 @@ const filteredItems = items.filter(item => !item.sponsored || item.sponsored ===
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-    {filteredItems.slice(0, 10).map((item) => (
+    {filteredItems.slice(0, hasMoreItems ? 9 : 10).map((item) => (
       <ResourceCard
         name={item.name}
         description={item.description}
@@ -41,6 +42,21 @@ const filteredItems = items.filter(item => !item.sponsored || item.sponsored ===
         sponsored={item.sponsored}
       />
     ))}
+    {hasMoreItems && (
+      <a 
+        href={`/category/${categorySlug}`}
+        class="flex items-center justify-center min-h-[200px] bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-700 dark:hover:to-gray-800 transition-all duration-300 group"
+      >
+        <div class="text-center">
+          <div class="text-4xl font-bold text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-400 transition-colors duration-300">
+            ...
+          </div>
+          <div class="text-sm text-gray-500 dark:text-gray-400 mt-2 group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors duration-300">
+            +{filteredItems.length - 9} more
+          </div>
+        </div>
+      </a>
+    )}
   </div>
 
   <div class="flex justify-start">

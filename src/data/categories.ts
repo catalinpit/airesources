@@ -56,6 +56,54 @@ export const categories: Category[] = [
       //   },
       // },
       {
+        name: "Claude Code",
+        description:
+          "Anthropic's agentic coding tool that works directly in your terminal to build features, debug code, and automate development tasks",
+        link: "https://claude.ai/code",
+        iconUrl: "https://claude.ai/favicon.ico",
+        type: "terminal",
+        previewImage: "https://claude.ai/code-preview.png",
+        pricing: {
+          type: "freemium",
+          tiers: [
+            {
+              name: "Pro",
+              price: "$20/month",
+            },
+            {
+              name: "Max",
+              price: "$100/month",
+            },
+            {
+              name: "Max Plus",
+              price: "$200/month",
+            },
+            {
+              name: "API - Sonnet 4",
+              price: "$3/$15 per 1M tokens",
+            },
+            {
+              name: "API - Opus 4",
+              price: "$15/$75 per 1M tokens",
+            },
+            {
+              name: "Enterprise",
+              price: "Pay-as-you-go",
+            },
+          ],
+          details: "Pro includes 40-80 hours of Sonnet 4 weekly. Max includes 140-280 hours of Sonnet 4 and 15-35 hours of Opus 4. API pricing: input/output tokens. Up to 90% savings with prompt caching, 50% with batch processing.",
+        },
+        models: [
+          "Claude 4 Sonnet",
+          "Claude 3.7 Sonnet (Thinking)",
+          "Claude 3.7 Sonnet",
+          "Claude 3.5 Sonnet",
+          "Claude 4 Opus",
+          "Claude 3 Opus",
+          "Claude 3.5 Haiku",
+        ],
+      },
+      {
         name: "Zed",
         description:
           "Next-generation code editor designed for high-performance collaboration with humans and AI",
@@ -234,6 +282,98 @@ export const categories: Category[] = [
           "DeepSeek V3 (US hosted)",
         ],
       },
+      {
+        name: "Aider",
+        description:
+          "Open-source AI pair programming tool that runs in your terminal and works with most LLMs",
+        link: "https://aider.chat/",
+        iconUrl: "https://aider.chat/assets/logo.svg",
+        type: "terminal",
+        pricing: {
+          type: "byok",
+          tiers: [
+            {
+              name: "BYOK",
+              price: "Bring your own API key",
+            },
+          ],
+          details: "Free tool that requires your own API keys for LLM providers. Approximately $0.007 per file processed. Very cost-effective at ~$100/year for typical usage.",
+        },
+        models: [
+          "Claude 3.7 Sonnet",
+          "DeepSeek R1",
+          "DeepSeek Chat V3",
+          "OpenAI o1",
+          "o3-mini",
+          "GPT-4o",
+          "Local models via Ollama",
+          "Most LLM APIs",
+        ],
+      },
+      {
+        name: "Augment Code",
+        description:
+          "AI coding platform with industry-leading context engine and AI agent for large codebases",
+        link: "https://www.augmentcode.com/",
+        iconUrl: "https://www.augmentcode.com/favicon.ico",
+        type: "editor",
+        pricing: {
+          type: "freemium",
+          tiers: [
+            {
+              name: "Community",
+              price: "50 messages/month free",
+            },
+            {
+              name: "Developer",
+              price: "$50/month",
+            },
+            {
+              name: "Pro",
+              price: "$100/month",
+            },
+            {
+              name: "Max",
+              price: "$250/month",
+            },
+          ],
+          details: "Community: 50 messages free/month. Developer: 600 messages. Pro: 1,500 messages. Max: 4,500 messages. 300 message top-ups available.",
+        },
+        models: [
+          "Claude 3.5 Sonnet",
+          "GPT-4",
+          "GPT-4o",
+          "Multiple AI providers",
+        ],
+      },
+      {
+        name: "RepoPrompt",
+        description:
+          "macOS native app for AI-assisted coding with advanced file selection, token estimation, and model delegation",
+        link: "https://repoprompt.com/",
+        iconUrl: "https://repoprompt.com/images/RepoPromptLogo_NoBG.png",
+        type: "editor",
+        pricing: {
+          type: "freemium",
+          tiers: [
+            {
+              name: "Free",
+              price: "$0",
+            },
+            {
+              name: "Pro",
+              price: "Paid tier available",
+            },
+          ],
+          details: "Free tier includes Mac-Native UX, clipboard & chat, workspaces, search & filtering. Pro adds model delegation and ACT mode.",
+        },
+        models: [
+          "Multiple LLM providers",
+          "OpenAI models",
+          "Anthropic models",
+          "Local models",
+        ],
+      },
     ],
   },
   {
@@ -273,27 +413,39 @@ export const categories: Category[] = [
         iconUrl: "https://github.com/favicon.ico",
         type: "extension",
         pricing: {
-          type: "paid",
+          type: "freemium",
           tiers: [
             {
-              name: "Individual",
+              name: "Free",
+              price: "$0",
+            },
+            {
+              name: "Pro",
               price: "$10/month",
+            },
+            {
+              name: "Pro+",
+              price: "$39/month",
             },
             {
               name: "Business",
               price: "$19/user/month",
             },
+            {
+              name: "Enterprise",
+              price: "$39/user/month",
+            },
           ],
-          details: "Free for verified students and open source maintainers",
+          details: "Free tier with limited access. Free for verified students and open source maintainers. Enterprise requires GitHub Enterprise Cloud ($21/user/month).",
         },
-        models: ["Codex", "GPT-4"],
+        models: ["Codex", "GPT-4", "GPT-4o", "Claude 3.5 Sonnet"],
       },
       {
         name: "Cline",
         description:
           "Open-source collaborative AI coding agent with frontier model access",
         link: "https://cline.bot",
-        iconUrl: "https://cline.bot/assets/icons/favicon-32x32.png",
+        iconUrl: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/cline.png",
         type: "extension",
         models: ["GPT-4", "Claude 3", "Gemini Pro"],
       },
@@ -396,6 +548,78 @@ export const categories: Category[] = [
           "Phi-1",
           "Ollama Models",
           "LM Studio Models",
+        ],
+      },
+      {
+        name: "Neocodeium",
+        description:
+          "Free AI code completion plugin for Neovim powered by Windsurf, eliminating suggestion flickering",
+        link: "https://github.com/monkoose/neocodeium",
+        iconUrl: "https://github.com/favicon.ico",
+        type: "extension",
+        pricing: {
+          type: "free",
+          tiers: [
+            {
+              name: "Free",
+              price: "$0",
+            },
+          ],
+          details: "Free plugin but uses Windsurf servers for completions. Requires Neovim 0.10.0+.",
+        },
+        models: ["Windsurf AI models"],
+      },
+      {
+        name: "Cmp-AI",
+        description:
+          "AI-powered code completion source for nvim-cmp with support for multiple AI providers",
+        link: "https://github.com/tzachar/cmp-ai",
+        iconUrl: "https://github.com/favicon.ico",
+        type: "extension",
+        pricing: {
+          type: "byok",
+          tiers: [
+            {
+              name: "BYOK",
+              price: "Bring your own API key",
+            },
+          ],
+          details: "Free plugin that requires API keys for AI providers. Supports multiple providers with flexible configuration.",
+        },
+        models: [
+          "HuggingFace models",
+          "OpenAI GPT-3.5",
+          "OpenAI GPT-4",
+          "Codestral",
+          "Google Bard",
+          "Ollama",
+          "Tabby",
+        ],
+      },
+      {
+        name: "Avante.nvim",
+        description:
+          "Neovim plugin that emulates Cursor AI IDE with AI-powered code suggestions and one-click application",
+        link: "https://github.com/yetone/avante.nvim",
+        iconUrl: "https://github.com/favicon.ico",
+        type: "extension",
+        pricing: {
+          type: "byok",
+          tiers: [
+            {
+              name: "BYOK",
+              price: "Bring your own API key",
+            },
+          ],
+          details: "Free plugin that requires API keys for AI providers. Supports multiple AI providers with configurable settings.",
+        },
+        models: [
+          "Claude (Anthropic)",
+          "OpenAI GPT models",
+          "Azure OpenAI",
+          "Google Gemini",
+          "GitHub Copilot",
+          "Local models",
         ],
       },
     ],
@@ -507,8 +731,7 @@ export const categories: Category[] = [
         name: "Fast.ai",
         description: "Practical deep learning for coders",
         link: "https://www.fast.ai",
-        iconUrl:
-          "https://raw.githubusercontent.com/fastai/logos/refs/heads/main/fastai_small.png",
+        iconUrl: "https://via.placeholder.com/64/E74C3C/FFFFFF?text=AI",
         models: ["Custom Models", "PyTorch"],
       },
       {
@@ -543,15 +766,32 @@ export const categories: Category[] = [
         name: "Udacity AI Nanodegree",
         description: "Comprehensive AI program with industry projects",
         link: "https://www.udacity.com/course/ai-artificial-intelligence-nanodegree--nd898",
-        iconUrl: "https://www.udacity.com/favicon.ico",
+        iconUrl: "https://upload.wikimedia.org/wikipedia/en/3/3b/Udacity_logo.png",
         models: ["TensorFlow", "PyTorch", "Keras"],
       },
       {
         name: "Deep Learning Book",
         description: "The definitive textbook on deep learning",
         link: "https://www.deeplearningbook.org",
-        iconUrl: "https://www.deeplearningbook.org/favicon.ico",
+        iconUrl: "https://via.placeholder.com/64/2E8B57/FFFFFF?text=DL",
         models: ["Theoretical Models", "Mathematical Foundations"],
+      },
+      {
+        name: "Principled AI Coding",
+        description: "IndyDevDan's comprehensive course on AI coding principles, covering the Big Three: Context, Prompt, and Model",
+        link: "https://agenticengineer.com/principled-ai-coding",
+        iconUrl: "https://via.placeholder.com/64/3498DB/FFFFFF?text=DD",
+        pricing: {
+          type: "paid",
+          tiers: [
+            {
+              name: "Full Course",
+              price: "$299",
+            },
+          ],
+          details: "6 hours of content across 8 lessons (beginner to advanced). Lifetime access with updates. No-questions-asked refund before lesson four.",
+        },
+        models: ["OpenAI models", "Anthropic models", "Aider", "Various AI tools"],
       },
     ],
   },
@@ -598,7 +838,7 @@ export const categories: Category[] = [
         name: "Midjourney",
         description: "AI-powered image generation from text descriptions",
         link: "https://www.midjourney.com/",
-        iconUrl: "https://www.midjourney.com/favicon.ico",
+        iconUrl: "https://upload.wikimedia.org/wikipedia/commons/2/24/Midjourney_Emblem.svg",
         type: "image",
         models: ["Midjourney v6", "Midjourney v5"],
       },
