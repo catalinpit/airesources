@@ -1,8 +1,15 @@
-interface CategoryItem {
+type Author = {
+  name: string;
+  link: string;
+  iconUrl: string;
+};
+
+type CategoryItem = {
   name: string;
   description: string;
   link: string;
   iconUrl: string;
+  author?: Author;
   previewImage?: string;
   type?: string;
   models?: string[];
@@ -15,14 +22,14 @@ interface CategoryItem {
     details?: string;
   };
   sponsored?: "small" | "big";
-}
+};
 
-interface Category {
+type Category = {
   title: string;
   description: string;
   categorySlug: string;
   items: CategoryItem[];
-}
+};
 
 export const categories: Category[] = [
   {
@@ -813,6 +820,26 @@ export const categories: Category[] = [
     ],
   },
   {
+    title: "Posts",
+    description: "Blog, newsletter and social media posts related to AI",
+    categorySlug: "posts",
+    items: [
+      {
+        name: "Vibing a Non-Trivial Ghostty Feature",
+        description:
+          "In this post, Mitchell Hashimoto writes about his process of implementing a difficult feature to Ghostty using AI.",
+        link: "https://mitchellh.com/writing/non-trivial-vibing",
+        iconUrl: "https://mitchellh.com/favicon.ico",
+        author: {
+          name: "Mitchell Hashimoto",
+          link: "https://x.com/mitchellh",
+          iconUrl:
+            "https://pbs.twimg.com/profile_images/1141762999838842880/64_Y4_XB_400x400.jpg",
+        },
+      },
+    ],
+  },
+  {
     title: "People",
     description: "Influential figures in AI and technology",
     categorySlug: "people",
@@ -857,6 +884,15 @@ export const categories: Category[] = [
           "CodeRabbit is an AI-powered code review tool that automates the code review process, providing context-aware feedback on pull requests within minutes.",
         link: "https://www.coderabbit.ai/",
         iconUrl: "https://www.coderabbit.ai/favicon.ico",
+        type: "code-review",
+        models: ["Custom models"],
+      },
+      {
+        name: "Graphite",
+        description:
+          "Graphite is a pull-request toolchain with AI and non-AI features that help you ship code faster by reducing the time it spends in review.",
+        link: "https://www.graphite.com/",
+        iconUrl: "https://www.graphite.com/favicon.ico",
         type: "code-review",
         models: ["Custom models"],
       },
