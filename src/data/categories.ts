@@ -91,7 +91,8 @@ export const categories: Category[] = [
               price: "Pay-as-you-go",
             },
           ],
-          details: "Pro includes 40-80 hours of Sonnet 4 weekly. Max includes 140-280 hours of Sonnet 4 and 15-35 hours of Opus 4. API pricing: input/output tokens. Up to 90% savings with prompt caching, 50% with batch processing.",
+          details:
+            "Pro includes 40-80 hours of Sonnet 4 weekly. Max includes 140-280 hours of Sonnet 4 and 15-35 hours of Opus 4. API pricing: input/output tokens. Up to 90% savings with prompt caching, 50% with batch processing.",
         },
         models: [
           "Claude 4 Sonnet",
@@ -297,7 +298,8 @@ export const categories: Category[] = [
               price: "Bring your own API key",
             },
           ],
-          details: "Free tool that requires your own API keys for LLM providers. Approximately $0.007 per file processed. Very cost-effective at ~$100/year for typical usage.",
+          details:
+            "Free tool that requires your own API keys for LLM providers. Approximately $0.007 per file processed. Very cost-effective at ~$100/year for typical usage.",
         },
         models: [
           "Claude 3.7 Sonnet",
@@ -337,7 +339,8 @@ export const categories: Category[] = [
               price: "$250/month",
             },
           ],
-          details: "Community: 50 messages free/month. Developer: 600 messages. Pro: 1,500 messages. Max: 4,500 messages. 300 message top-ups available.",
+          details:
+            "Community: 50 messages free/month. Developer: 600 messages. Pro: 1,500 messages. Max: 4,500 messages. 300 message top-ups available.",
         },
         models: [
           "Claude 3.5 Sonnet",
@@ -365,7 +368,8 @@ export const categories: Category[] = [
               price: "Paid tier available",
             },
           ],
-          details: "Free tier includes Mac-Native UX, clipboard & chat, workspaces, search & filtering. Pro adds model delegation and ACT mode.",
+          details:
+            "Free tier includes Mac-Native UX, clipboard & chat, workspaces, search & filtering. Pro adds model delegation and ACT mode.",
         },
         models: [
           "Multiple LLM providers",
@@ -436,7 +440,8 @@ export const categories: Category[] = [
               price: "$39/user/month",
             },
           ],
-          details: "Free tier with limited access. Free for verified students and open source maintainers. Enterprise requires GitHub Enterprise Cloud ($21/user/month).",
+          details:
+            "Free tier with limited access. Free for verified students and open source maintainers. Enterprise requires GitHub Enterprise Cloud ($21/user/month).",
         },
         models: ["Codex", "GPT-4", "GPT-4o", "Claude 3.5 Sonnet"],
       },
@@ -445,7 +450,8 @@ export const categories: Category[] = [
         description:
           "Open-source collaborative AI coding agent with frontier model access",
         link: "https://cline.bot",
-        iconUrl: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/cline.png",
+        iconUrl:
+          "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/cline.png",
         type: "extension",
         models: ["GPT-4", "Claude 3", "Gemini Pro"],
       },
@@ -565,7 +571,8 @@ export const categories: Category[] = [
               price: "$0",
             },
           ],
-          details: "Free plugin but uses Windsurf servers for completions. Requires Neovim 0.10.0+.",
+          details:
+            "Free plugin but uses Windsurf servers for completions. Requires Neovim 0.10.0+.",
         },
         models: ["Windsurf AI models"],
       },
@@ -584,7 +591,8 @@ export const categories: Category[] = [
               price: "Bring your own API key",
             },
           ],
-          details: "Free plugin that requires API keys for AI providers. Supports multiple providers with flexible configuration.",
+          details:
+            "Free plugin that requires API keys for AI providers. Supports multiple providers with flexible configuration.",
         },
         models: [
           "HuggingFace models",
@@ -611,7 +619,8 @@ export const categories: Category[] = [
               price: "Bring your own API key",
             },
           ],
-          details: "Free plugin that requires API keys for AI providers. Supports multiple AI providers with configurable settings.",
+          details:
+            "Free plugin that requires API keys for AI providers. Supports multiple AI providers with configurable settings.",
         },
         models: [
           "Claude (Anthropic)",
@@ -766,7 +775,8 @@ export const categories: Category[] = [
         name: "Udacity AI Nanodegree",
         description: "Comprehensive AI program with industry projects",
         link: "https://www.udacity.com/course/ai-artificial-intelligence-nanodegree--nd898",
-        iconUrl: "https://upload.wikimedia.org/wikipedia/en/3/3b/Udacity_logo.png",
+        iconUrl:
+          "https://upload.wikimedia.org/wikipedia/en/3/3b/Udacity_logo.png",
         models: ["TensorFlow", "PyTorch", "Keras"],
       },
       {
@@ -778,7 +788,8 @@ export const categories: Category[] = [
       },
       {
         name: "Principled AI Coding",
-        description: "IndyDevDan's comprehensive course on AI coding principles, covering the Big Three: Context, Prompt, and Model",
+        description:
+          "IndyDevDan's comprehensive course on AI coding principles, covering the Big Three: Context, Prompt, and Model",
         link: "https://agenticengineer.com/principled-ai-coding",
         iconUrl: "https://via.placeholder.com/64/3498DB/FFFFFF?text=DD",
         pricing: {
@@ -789,9 +800,15 @@ export const categories: Category[] = [
               price: "$299",
             },
           ],
-          details: "6 hours of content across 8 lessons (beginner to advanced). Lifetime access with updates. No-questions-asked refund before lesson four.",
+          details:
+            "6 hours of content across 8 lessons (beginner to advanced). Lifetime access with updates. No-questions-asked refund before lesson four.",
         },
-        models: ["OpenAI models", "Anthropic models", "Aider", "Various AI tools"],
+        models: [
+          "OpenAI models",
+          "Anthropic models",
+          "Aider",
+          "Various AI tools",
+        ],
       },
     ],
   },
@@ -830,6 +847,22 @@ export const categories: Category[] = [
     ],
   },
   {
+    title: "Code Review",
+    description: "AI-powered tools for code review",
+    categorySlug: "code-review",
+    items: [
+      {
+        name: "CodeRabbit",
+        description:
+          "CodeRabbit is an AI-powered code review tool that automates the code review process, providing context-aware feedback on pull requests within minutes.",
+        link: "https://www.coderabbit.ai/",
+        iconUrl: "https://www.coderabbit.ai/favicon.ico",
+        type: "code-review",
+        models: ["Custom models"],
+      },
+    ],
+  },
+  {
     title: "Image Generation",
     description: "AI-powered tools for creating and editing images",
     categorySlug: "image-generation",
@@ -838,7 +871,8 @@ export const categories: Category[] = [
         name: "Midjourney",
         description: "AI-powered image generation from text descriptions",
         link: "https://www.midjourney.com/",
-        iconUrl: "https://upload.wikimedia.org/wikipedia/commons/2/24/Midjourney_Emblem.svg",
+        iconUrl:
+          "https://upload.wikimedia.org/wikipedia/commons/2/24/Midjourney_Emblem.svg",
         type: "image",
         models: ["Midjourney v6", "Midjourney v5"],
       },
