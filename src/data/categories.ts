@@ -829,7 +829,8 @@ export const categories: Category[] = [
         description:
           "In this post, Mitchell Hashimoto writes about his process of implementing a difficult feature to Ghostty using AI.",
         link: "https://mitchellh.com/writing/non-trivial-vibing",
-        iconUrl: "https://mitchellh.com/favicon.ico",
+        iconUrl: "https://mitchellh.com/static/favicons/favicon-32x32.png",
+        type: "post",
         author: {
           name: "Mitchell Hashimoto",
           link: "https://x.com/mitchellh",
