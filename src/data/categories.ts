@@ -893,7 +893,7 @@ export const categories: Category[] = [
         description:
           "Graphite is a pull-request toolchain with AI and non-AI features that help you ship code faster by reducing the time it spends in review.",
         link: "https://www.graphite.com/",
-        iconUrl: "https://www.graphite.com/favicon.ico",
+        iconUrl: "https://graphite.dev/favicon/favicon-32x32.png",
         type: "code-review",
         models: ["Custom models"],
       },
