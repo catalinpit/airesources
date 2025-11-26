@@ -15,6 +15,9 @@ export async function getStaticPaths() {
 
 const { category } = Astro.props;
 
+const siteUrl = Astro.site || 'https://airesources.dev';
+const categoryUrl = new URL(`/category/${category.categorySlug}`, siteUrl).href;
+
 const allItems = categories.flatMap(cat => 
   cat.items.map(item => ({
     ...item,
@@ -26,6 +29,44 @@ const categoryItems = category.items.filter(item => !item.sponsored || item.spon
 ---
 
 <Layout description={category.description} pageTitle={category.title}>
+	<script type="application/ld+json" set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "CollectionPage",
+		"name": category.title,
+		"description": category.description,
+		"url": categoryUrl,
+		"breadcrumb": {
+			"@type": "BreadcrumbList",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Resources",
+					"item": siteUrl
+				},
+				{
+					"@type": "ListItem",
+					"position": 2,
+					"name": category.title,
+					"item": categoryUrl
+				}
+			]
+		},
+		"mainEntity": {
+			"@type": "ItemList",
+			"numberOfItems": categoryItems.length,
+			"itemListElement": categoryItems.map((item, index) => ({
+				"@type": "ListItem",
+				"position": index + 1,
+				"item": {
+					"@type": "SoftwareApplication",
+					"name": item.name,
+					"description": item.description,
+					"url": new URL(`/${category.categorySlug}/${item.name.toLowerCase().replace(/\s+/g, '-')}`, siteUrl).href
+				}
+			}))
+		}
+	})} />
 	<main class="container mx-auto px-4 py-8">
 		<Header
 			title={`${category.title} (${categoryItems.length})`}
@@ -35,12 +76,20 @@ const categoryItems = category.items.filter(item => !item.sponsored || item.spon
 		<SponsoredProducts items={allItems} />
 
 		<section class="space-y-6 p-10 w-full bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
-			<nav class="mb-8">
-				<div class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-					<a href="/" class="hover:text-neutral-900 dark:hover:text-neutral-100">Resources</a>
-					<span>/</span>
-					<span class="text-neutral-900 dark:text-neutral-100">{category.title}</span>
-				</div>
+			<nav class="mb-8" aria-label="Breadcrumb">
+				<ol class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400" itemscope itemtype="https://schema.org/BreadcrumbList">
+					<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+						<a href="/" class="hover:text-neutral-900 dark:hover:text-neutral-100" itemprop="item">
+							<span itemprop="name">Resources</span>
+						</a>
+						<meta itemprop="position" content="1" />
+					</li>
+					<span aria-hidden="true">/</span>
+					<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+						<span class="text-neutral-900 dark:text-neutral-100" itemprop="name" aria-current="page">{category.title}</span>
+						<meta itemprop="position" content="2" />
+					</li>
+				</ol>
 			</nav>
 
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

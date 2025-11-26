@@ -25,6 +25,10 @@ export async function getStaticPaths() {
 
 const { category, item } = Astro.props;
 
+const siteUrl = Astro.site || 'https://airesources.dev';
+const productUrl = new URL(`/${category.categorySlug}/${item.name.toLowerCase().replace(/\s+/g, '-')}`, siteUrl).href;
+const categoryUrl = new URL(`/category/${category.categorySlug}`, siteUrl).href;
+
 const tags = [
   { label: item.type || 'tool', href: '#' },
 ];
@@ -42,15 +46,70 @@ const filteredItems = allItems.filter(product =>
 ---
 
 <Layout description={item.description} pageTitle={item.name}>
+	<script type="application/ld+json" set:html={JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "SoftwareApplication",
+		"name": item.name,
+		"description": item.description,
+		"url": item.link,
+		"applicationCategory": category.title,
+		"operatingSystem": "Web",
+		"offers": item.pricing ? {
+			"@type": "Offer",
+			"priceCurrency": "USD",
+			"price": item.pricing.type === "free" ? "0" : undefined,
+			"priceSpecification": item.pricing.tiers?.map(tier => ({
+				"@type": "UnitPriceSpecification",
+				"name": tier.name,
+				"price": tier.price
+			}))
+		} : undefined,
+		"breadcrumb": {
+			"@type": "BreadcrumbList",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Resources",
+					"item": siteUrl
+				},
+				{
+					"@type": "ListItem",
+					"position": 2,
+					"name": category.title,
+					"item": categoryUrl
+				},
+				{
+					"@type": "ListItem",
+					"position": 3,
+					"name": item.name,
+					"item": productUrl
+				}
+			]
+		}
+	})} />
   <div class="container mx-auto px-4 py-12">
-    <nav class="max-w-3xl mx-auto mb-6">
-      <div class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400">
-        <a href="/" class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">Resources</a>
-        <span>/</span>
-        <a href={`/category/${category.categorySlug}`} class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">{category.title}</a>
-        <span>/</span>
-        <span class="text-neutral-900 dark:text-neutral-100 font-medium">{item.name}</span>
-      </div>
+    <nav class="max-w-3xl mx-auto mb-6" aria-label="Breadcrumb">
+      <ol class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href="/" class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors" itemprop="item">
+            <span itemprop="name">Resources</span>
+          </a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <span aria-hidden="true">/</span>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a href={`/category/${category.categorySlug}`} class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors" itemprop="item">
+            <span itemprop="name">{category.title}</span>
+          </a>
+          <meta itemprop="position" content="2" />
+        </li>
+        <span aria-hidden="true">/</span>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <span class="text-neutral-900 dark:text-neutral-100 font-medium" itemprop="name" aria-current="page">{item.name}</span>
+          <meta itemprop="position" content="3" />
+        </li>
+      </ol>
     </nav>
 
     {filteredItems.length > 0 && <SponsoredProducts items={filteredItems} class="max-w-3xl mx-auto" />}
