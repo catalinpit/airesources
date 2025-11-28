@@ -425,19 +425,27 @@ export const categories: Category[] = [
         iconUrl: "https://repoprompt.com/images/RepoPromptLogo_NoBG.png",
         type: "editor",
         pricing: {
-          type: "freemium",
+          type: "paid",
           tiers: [
             {
-              name: "Free",
-              price: "$0",
+              name: "Monthly",
+              price: "$14.99/month",
             },
             {
-              name: "Pro",
-              price: "Paid tier available",
+              name: "Yearly",
+              price: "$99/year",
+            },
+            {
+              name: "Buy-to-own",
+              price: "$249",
+            },
+            {
+              name: "Team",
+              price: "From $14.99/mo per seat",
             },
           ],
           details:
-            "Free tier includes Mac-Native UX, clipboard & chat, workspaces, search & filtering. Pro adds model delegation and ACT mode.",
+            "Monthly subscription includes 1-week free trial, all updates during subscription, and flexible billing. Yearly subscription ($99/year, regular $150) includes all updates and saves 2 months compared to monthly. Buy-to-own ($249, regular $349) includes lifetime access, all future updates, and is for individuals only. Team licenses include managed seats with centralized billing and volume discounts available.",
         },
         models: [
           "Multiple LLM providers",
@@ -449,7 +457,7 @@ export const categories: Category[] = [
       {
         name: "Crystal",
         description:
-          "A new type of dev environment to manage, inspect, and test parallel Claude Code sessions",
+          "Run multiple Claude Code AI sessions in parallel git worktrees. Manage, inspect, test, and compare different AI-assisted development approaches in one desktop app",
         link: "https://github.com/stravu/crystal",
         iconUrl: "https://github.com/stravu.png",
         type: "editor",
@@ -471,13 +479,23 @@ export const categories: Category[] = [
         iconUrl: "https://trypear.ai/favicon.ico",
         type: "editor",
         pricing: {
-          type: "free",
+          type: "freemium",
           tiers: [
             {
-              name: "Free",
-              price: "$0",
+              name: "Intern",
+              price: "Free",
+            },
+            {
+              name: "Maker",
+              price: "$15/month",
+            },
+            {
+              name: "Enterprise",
+              price: "Contact Us",
             },
           ],
+          details:
+            "Intern includes free trial, use your own API key or local models, Community Discord server, and macOS (Silicon) support. Maker includes full access to PearAI Router & Hosted Servers, monthly refill of $15 credits for market-leading AI models, full privacy with zero data retention policy with Anthropic, direct customer support by founders and contributors, and pay-as-you-go for additional credits. Enterprise includes monthly refill of increased PearAI Credits, zero data retention policy with Anthropic, centralized billing and dashboard, direct customer support by founders and contributors, and bulk purchase discounts.",
         },
       },
       {
@@ -508,18 +526,24 @@ export const categories: Category[] = [
           type: "freemium",
           tiers: [
             {
-              name: "Free",
-              price: "$0",
+              name: "Starter",
+              price: "Free",
             },
             {
               name: "Core",
-              price: "$20/month",
+              price: "$20/month (annual) or $25/month",
             },
             {
               name: "Teams",
+              price: "$35/user/month (annual) or $40/user/month",
+            },
+            {
+              name: "Enterprise",
               price: "Custom",
             },
           ],
+          details:
+            "Starter includes Replit Agent trial, 10 development apps (with temporary links), public apps only, and limited build time without long full autonomy. Core includes $25 monthly credits, a personal workspace, full Agent access, create apps & automations, autonomous app testing, and connectors. Teams includes everything in Core plus $40 monthly credits, credits granted upfront on annual plan, centralized billing, role-based access control, and private deployments. Enterprise includes custom credit allowance, everything in Teams, custom Viewer Seats, SSO/SAML, SCIM, advanced privacy controls, and SOC 2 & SSO.",
         },
         models: ["OpenAI", "replit-code-v1-3b"],
       },
