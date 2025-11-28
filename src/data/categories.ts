@@ -520,7 +520,7 @@ export const categories: Category[] = [
         description:
           "Web-based IDE with cloud developer environments, code completion, chat, a software development agent and deployments",
         link: "https://replit.com/",
-        iconUrl: "https://replit.com/favicon.ico",
+        iconUrl: "https://replit.com/public/icons/favicon-prompt-192.png",
         type: "editor",
         pricing: {
           type: "freemium",
@@ -548,22 +548,6 @@ export const categories: Category[] = [
         models: ["OpenAI", "replit-code-v1-3b"],
       },
       {
-        name: "Mutable",
-        description: "Web-based IDE, integrated with a chatbot and GitHub",
-        link: "https://github.com/mutableai/monitors4codegen",
-        iconUrl: "https://github.com/mutableai.png",
-        type: "editor",
-        pricing: {
-          type: "free",
-          tiers: [
-            {
-              name: "Free",
-              price: "$0",
-            },
-          ],
-        },
-      },
-      {
         name: "CodeStory",
         description:
           "An IDE with chat, code explanations, auto-generated commits and PR summaries. Forked from VSCodium",
@@ -579,24 +563,6 @@ export const categories: Category[] = [
             },
           ],
         },
-      },
-      {
-        name: "UI Pilot",
-        description:
-          "Chat-based AI code editor that creates forms using Material UI, using GPT-4",
-        link: "https://ui-pilot.com/",
-        iconUrl: "https://ui-pilot.com/favicon.ico",
-        type: "editor",
-        pricing: {
-          type: "free",
-          tiers: [
-            {
-              name: "Free",
-              price: "$0",
-            },
-          ],
-        },
-        models: ["GPT-4"],
       },
       {
         name: "GitWit",
@@ -1187,7 +1153,7 @@ export const categories: Category[] = [
         description:
           "Open source assistant with chat, completion, refactoring, and codebase-specific fine-tuning. Extensions for VS Code and JetBrains",
         link: "https://refact.ai/",
-        iconUrl: "https://refact.ai/favicon.ico",
+        iconUrl: "https://refact.ai/favicon.png",
         type: "extension",
         pricing: {
           type: "free",
@@ -1204,7 +1170,8 @@ export const categories: Category[] = [
         description:
           "VS Code extension with chat, refactor, and code generation. Edits multiple files and runs commands on your behalf",
         link: "https://continue.dev/",
-        iconUrl: "https://continue.dev/favicon.ico",
+        iconUrl:
+          "https://cdn.prod.website-files.com/663e06c56841363663ffbbcf/69261173dcbec97c5ed9ac97_Logo_256x256.png",
         type: "extension",
         pricing: {
           type: "free",
@@ -1221,7 +1188,7 @@ export const categories: Category[] = [
         description:
           "VS Code extension with autocomplete and chat including links to online coding references",
         link: "https://www.useblackbox.io/",
-        iconUrl: "https://www.useblackbox.io/favicon.ico",
+        iconUrl: "https://www.blackbox.ai/favicons/favicon02.png",
         type: "extension",
         pricing: {
           type: "freemium",
@@ -1256,7 +1223,7 @@ export const categories: Category[] = [
         description:
           "Open source assistant based on the CodeGeeX LLM with chat, completion, and refactoring. Extensions for 9 editors including VS Code, and PyCharm",
         link: "https://codegeex.cn/",
-        iconUrl: "https://codegeex.cn/favicon.ico",
+        iconUrl: "https://codegeex.cn/assets/images/only_logo_dark.png",
         type: "extension",
         pricing: {
           type: "free",
@@ -1292,7 +1259,8 @@ export const categories: Category[] = [
         description:
           "Open source, self-hosted code completion assistant. Extensions for VS Code and Vim",
         link: "https://tabbyml.github.io/tabby/",
-        iconUrl: "https://tabbyml.github.io/tabby/favicon.ico",
+        iconUrl:
+          "https://cdn.prod.website-files.com/66bb2bdd604a7640628938dd/66d5c6ad1aa3c2cf56d77658_tabby_favicon.png",
         type: "extension",
         pricing: {
           type: "free",
