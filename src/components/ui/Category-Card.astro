@@ -1,6 +1,5 @@
 ---
 import ResourceCard from './Resource-Card.astro';
-import Button from './Button.astro';
 
 interface Props {
   title: string;
@@ -18,7 +17,6 @@ interface Props {
 const { title, description, items, categorySlug } = Astro.props;
 
 const filteredItems = items.filter(item => !item.sponsored || item.sponsored === "small");
-const hasMoreItems = filteredItems.length > 10;
 ---
 
 <section class="space-y-6 p-10 w-full bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
@@ -32,7 +30,7 @@ const hasMoreItems = filteredItems.length > 10;
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-    {filteredItems.slice(0, hasMoreItems ? 9 : 10).map((item) => (
+    {filteredItems.map((item) => (
       <ResourceCard
         name={item.name}
         description={item.description}
@@ -42,34 +40,5 @@ const hasMoreItems = filteredItems.length > 10;
         sponsored={item.sponsored}
       />
     ))}
-    
-    {hasMoreItems && (
-      <a 
-        href={`/category/${categorySlug}`}
-        class="group w-full h-full flex flex-col transition-all duration-200"
-      >
-        <div class="rounded-lg flex-1 flex flex-col justify-center items-center bg-gradient-to-br from-neutral-50 to-neutral-50/60 dark:from-neutral-800 dark:to-neutral-800/60 shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)] group-hover:scale-[1.03] transition-transform duration-200 p-6">
-          <div class="text-center">
-            <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3),0_0_0_1px_rgba(255,255,255,0.05)] flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-            <h3 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-              +{filteredItems.length - 9} more
-            </h3>
-          </div>
-        </div>
-      </a>
-    )}
-  </div>
-
-  <div class="flex justify-start">
-    <Button href={`/category/${categorySlug}`}>
-      View all
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 ml-2" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M5.22 14.78a.75.75 0 001.06 0l7.22-7.22v5.69a.75.75 0 001.5 0v-7.5a.75.75 0 00-.75-.75h-7.5a.75.75 0 000 1.5h5.69l-7.22 7.22a.75.75 0 000 1.06z" clip-rule="evenodd" />
-      </svg>
-    </Button>
   </div>
 </section> 

@@ -74,24 +74,28 @@ export const categories: Category[] = [
           type: "freemium",
           tiers: [
             {
+              name: "Free",
+              price: "$0",
+            },
+            {
               name: "Pro",
-              price: "$20/month",
+              price: "$17/month (annual) or $20/month (monthly)",
             },
             {
               name: "Max",
-              price: "$100/month",
+              price: "From $100/month per person",
             },
             {
-              name: "Max Plus",
-              price: "$200/month",
+              name: "API - Opus 4.5",
+              price: "$5/$25 per 1M tokens (input/output)",
             },
             {
-              name: "API - Sonnet 4",
-              price: "$3/$15 per 1M tokens",
+              name: "API - Sonnet 4.5",
+              price: "$3/$15 per 1M tokens (≤200K) or $6/$22.50 (>200K)",
             },
             {
-              name: "API - Opus 4",
-              price: "$15/$75 per 1M tokens",
+              name: "API - Haiku 4.5",
+              price: "$1/$5 per 1M tokens (input/output)",
             },
             {
               name: "Enterprise",
@@ -99,16 +103,17 @@ export const categories: Category[] = [
             },
           ],
           details:
-            "Pro includes 40-80 hours of Sonnet 4 weekly. Max includes 140-280 hours of Sonnet 4 and 15-35 hours of Opus 4. API pricing: input/output tokens. Up to 90% savings with prompt caching, 50% with batch processing.",
+            "Free tier includes chat on web, iOS, Android, and desktop. Pro includes more usage, Claude Code access, unlimited projects, Research access, Google Workspace integration, and extended thinking. Max includes 5x or 20x more usage than Pro, higher output limits, memory across conversations, and early access to advanced features. API pricing varies by model and prompt size. Prompt caching available for additional savings.",
         },
         models: [
-          "Claude 4 Sonnet",
-          "Claude 3.7 Sonnet (Thinking)",
-          "Claude 3.7 Sonnet",
-          "Claude 3.5 Sonnet",
-          "Claude 4 Opus",
-          "Claude 3 Opus",
-          "Claude 3.5 Haiku",
+          "Claude Sonnet 4.5",
+          "Claude Haiku 4.5",
+          "Claude Opus 4.5",
+          "Claude Opus 4.1",
+          "Claude Sonnet 4",
+          "Claude Sonnet 3.7",
+          "Claude Opus 4",
+          "Claude Haiku 3.5",
         ],
       },
       {
@@ -168,12 +173,24 @@ export const categories: Category[] = [
               price: "$20/month",
             },
             {
-              name: "Business",
+              name: "Pro+",
+              price: "$60/month",
+            },
+            {
+              name: "Ultra",
+              price: "$200/month",
+            },
+            {
+              name: "Team",
               price: "$40/user/month",
+            },
+            {
+              name: "Enterprise",
+              price: "Custom",
             },
           ],
           details:
-            "Free tier includes 2000 completions and 50 slow premium requests. Pro includes unlimited completions and 500 fast premium requests per month.",
+            "Hobby includes one-week Pro trial, limited Agent requests, and limited Tab completion. Pro includes extended limits on Agent, unlimited Tab completion, background Agent, and maximum context window. Pro+ includes 3x usage on all OpenAI, Claude, Gemini models. Ultra includes 20x usage on all models and priority access to new features. Team includes centralized billing, usage analytics, org-wide privacy controls, role-based access, and SAML/OIDC SSO.",
         },
         models: [
           "claude-3.7-sonnet",
