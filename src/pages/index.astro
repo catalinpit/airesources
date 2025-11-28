@@ -15,6 +15,8 @@ const allItems = categories.flatMap(cat =>
 		categorySlug: cat.categorySlug
 	}))
 );
+
+const totalItemsCount = allItems.length;
 ---
 
 <Layout description={description}>
@@ -26,6 +28,9 @@ const allItems = categories.flatMap(cat =>
 		/>
 
 		<nav class="flex flex-wrap gap-2 justify-center mx-auto mb-12" aria-label="Categories">
+			<Tag href="/">
+				All ({totalItemsCount})
+			</Tag>
 			{categories.map((category) => (
 				<Tag href={`/category/${category.categorySlug}`}>
 					{category.title} ({category.items.length})
