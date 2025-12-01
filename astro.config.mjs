@@ -8,6 +8,7 @@ import partytown from "@astrojs/partytown";
 
 export default defineConfig({
   site: "https://airesources.dev",
+  trailingSlash: "always",
   vite: {
     plugins: [tailwindcss()],
   },

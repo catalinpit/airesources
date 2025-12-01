@@ -32,7 +32,7 @@ const totalItemsCount = allItems.length;
 				All ({totalItemsCount})
 			</Tag>
 			{categories.map((category) => (
-				<Tag href={`/category/${category.categorySlug}`}>
+				<Tag href={`/category/${category.categorySlug}/`}>
 					{category.title} ({category.items.length})
 				</Tag>
 			))}

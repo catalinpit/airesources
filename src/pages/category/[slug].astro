@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 const { category } = Astro.props;
 
 const siteUrl = Astro.site || 'https://airesources.dev';
-const categoryUrl = new URL(`/category/${category.categorySlug}`, siteUrl).href;
+const categoryUrl = new URL(`/category/${category.categorySlug}/`, siteUrl).href;
 
 const allItems = categories.flatMap(cat => 
   cat.items.map(item => ({
@@ -62,7 +62,7 @@ const categoryItems = category.items.filter(item => !item.sponsored || item.spon
 					"@type": "SoftwareApplication",
 					"name": item.name,
 					"description": item.description,
-					"url": new URL(`/${category.categorySlug}/${item.name.toLowerCase().replace(/\s+/g, '-')}`, siteUrl).href
+					"url": new URL(`/${category.categorySlug}/${item.name.toLowerCase().replace(/\s+/g, '-')}/`, siteUrl).href
 				}
 			}))
 		}

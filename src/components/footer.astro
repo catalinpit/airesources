@@ -25,7 +25,7 @@ const currentYear = new Date().getFullYear();
             </a>
             {categories.map((category) => (
               <a
-                href={`/category/${category.categorySlug}`}
+                href={`/category/${category.categorySlug}/`}
                 class="hover:text-neutral-900 dark:hover:text-neutral-300 transition-colors"
               >
                 {category.title}

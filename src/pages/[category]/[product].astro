@@ -26,8 +26,8 @@ export async function getStaticPaths() {
 const { category, item } = Astro.props;
 
 const siteUrl = Astro.site || 'https://airesources.dev';
-const productUrl = new URL(`/${category.categorySlug}/${item.name.toLowerCase().replace(/\s+/g, '-')}`, siteUrl).href;
-const categoryUrl = new URL(`/category/${category.categorySlug}`, siteUrl).href;
+const productUrl = new URL(`/${category.categorySlug}/${item.name.toLowerCase().replace(/\s+/g, '-')}/`, siteUrl).href;
+const categoryUrl = new URL(`/category/${category.categorySlug}/`, siteUrl).href;
 
 const tags = [
   { label: item.type || 'tool', href: '#' },
@@ -99,7 +99,7 @@ const filteredItems = allItems.filter(product =>
         </li>
         <span aria-hidden="true">/</span>
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href={`/category/${category.categorySlug}`} class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors" itemprop="item">
+          <a href={`/category/${category.categorySlug}/`} class="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors" itemprop="item">
             <span itemprop="name">{category.title}</span>
           </a>
           <meta itemprop="position" content="2" />
@@ -206,7 +206,7 @@ const filteredItems = allItems.filter(product =>
             <div class="flex items-center justify-between mt-10">
               <div class="flex flex-wrap gap-2">
                 {tags.map(tag => (
-                  <Tag href={`/category/${category.categorySlug}`}>
+                  <Tag href={`/category/${category.categorySlug}/`}>
                     #{tag.label}
                   </Tag>
                 ))}
