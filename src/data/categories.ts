@@ -7,8 +7,8 @@ type Author = {
 type CategoryItem = {
   name: string;
   description: string;
-  link: string;
-  iconUrl: string;
+  link?: string;
+  iconUrl?: string;
   author?: Author;
   previewImage?: string;
   type?: string;
@@ -22,6 +22,8 @@ type CategoryItem = {
     details?: string;
   };
   sponsored?: "small" | "big";
+  prompt?: string;
+  tags?: string[];
 };
 
 type Category = {
@@ -639,6 +641,43 @@ export const categories: Category[] = [
             "Free tier includes 1,000 requests of Advanced models/month and 5,000 Autocomplete/month. Pro includes unlimited requests of Advanced models, unlimited Autocomplete, and 300 bonus Fast requests/month (limited-time offer).",
         },
         models: ["Advanced models", "Fast models"],
+      },
+    ],
+  },
+  {
+    title: "Prompts",
+    description:
+      "Curated AI prompts for coding, debugging, and development tasks",
+    categorySlug: "prompts",
+    items: [
+      {
+        name: "Code Refactoring Prompt",
+        description:
+          "A prompt template for refactoring code to improve readability, performance, and maintainability",
+        prompt:
+          "Refactor the following code to improve its readability, performance, and maintainability. Explain the changes you make and why they improve the code.",
+        tags: ["refactoring", "code-quality", "best-practices"],
+        author: {
+          name: "AI Resources",
+          link: "https://airesources.dev",
+          iconUrl: "https://airesources.dev/favicon.ico",
+        },
+      },
+      {
+        name: "Debug Error Message",
+        description:
+          "Prompt template for debugging errors by analyzing error messages and stack traces",
+        prompt:
+          "I'm encountering the following error: [error message]. Here's the relevant code: [code snippet]. Please help me understand what's causing this error and how to fix it.",
+        tags: ["debugging", "error-handling", "troubleshooting"],
+      },
+      {
+        name: "Generate Unit Tests",
+        description:
+          "Prompt for generating comprehensive unit tests for existing code",
+        prompt:
+          "Generate comprehensive unit tests for the following code. Include edge cases, error handling, and ensure good test coverage. Use [testing framework].",
+        tags: ["testing", "unit-tests", "test-coverage"],
       },
     ],
   },

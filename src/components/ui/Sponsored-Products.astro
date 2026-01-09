@@ -5,8 +5,7 @@ interface Props {
 	items: Array<{
 		name: string;
 		description: string;
-		link: string;
-		iconUrl: string;
+		iconUrl?: string;
 		categorySlug: string;
 		sponsored?: "small" | "big";
 	}>;
@@ -29,8 +28,7 @@ const sponsoredItems = items.filter((item) => item.sponsored === "big");
             <ResourceCard
                 name={item.name}
                 description={item.description}
-                link={item.link}
-                iconUrl={item.iconUrl}
+                iconUrl={item.iconUrl || ""}
                 categorySlug={item.categorySlug}
                 sponsored={item.sponsored}
             />

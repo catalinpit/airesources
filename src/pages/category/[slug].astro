@@ -97,10 +97,10 @@ const categoryItems = category.items.filter(item => !item.sponsored || item.spon
 					<ResourceCard
 						name={item.name}
 						description={item.description}
-						link={item.link}
-						iconUrl={item.iconUrl}
+						iconUrl={item.iconUrl || ""}
 						categorySlug={category.categorySlug}
 						sponsored={item.sponsored}
+						prompt={item.prompt}
 					/>
 				))}
 			</div>

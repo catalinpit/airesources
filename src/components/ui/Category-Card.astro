@@ -10,6 +10,7 @@ interface Props {
     link: string;
     iconUrl: string;
     sponsored?: "small" | "big";
+    prompt?: string;
   }>;
   categorySlug: string;
 }
@@ -34,10 +35,10 @@ const filteredItems = items.filter(item => !item.sponsored || item.sponsored ===
       <ResourceCard
         name={item.name}
         description={item.description}
-        link={item.link}
-        iconUrl={item.iconUrl}
+        iconUrl={item.iconUrl || ""}
         categorySlug={categorySlug}
         sponsored={item.sponsored}
+        prompt={item.prompt}
       />
     ))}
   </div>

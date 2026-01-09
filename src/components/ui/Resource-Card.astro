@@ -2,14 +2,14 @@
 interface Props {
   name: string;
   description: string;
-  link: string;
   iconUrl: string;
   categorySlug: string;
   sponsored?: "small" | "big";
+  prompt?: string;
   class?: string;
 }
 
-const { name, description, link, iconUrl, categorySlug, sponsored, class: className } = Astro.props;
+const { name, description, iconUrl, categorySlug, sponsored, prompt, class: className } = Astro.props;
 
 const productSlug = name.toLowerCase().replace(/\s+/g, '-');
 ---
@@ -59,11 +59,21 @@ const productSlug = name.toLowerCase().replace(/\s+/g, '-');
                   "dark:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3),0_0_0_1px_rgba(255,255,255,0.05)]"
                 ]
           ]}>
-            <img 
-              src={iconUrl} 
-              alt={`${name} icon`}
-              class="w-full h-full rounded-lg object-contain"
-            />
+            {prompt ? (
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z"/>
+                <circle cx="19" cy="5" r="1.5"/>
+                <circle cx="5" cy="19" r="1.5"/>
+                <circle cx="20" cy="19" r="1"/>
+                <circle cx="4" cy="5" r="1"/>
+              </svg>
+            ) : iconUrl ? (
+              <img 
+                src={iconUrl} 
+                alt={`${name} icon`}
+                class="w-full h-full rounded-lg object-contain"
+              />
+            ) : null}
           </div>
         </div>
         <h3 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
