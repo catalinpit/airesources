@@ -23,6 +23,7 @@ type CategoryItem = {
   };
   sponsored?: "small" | "big";
   prompt?: string;
+  example?: string;
   tags?: string[];
 };
 
@@ -650,6 +651,22 @@ export const categories: Category[] = [
       "Curated AI prompts for coding, debugging, and development tasks",
     categorySlug: "prompts",
     items: [
+      {
+        name: "PR Comment Fix Agent Prompt",
+        description:
+          "A prompt template for automatically fixing PR review comments.",
+        link: "https://github.com/AutoMaker-Org",
+        prompt:
+          "You are an AI agent tasked with reviewing and fixing GitHub Pull Request review comments.\n\nYour task:\n1. Fetch PR information: Run `gh pr view <pr-number> --comments --json number,title,body,comments,headRefName,baseRefName`\n2. Parse all comments from the JSON output\n3. Checkout the PR branch: `git checkout <headRefName>` and `git pull origin <headRefName>`\n4. For each comment:\n   - Identify the file and line number (if applicable)\n   - Understand what change is being requested\n   - Read the relevant file(s)\n   - Make the necessary code changes to address the comment\n   - Verify the fix doesn't break existing functionality\n5. Commit all changes with a descriptive message referencing the PR comments\n6. Push changes back to the PR branch\n\nGuidelines:\n- Address comments one at a time, but group related fixes\n- Preserve existing code style and patterns\n- Don't change more than necessary to address each comment\n- Run tests if available after making changes\n- If a comment is unclear, make your best interpretation and note it\n- Create a summary of all comments addressed\n\nStart by asking for the PR number, then proceed with the workflow above.",
+        example:
+          "I need you to fix all review comments on PR #123.\n\n[Paste the prompt above]\n\nPR number: 123",
+        tags: ["refactoring", "code-quality", "best-practices"],
+        author: {
+          name: "Web Dev Cody",
+          link: "https://github.com/webdevcody",
+          iconUrl: "https://github.com/webdevcody.png",
+        },
+      },
       {
         name: "Code Refactoring Prompt",
         description:
