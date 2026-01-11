@@ -4,19 +4,32 @@ import Layout from '../layouts/layout.astro';
 import CategoryCard from '../components/ui/Category-Card.astro';
 import Tag from '../components/ui/Tag.astro';
 import Header from '../components/Header.astro';
-import { categories } from '../data/categories';
 import SponsoredProducts from '../components/ui/Sponsored-Products.astro';
+import { getCollection } from 'astro:content';
 
 const description = 'A curated collection of the best AI tools, courses, and resources. From code editors to learning platforms, find everything you need to build, learn, and innovate with AI.';
 
-const allItems = categories.flatMap(cat => 
-	cat.items.map(item => ({
-		...item,
-		categorySlug: cat.categorySlug
-	}))
-);
+const allCategories = await getCollection('categories');
+const allResources = await getCollection('resources');
+
+// Transform resources to include categorySlug for compatibility
+const allItems = allResources.map(resource => ({
+	...resource.data,
+	categorySlug: resource.data.categorySlug
+}));
 
 const totalItemsCount = allItems.length;
+
+// Group resources by category for CategoryCard
+const resourcesByCategory = allCategories.map(category => {
+	const items = allResources
+		.filter(r => r.data.categorySlug === category.data.categorySlug)
+		.map(r => r.data);
+	return {
+		...category.data,
+		items
+	};
+});
 ---
 
 <Layout description={description}>
@@ -31,7 +44,7 @@ const totalItemsCount = allItems.length;
 			<Tag href="/">
 				All ({totalItemsCount})
 			</Tag>
-			{categories.map((category) => (
+			{resourcesByCategory.map((category) => (
 				<Tag href={`/category/${category.categorySlug}/`}>
 					{category.title} ({category.items.length})
 				</Tag>
@@ -41,7 +54,7 @@ const totalItemsCount = allItems.length;
 		<SponsoredProducts items={allItems} class="w-full" />
 
 		<div class="space-y-16">
-			{categories.map((category) => (
+			{resourcesByCategory.map((category) => (
 				<CategoryCard
 					title={category.title}
 					description={category.description}
