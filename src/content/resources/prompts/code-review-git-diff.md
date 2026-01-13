@@ -27,4 +27,9 @@ prompt: |
   ## Getting the Diff
 
   Use the `git diff` tool to fetch the diff.
+
+  author:
+   name: Conductor
+   link: "[Conductor](https://www.conductor.build/)"
+   iconUrl: "https://www.conductor.build/favicon.ico?favicon.6008944c.ico"
 ---
