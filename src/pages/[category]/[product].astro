@@ -1,7 +1,6 @@
 ---
 import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
-import { categories } from '../../data/categories';
 import Button from '../../components/ui/Button.astro';
 import Tag from '../../components/ui/Tag.astro';
 import Header from '../../components/Header.astro';
@@ -15,20 +14,26 @@ import ExternalLinkIcon from '../../components/icons/ExternalLinkIcon.astro';
 import EyeIcon from '../../components/icons/EyeIcon.astro';
 import DollarIcon from '../../components/icons/DollarIcon.astro';
 import InfoIcon from '../../components/icons/InfoIcon.astro';
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  return categories.flatMap(category => 
-    category.items.map(item => ({
+  const categories = await getCollection('categories');
+  const resources = await getCollection('resources');
+
+  return resources.map(resource => {
+    const category = categories.find(c => c.data.categorySlug === resource.data.categorySlug);
+
+    return {
       params: {
-        category: category.categorySlug,
-        product: item.name.toLowerCase().replace(/\s+/g, '-'),
+        category: resource.data.categorySlug,
+        product: resource.data.name.toLowerCase().replace(/\s+/g, '-'),
       },
       props: {
-        category,
-        item,
+        category: category?.data,
+        item: resource.data,
       },
-    }))
-  );
+    };
+  });
 }
 
 const { category, item } = Astro.props;
@@ -41,14 +46,13 @@ const tags = [
   { label: item.type || 'tool', href: '#' },
 ];
 
-const allItems = categories.flatMap(cat => 
-  cat.items.map(item => ({
-    ...item,
-    categorySlug: cat.categorySlug
-  }))
-);
+const allResources = await getCollection('resources');
+const allItems = allResources.map(r => ({
+  ...r.data,
+  categorySlug: r.data.categorySlug
+}));
 
-const filteredItems = allItems.filter(product => 
+const filteredItems = allItems.filter(product =>
   product.name !== item.name || product.categorySlug !== category.categorySlug
 );
 ---
@@ -132,12 +136,17 @@ const filteredItems = allItems.filter(product =>
                   {item.prompt ? (
                     <PromptIcon class="w-full h-full text-blue-500" />
                   ) : item.iconUrl ? (
-                  <img 
-                    src={item.iconUrl} 
+                  <img
+                    src={item.iconUrl}
                     alt={`${item.name} icon`}
-                    class="w-full h-full rounded-lg object-contain"
+                    class="w-full h-full rounded-lg object-contain icon-with-fallback"
+                    data-fallback-letter={item.name.charAt(0).toUpperCase()}
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
                   />
-                  ) : null}
+                  <span class="hidden w-full h-full rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 items-center justify-center text-white font-bold text-xl">{item.name.charAt(0).toUpperCase()}</span>
+                  ) : (
+                  <span class="flex w-full h-full rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 items-center justify-center text-white font-bold text-xl">{item.name.charAt(0).toUpperCase()}</span>
+                  )}
                 </div>
               </div>
                 <Header

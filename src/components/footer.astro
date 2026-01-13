@@ -1,5 +1,5 @@
 ---
-import { categories } from '../data/categories';
+import { getCollection } from 'astro:content';
 import GitHubIcon from './icons/GitHubIcon.astro';
 import TwitterIcon from './icons/TwitterIcon.astro';
 
@@ -10,6 +10,7 @@ interface Props {
 const { currentPath = '' } = Astro.props;
 const isHomepage = currentPath === '/' || currentPath === '';
 
+const categories = await getCollection('categories');
 const currentYear = new Date().getFullYear();
 ---
 
@@ -27,10 +28,10 @@ const currentYear = new Date().getFullYear();
             </a>
             {categories.map((category) => (
               <a
-                href={`/category/${category.categorySlug}/`}
+                href={`/category/${category.data.categorySlug}/`}
                 class="hover:text-neutral-900 dark:hover:text-neutral-300 transition-colors"
               >
-                {category.title}
+                {category.data.title}
               </a>
             ))}
           </div>
@@ -61,4 +62,4 @@ const currentYear = new Date().getFullYear();
       </div>
     </div>
   </div>
-</footer> 
+</footer>

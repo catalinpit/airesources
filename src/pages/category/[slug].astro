@@ -1,31 +1,42 @@
 ---
 import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
-import { categories } from '../../data/categories';
 import ResourceCard from '../../components/ui/Resource-Card.astro';
 import Header from '../../components/Header.astro';
 import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  return categories.map(category => ({
-    params: { slug: category.categorySlug },
-    props: { category }
-  }));
+  const categories = await getCollection('categories');
+  const resources = await getCollection('resources');
+
+  return categories.map(category => {
+    const categoryItems = resources
+      .filter(r => r.data.categorySlug === category.data.categorySlug)
+      .map(r => r.data);
+
+    return {
+      params: { slug: category.data.categorySlug },
+      props: {
+        category: category.data,
+        items: categoryItems
+      }
+    };
+  });
 }
 
-const { category } = Astro.props;
+const { category, items } = Astro.props;
 
 const siteUrl = Astro.site || 'https://airesources.dev';
 const categoryUrl = new URL(`/category/${category.categorySlug}/`, siteUrl).href;
 
-const allItems = categories.flatMap(cat => 
-  cat.items.map(item => ({
-    ...item,
-    categorySlug: cat.categorySlug
-  }))
-);
+const allResources = await getCollection('resources');
+const allItems = allResources.map(r => ({
+  ...r.data,
+  categorySlug: r.data.categorySlug
+}));
 
-const categoryItems = category.items.filter(item => !item.sponsored || item.sponsored === "small");
+const categoryItems = items.filter(item => !item.sponsored || item.sponsored === "small");
 ---
 
 <Layout description={category.description} pageTitle={category.title}>

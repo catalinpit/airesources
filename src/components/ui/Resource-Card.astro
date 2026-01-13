@@ -64,12 +64,16 @@ const productSlug = name.toLowerCase().replace(/\s+/g, '-');
             {prompt ? (
               <PromptIcon class="w-full h-full text-blue-500" />
             ) : iconUrl ? (
-              <img 
-                src={iconUrl} 
+              <img
+                src={iconUrl}
                 alt={`${name} icon`}
                 class="w-full h-full rounded-lg object-contain"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
               />
-            ) : null}
+              <span class="hidden w-full h-full rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 items-center justify-center text-white font-bold text-sm">{name.charAt(0).toUpperCase()}</span>
+            ) : (
+              <span class="flex w-full h-full rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 items-center justify-center text-white font-bold text-sm">{name.charAt(0).toUpperCase()}</span>
+            )}
           </div>
         </div>
         <h3 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
