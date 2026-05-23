@@ -1,0 +1,142 @@
+---
+import { getCollection } from 'astro:content';
+
+const allCategories = await getCollection('categories');
+const allResources = await getCollection('resources');
+
+const resourcesByCategory = allCategories.map(category => {
+	const items = allResources
+		.filter(r => r.data.categorySlug === category.data.categorySlug)
+		.map(r => r.data);
+	return {
+		...category.data,
+		items
+	};
+});
+
+const totalItemsCount = allResources.length;
+const currentPath = Astro.url.pathname;
+---
+
+<div class="relative">
+	<button
+		id="categories-toggle"
+		class="flex h-9 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm font-medium text-neutral-300 transition-colors hover:border-indigo-300/40 hover:text-white"
+		aria-label="Toggle categories"
+		aria-expanded="false"
+	>
+		<span>Categories</span>
+		<svg class="w-4 h-4 transition-transform" id="categories-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+		</svg>
+	</button>
+
+	<div
+		id="categories-dropdown"
+		class="pointer-events-none absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-6rem)] w-[min(20rem,calc(100vw-2rem))] origin-top-right translate-y-1 scale-[0.98] overflow-y-auto rounded-lg border border-white/10 bg-[#0f121a] opacity-0 shadow-xl shadow-black/40 transition-all duration-150 md:left-0 md:right-auto md:origin-top-left"
+	>
+		<div class="p-2">
+			<nav class="space-y-1" aria-label="Categories">
+				<a 
+					href="/"
+					class:list={[
+						"flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
+						currentPath === "/"
+							? "bg-white text-neutral-950"
+							: "text-neutral-300 hover:bg-white/[0.06] hover:text-white"
+					]}
+				>
+					<span>All</span>
+					<span class:list={[
+						"ml-2 flex-shrink-0 rounded-md px-2 py-0.5 text-xs",
+						currentPath === "/"
+							? "bg-neutral-950/10 text-neutral-950"
+							: "bg-white/[0.06] text-neutral-400"
+					]}>
+						{totalItemsCount}
+					</span>
+				</a>
+				{resourcesByCategory.map((category) => {
+					const isActive = currentPath === `/category/${category.categorySlug}/`;
+					return (
+						<a
+							href={`/category/${category.categorySlug}/`}
+							class:list={[
+								"flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
+								isActive
+									? "bg-white text-neutral-950"
+									: "text-neutral-300 hover:bg-white/[0.06] hover:text-white"
+							]}
+						>
+							<span class="truncate">{category.title}</span>
+							<span class:list={[
+								"ml-2 flex-shrink-0 rounded-md px-2 py-0.5 text-xs",
+								isActive
+									? "bg-neutral-950/10 text-neutral-950"
+									: "bg-white/[0.06] text-neutral-400"
+							]}>
+								{category.items.length}
+							</span>
+						</a>
+					);
+				})}
+			</nav>
+		</div>
+	</div>
+</div>
+
+<script>
+	const toggle = document.getElementById('categories-toggle');
+	const dropdown = document.getElementById('categories-dropdown');
+	const chevron = document.getElementById('categories-chevron');
+
+	if (toggle && dropdown) {
+		let isOpen = false;
+
+		function openDropdown() {
+			isOpen = true;
+			dropdown.classList.remove('opacity-0', 'pointer-events-none', 'scale-[0.98]', 'translate-y-1');
+			dropdown.classList.add('opacity-100', 'pointer-events-auto', 'scale-100', 'translate-y-0');
+			chevron?.classList.add('rotate-180');
+			toggle.setAttribute('aria-expanded', 'true');
+		}
+
+		function closeDropdown() {
+			isOpen = false;
+			dropdown.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100', 'translate-y-0');
+			dropdown.classList.add('opacity-0', 'pointer-events-none', 'scale-[0.98]', 'translate-y-1');
+			chevron?.classList.remove('rotate-180');
+			toggle.setAttribute('aria-expanded', 'false');
+		}
+
+		toggle.addEventListener('click', (e) => {
+			e.stopPropagation();
+			if (isOpen) {
+				closeDropdown();
+			} else {
+				openDropdown();
+			}
+		});
+
+		// Close when clicking outside
+		document.addEventListener('click', (e) => {
+			if (isOpen && !dropdown.contains(e.target as Node) && !toggle.contains(e.target as Node)) {
+				closeDropdown();
+			}
+		});
+
+		// Close on escape key
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && isOpen) {
+				closeDropdown();
+			}
+		});
+
+		// Close when clicking a link
+		dropdown.querySelectorAll('a').forEach(link => {
+			link.addEventListener('click', () => {
+				closeDropdown();
+			});
+		});
+	}
+</script>

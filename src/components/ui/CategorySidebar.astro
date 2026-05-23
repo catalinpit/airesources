@@ -1,0 +1,215 @@
+---
+import { getCollection } from 'astro:content';
+
+const allCategories = await getCollection('categories');
+const allResources = await getCollection('resources');
+
+const resourcesByCategory = allCategories.map(category => {
+	const items = allResources
+		.filter(r => r.data.categorySlug === category.data.categorySlug)
+		.map(r => r.data);
+	return {
+		...category.data,
+		items
+	};
+});
+
+const totalItemsCount = allResources.length;
+const currentPath = Astro.url.pathname;
+---
+
+<div id="category-sidebar" class="fixed left-0 top-0 h-full bg-white dark:bg-neutral-900 border-r border-neutral-200 dark:border-neutral-800 z-40 transform -translate-x-full transition-all duration-300 md:relative md:translate-x-0 md:z-auto md:flex-shrink-0" data-collapsed="false">
+	<div class="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto transition-all duration-300" id="sidebar-content">
+		<div class="p-4 md:p-6">
+			<!-- Header with toggle button -->
+			<div class="flex items-center justify-between mb-6">
+				<h2 class="text-lg font-bold text-neutral-900 dark:text-white sidebar-title">Categories</h2>
+				<button
+					id="toggle-sidebar"
+					class="hidden md:flex p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+					aria-label="Toggle sidebar"
+				>
+					<svg id="collapse-icon" class="w-5 h-5 text-neutral-600 dark:text-neutral-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+					</svg>
+					<svg id="expand-icon" class="w-5 h-5 text-neutral-600 dark:text-neutral-400 transition-transform hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+					</svg>
+				</button>
+				<button
+					id="close-sidebar"
+					class="md:hidden p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+					aria-label="Close sidebar"
+				>
+					<svg class="w-5 h-5 text-neutral-600 dark:text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+					</svg>
+				</button>
+			</div>
+
+			<nav class="space-y-1 sidebar-nav" aria-label="Categories">
+				<a 
+					href="/"
+					class:list={[
+						"flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium transition-all group",
+						currentPath === "/"
+							? "bg-indigo-500 text-white shadow-md shadow-indigo-400/40"
+							: "text-neutral-700 dark:text-neutral-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 hover:text-indigo-600 dark:hover:text-indigo-400"
+					]}
+					title="All ({totalItemsCount})"
+				>
+					<span class="truncate">All</span>
+					<span class:list={[
+						"text-xs px-2 py-0.5 rounded-full sidebar-count flex-shrink-0 ml-2",
+						currentPath === "/"
+							? "bg-indigo-400/30 text-white"
+							: "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+					]}>
+						{totalItemsCount}
+					</span>
+				</a>
+				{resourcesByCategory.map((category) => {
+					const isActive = currentPath === `/category/${category.categorySlug}/`;
+					return (
+						<a
+							href={`/category/${category.categorySlug}/`}
+							class:list={[
+								"flex items-center justify-between px-4 py-2.5 rounded-lg text-sm font-medium transition-all group",
+								isActive
+									? "bg-indigo-500 text-white shadow-md shadow-indigo-400/40"
+									: "text-neutral-700 dark:text-neutral-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 hover:text-indigo-600 dark:hover:text-indigo-400"
+							]}
+							title={`${category.title} (${category.items.length})`}
+						>
+							<span class="truncate">{category.title}</span>
+							<span class:list={[
+								"text-xs px-2 py-0.5 rounded-full sidebar-count flex-shrink-0 ml-2",
+								isActive
+									? "bg-indigo-400/30 text-white"
+									: "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400"
+							]}>
+								{category.items.length}
+							</span>
+						</a>
+					);
+				})}
+			</nav>
+		</div>
+	</div>
+</div>
+
+<!-- Overlay for mobile -->
+<div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"></div>
+
+<!-- Mobile menu button -->
+<button
+	id="open-sidebar"
+	class="fixed bottom-6 right-6 md:hidden z-50 p-4 bg-indigo-500 text-white rounded-full shadow-lg shadow-indigo-500/40 hover:bg-indigo-600 transition-all hover:scale-110"
+	aria-label="Open categories"
+>
+	<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+	</svg>
+</button>
+
+<style>
+	#category-sidebar {
+		width: 16rem; /* 256px */
+	}
+	#category-sidebar[data-collapsed="true"] {
+		width: 4rem; /* 64px */
+	}
+	#category-sidebar[data-collapsed="true"] .sidebar-title,
+	#category-sidebar[data-collapsed="true"] .sidebar-count {
+		opacity: 0;
+		width: 0;
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+	}
+	#category-sidebar[data-collapsed="true"] .sidebar-nav a {
+		justify-content: center;
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
+	}
+	#category-sidebar[data-collapsed="true"] #collapse-icon {
+		transform: rotate(180deg);
+	}
+	#category-sidebar[data-collapsed="false"] #expand-icon {
+		display: none;
+	}
+	#category-sidebar[data-collapsed="true"] #collapse-icon {
+		display: none;
+	}
+	#category-sidebar[data-collapsed="true"] #expand-icon {
+		display: block;
+	}
+</style>
+
+<script>
+	const sidebar = document.getElementById('category-sidebar');
+	const sidebarContent = document.getElementById('sidebar-content');
+	const overlay = document.getElementById('sidebar-overlay');
+	const openBtn = document.getElementById('open-sidebar');
+	const closeBtn = document.getElementById('close-sidebar');
+	const toggleBtn = document.getElementById('toggle-sidebar');
+
+	// Check localStorage for collapsed state
+	const isCollapsed = localStorage.getItem('sidebar-collapsed') === 'true';
+	if (sidebar && isCollapsed) {
+		sidebar.setAttribute('data-collapsed', 'true');
+	}
+
+	function openSidebar() {
+		if (sidebar && overlay) {
+			sidebar.classList.remove('-translate-x-full');
+			overlay.classList.remove('opacity-0', 'pointer-events-none');
+			overlay.classList.add('opacity-100', 'pointer-events-auto');
+			document.body.style.overflow = 'hidden';
+		}
+	}
+
+	function closeSidebar() {
+		if (sidebar && overlay) {
+			sidebar.classList.add('-translate-x-full');
+			overlay.classList.remove('opacity-100', 'pointer-events-auto');
+			overlay.classList.add('opacity-0', 'pointer-events-none');
+			document.body.style.overflow = '';
+		}
+	}
+
+	function toggleCollapse() {
+		if (!sidebar) return;
+		const isCollapsed = sidebar.getAttribute('data-collapsed') === 'true';
+		sidebar.setAttribute('data-collapsed', isCollapsed ? 'false' : 'true');
+		localStorage.setItem('sidebar-collapsed', isCollapsed ? 'false' : 'true');
+		
+		// Update main content margin
+		const main = document.querySelector('main');
+		if (main) {
+			main.style.transition = 'margin-left 0.3s';
+			main.style.marginLeft = isCollapsed ? '16rem' : '4rem';
+		}
+	}
+
+	openBtn?.addEventListener('click', openSidebar);
+	closeBtn?.addEventListener('click', closeSidebar);
+	toggleBtn?.addEventListener('click', toggleCollapse);
+	overlay?.addEventListener('click', closeSidebar);
+
+	// Close on escape key (mobile only)
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && sidebar && !sidebar.classList.contains('-translate-x-full')) {
+			closeSidebar();
+		}
+	});
+
+	// Update main content margin on load
+	if (sidebar) {
+		const isCollapsed = sidebar.getAttribute('data-collapsed') === 'true';
+		const main = document.querySelector('main');
+		if (main && window.innerWidth >= 768) {
+			main.style.marginLeft = isCollapsed ? '4rem' : '16rem';
+		}
+	}
+</script>

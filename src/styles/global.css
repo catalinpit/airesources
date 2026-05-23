@@ -7,3 +7,58 @@
     font-family: "Hanken Grotesk", system-ui, sans-serif;
   }
 }
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Custom scrollbar for sidebar - hidden by default, show on hover */
+  #sidebar-content {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  #sidebar-content::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+  
+  #sidebar-content:hover {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(148, 163, 184, 0.2) transparent;
+  }
+  
+  #sidebar-content:hover::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  #sidebar-content:hover::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  #sidebar-content:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(148, 163, 184, 0.2);
+    border-radius: 3px;
+  }
+  
+  #sidebar-content:hover::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(148, 163, 184, 0.4);
+  }
+  
+  .dark #sidebar-content:hover {
+    scrollbar-color: rgba(100, 116, 139, 0.2) transparent;
+  }
+  
+  .dark #sidebar-content:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.2);
+  }
+  
+  .dark #sidebar-content:hover::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 116, 139, 0.4);
+  }
+}

@@ -9,80 +9,168 @@ interface Props {
   sponsored?: "small" | "big";
   prompt?: string;
   class?: string;
+  badges?: {
+    featured?: boolean;
+    bestseller?: boolean;
+    verified?: boolean;
+    new?: boolean;
+  };
+  techStack?: string[];
+  features?: string[];
+  pricing?: {
+    type: 'free' | 'paid' | 'freemium' | 'byok' | 'top-up';
+  };
+  integrations?: string[];
+  tags?: string[];
 }
 
-const { name, description, iconUrl, categorySlug, sponsored, prompt, class: className } = Astro.props;
+const { 
+  name, 
+  description, 
+  iconUrl, 
+  categorySlug, 
+  sponsored, 
+  prompt, 
+  class: className,
+  badges,
+  techStack,
+  features,
+  pricing,
+  integrations,
+  tags,
+} = Astro.props;
 
 const productSlug = name.toLowerCase().replace(/\s+/g, '-');
+const initial = name.charAt(0).toUpperCase();
+const usesGenericIcon = !iconUrl || iconUrl.includes('github.com/favicon.ico');
+
+const resourceData = {
+  name,
+  description,
+  tags: tags || [],
+  techStack: techStack || [],
+  features: features || [],
+  badges: badges || {},
+  pricing: pricing || undefined,
+  integrations: integrations || [],
+};
+
+const badgeItems = [
+  sponsored && { label: 'Sponsored', class: 'border-amber-300/25 bg-amber-400/10 text-amber-200' },
+  badges?.featured && { label: 'Featured', class: 'border-indigo-300/25 bg-indigo-400/10 text-indigo-200' },
+  badges?.bestseller && { label: 'Popular', class: 'border-emerald-300/25 bg-emerald-400/10 text-emerald-200' },
+  badges?.verified && { label: 'Verified', class: 'border-sky-300/25 bg-sky-400/10 text-sky-200' },
+  badges?.new && { label: 'New', class: 'border-fuchsia-300/25 bg-fuchsia-400/10 text-fuchsia-200' },
+].filter(Boolean) as { label: string; class: string }[];
+
+const attributeItems = [
+  ...(techStack || []),
+  ...(features || []),
+].slice(0, 4);
+
+const hiddenAttributeCount = Math.max(0, ((techStack?.length || 0) + (features?.length || 0)) - attributeItems.length);
+
+const pricingLabel = pricing?.type === 'byok'
+  ? 'BYOK'
+  : pricing?.type === 'top-up'
+    ? 'Top-up'
+    : pricing?.type
+      ? pricing.type.charAt(0).toUpperCase() + pricing.type.slice(1)
+      : undefined;
 ---
 
 <a 
   href={`/${categorySlug}/${productSlug}/`}
   class:list={[
-    "group w-full relative hover:border-neutral-400 dark:hover:border-neutral-700/50 transition-all duration-200 h-full flex flex-col",
+    "group block h-full w-full rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#090a0f]",
     className
   ]}
+  data-resource={JSON.stringify(resourceData)}
 >
   <div class:list={[
-    "rounded-lg flex-1 flex flex-col group-hover:scale-[1.03] transition-transform duration-200",
-    sponsored === "big" 
-      ? [
-          "bg-gradient-to-br from-indigo-50 to-indigo-100/60 dark:from-indigo-500/40 dark:to-indigo-700/30",
-          "shadow-[0_0_0_1px_rgba(79,70,229,0.1)_inset,0_0.5px_0.5px_rgba(79,70,229,0.05)_inset,0_-0.5px_0.5px_rgba(79,70,229,0.05)_inset,0_1px_2px_rgba(79,70,229,0.1)]",
-          "dark:shadow-[0_0_0_0.5px_rgba(99,102,241,0.2)_inset,0_0.5px_0.5px_rgba(99,102,241,0.1)_inset,0_-0.5px_0.5px_rgba(99,102,241,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]"
-        ]
-      : [
-          "bg-gradient-to-br from-neutral-50 to-neutral-50/60 dark:from-neutral-800 dark:to-neutral-800/60",
-          "shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)]",
-          "dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]"
-        ]
+    "flex h-full flex-col rounded-lg border bg-[#10131b] p-4 shadow-[0_20px_45px_rgba(0,0,0,0.18)] transition duration-150",
+    "border-white/10 hover:-translate-y-0.5 hover:border-indigo-300/40 hover:bg-[#141824]",
+    sponsored === "big" && "border-amber-300/35 bg-amber-300/10"
   ]}>
-    {sponsored && (
-      <div class="absolute top-2 right-2 z-10 transition-transform duration-200">
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gradient-to-b from-indigo-100 to-indigo-200/50 dark:from-indigo-400/50 dark:to-indigo-400/20 text-indigo-700 dark:text-indigo-300 border border-indigo-300/30 dark:border-indigo-700/30 shadow-sm">
-          Sponsored
-        </span>
+    {badgeItems.length > 0 && (
+      <div class="mb-3 flex flex-wrap gap-1.5">
+        {badgeItems.map((badge) => (
+          <span class:list={[
+            "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium",
+            badge.class
+          ]}>
+            {badge.label}
+          </span>
+        ))}
       </div>
     )}
-    <div class="p-6 flex-1 flex flex-col">
-      <div class="flex items-center gap-3 mb-3">
-        <div class="flex-shrink-0">
-          <div class:list={[
-            "w-10 h-10 rounded-xl p-2",
-            sponsored === "big"
-              ? [
-                  "bg-gradient-to-br from-white to-indigo-50 dark:from-indigo-900 dark:to-indigo-950",
-                  "shadow-[0_4px_12px_-2px_rgba(79,70,229,0.1),0_0_0_1px_rgba(79,70,229,0.05)]",
-                  "dark:shadow-[0_4px_12px_-2px_rgba(99,102,241,0.2),0_0_0_1px_rgba(99,102,241,0.1)]"
-                ]
-              : [
-                  "bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-800 dark:to-neutral-900",
-                  "shadow-[0_4px_12px_-2px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.05)]",
-                  "dark:shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3),0_0_0_1px_rgba(255,255,255,0.05)]"
-                ]
-          ]}>
-            {prompt ? (
-              <PromptIcon class="w-full h-full text-blue-500" />
-            ) : iconUrl ? (
-              <img
-                src={iconUrl}
-                alt={`${name} icon`}
-                class="w-full h-full rounded-lg object-contain"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-              />
-              <span class="hidden w-full h-full rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 items-center justify-center text-white font-bold text-sm">{name.charAt(0).toUpperCase()}</span>
-            ) : (
-              <span class="flex w-full h-full rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 items-center justify-center text-white font-bold text-sm">{name.charAt(0).toUpperCase()}</span>
-            )}
-          </div>
-        </div>
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+
+    <div class:list={[
+      "mb-3 flex gap-3",
+      pricingLabel ? "items-start" : "items-center"
+    ]}>
+      <div class="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/25 p-2">
+        {prompt ? (
+          <PromptIcon class="h-full w-full text-indigo-500" />
+        ) : !usesGenericIcon ? (
+          <>
+            <img
+              src={iconUrl}
+              alt={`${name} icon`}
+              class="h-full w-full rounded-md object-contain"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+            />
+            <span class="hidden h-full w-full items-center justify-center rounded-md bg-white text-sm font-semibold text-neutral-950">
+              {initial}
+            </span>
+          </>
+        ) : (
+          <span class="flex h-full w-full items-center justify-center rounded-md bg-white text-sm font-semibold text-neutral-950">
+            {initial}
+          </span>
+        )}
+      </div>
+      <div class:list={[
+        "min-w-0 flex-1",
+        !pricingLabel && "flex min-h-11 flex-col justify-center"
+      ]}>
+        <h3 class="line-clamp-2 text-base font-semibold leading-6 text-white transition-colors group-hover:text-indigo-200">
           {name}
         </h3>
+        {pricingLabel && (
+          <span class="mt-1 inline-flex rounded-md bg-white/10 px-2 py-0.5 text-xs font-medium text-neutral-300">
+            {pricingLabel}
+          </span>
+        )}
       </div>
-      <p class="text-gray-600 dark:text-gray-300 flex-1">
-        {description}
-      </p>
+    </div>
+
+    <p class="line-clamp-3 flex-1 text-sm leading-6 text-neutral-300">
+      {description}
+    </p>
+
+    {attributeItems.length > 0 && (
+      <div class="mt-4 flex flex-wrap gap-1.5">
+        {attributeItems.map(attribute => (
+          <span class="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-xs font-medium text-neutral-300">
+            {attribute}
+          </span>
+        ))}
+        {hiddenAttributeCount > 0 && (
+          <span class="rounded-md border border-white/10 px-2 py-1 text-xs font-medium text-neutral-400">
+            +{hiddenAttributeCount}
+          </span>
+        )}
+      </div>
+    )}
+
+    <div class="mt-4 flex justify-end border-t border-white/10 pt-3 text-xs text-neutral-400">
+      <span class="inline-flex items-center gap-1 font-medium text-neutral-300 transition-colors group-hover:text-indigo-200">
+        View
+        <svg class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </span>
     </div>
   </div>
-</a> 
+</a>

@@ -1,0 +1,478 @@
+---
+interface Props {
+  allResources: Array<{
+    name: string;
+    techStack?: string[];
+    features?: string[];
+    badges?: {
+      featured?: boolean;
+      bestseller?: boolean;
+      verified?: boolean;
+      new?: boolean;
+    };
+    pricing?: {
+      type: 'free' | 'paid' | 'freemium' | 'byok' | 'top-up';
+    };
+    integrations?: string[];
+    categorySlug: string;
+  }>;
+  activeFilters: {
+    techStack?: string[];
+    features?: string[];
+    badges?: string[];
+    pricing?: string[];
+    integrations?: string[];
+  };
+}
+
+const { allResources, activeFilters } = Astro.props;
+
+// Extract unique values for filter options
+const allTechStack = Array.from(new Set(
+  allResources.flatMap(r => r.techStack || [])
+)).sort();
+
+const allFeatures = Array.from(new Set(
+  allResources.flatMap(r => r.features || [])
+)).sort();
+
+const allIntegrations = Array.from(new Set(
+  allResources.flatMap(r => r.integrations || [])
+)).sort();
+
+const badgeOptions = [
+  { value: 'featured', label: 'Featured' },
+  { value: 'bestseller', label: 'Popular' },
+  { value: 'verified', label: 'Verified' },
+  { value: 'new', label: 'New' },
+];
+
+const pricingOptions = [
+  { value: 'free', label: 'Free' },
+  { value: 'freemium', label: 'Freemium' },
+  { value: 'paid', label: 'Paid' },
+  { value: 'byok', label: 'BYOK' },
+  { value: 'top-up', label: 'Top-up' },
+];
+
+const availableBadges = badgeOptions.filter(option =>
+  allResources.some(resource => resource.badges?.[option.value as keyof NonNullable<typeof resource.badges>])
+);
+
+const availablePricing = pricingOptions.filter(option =>
+  allResources.some(resource => resource.pricing?.type === option.value)
+);
+---
+
+<div id="filter-bar" class="mb-12 rounded-lg border border-white/10 bg-[#10131b]/95 p-4 shadow-[0_24px_80px_rgba(0,0,0,0.24)]">
+  <div class="relative">
+    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+      <svg class="h-5 w-5 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+    </div>
+    <input
+      type="text"
+      id="search-input"
+      placeholder="Search resources, features, tech stack..."
+      class="h-12 w-full rounded-lg border border-white/10 bg-black/25 pl-11 pr-4 text-sm text-white placeholder-neutral-400 transition-colors focus:border-indigo-300/70 focus:bg-black/35 focus:outline-none focus:ring-2 focus:ring-indigo-400/15"
+    />
+  </div>
+
+  <div id="active-filters" class="mt-4 flex min-h-0 flex-wrap gap-2"></div>
+
+  <div class="mt-4 space-y-3">
+    {(availableBadges.length > 0 || availablePricing.length > 0) && (
+    <div class="flex flex-wrap items-center gap-2">
+      {availableBadges.map(badge => {
+        const isActive = activeFilters.badges?.includes(badge.value);
+        return (
+          <button
+            type="button"
+            data-filter-type="badges"
+            data-filter-value={badge.value}
+            class:list={[
+              "inline-flex h-8 items-center rounded-lg border px-3 text-sm font-medium transition-colors",
+              isActive
+                ? "border-white bg-white text-neutral-950"
+                : "border-white/10 bg-white/[0.04] text-neutral-300 hover:border-indigo-300/40 hover:text-white"
+            ]}
+          >
+            <span>{badge.label}</span>
+          </button>
+        );
+      })}
+      {availablePricing.map(pricing => {
+        const isActive = activeFilters.pricing?.includes(pricing.value);
+        return (
+          <button
+            type="button"
+            data-filter-type="pricing"
+            data-filter-value={pricing.value}
+            class:list={[
+              "inline-flex h-8 items-center rounded-lg border px-3 text-sm font-medium transition-colors",
+              isActive
+                ? "border-white bg-white text-neutral-950"
+                : "border-white/10 bg-white/[0.04] text-neutral-300 hover:border-indigo-300/40 hover:text-white"
+            ]}
+          >
+            {pricing.label}
+          </button>
+          );
+      })}
+    </div>
+    )}
+
+    <div class="space-y-3">
+      {allTechStack.length > 0 && (
+        <details class="group">
+          <summary class="flex cursor-pointer items-center justify-between rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm transition-colors hover:border-white/20 hover:bg-white/[0.04]">
+            <span class="text-sm font-semibold text-neutral-300">Tech Stack</span>
+            <svg class="h-5 w-5 text-neutral-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+          <div class="mt-2 flex flex-wrap gap-2">
+            {allTechStack.map(tech => {
+              const isActive = activeFilters.techStack?.includes(tech);
+              return (
+                <button
+                  type="button"
+                  data-filter-type="techStack"
+                  data-filter-value={tech}
+                    class:list={[
+                    "inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
+                    isActive
+                      ? "border-white bg-white text-neutral-950"
+                      : "border-white/10 bg-white/[0.04] text-neutral-300 hover:border-indigo-300/40 hover:text-white"
+                  ]}
+                >
+                  {tech}
+                </button>
+              );
+            })}
+          </div>
+        </details>
+      )}
+
+      {allFeatures.length > 0 && (
+        <details class="group">
+          <summary class="flex cursor-pointer items-center justify-between rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm transition-colors hover:border-white/20 hover:bg-white/[0.04]">
+            <span class="text-sm font-semibold text-neutral-300">Features</span>
+            <svg class="h-5 w-5 text-neutral-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+          <div class="mt-2 flex flex-wrap gap-2">
+            {allFeatures.map(feature => {
+              const isActive = activeFilters.features?.includes(feature);
+              return (
+                <button
+                  type="button"
+                  data-filter-type="features"
+                  data-filter-value={feature}
+                    class:list={[
+                    "inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
+                    isActive
+                      ? "border-white bg-white text-neutral-950"
+                      : "border-white/10 bg-white/[0.04] text-neutral-300 hover:border-indigo-300/40 hover:text-white"
+                  ]}
+                >
+                  {feature}
+                </button>
+              );
+            })}
+          </div>
+        </details>
+      )}
+
+      {allIntegrations.length > 0 && (
+        <details class="group">
+          <summary class="flex cursor-pointer items-center justify-between rounded-lg border border-white/10 bg-black/20 px-3 py-2 text-sm transition-colors hover:border-white/20 hover:bg-white/[0.04]">
+            <span class="text-sm font-semibold text-neutral-300">Integrations</span>
+            <svg class="h-5 w-5 text-neutral-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
+          <div class="mt-2 flex flex-wrap gap-2">
+            {allIntegrations.map(integration => {
+              const isActive = activeFilters.integrations?.includes(integration);
+              return (
+                <button
+                  type="button"
+                  data-filter-type="integrations"
+                  data-filter-value={integration}
+                    class:list={[
+                    "inline-flex items-center rounded-md border px-2.5 py-1 text-xs font-medium transition-colors",
+                    isActive
+                      ? "border-white bg-white text-neutral-950"
+                      : "border-white/10 bg-white/[0.04] text-neutral-300 hover:border-indigo-300/40 hover:text-white"
+                  ]}
+                >
+                  {integration}
+                </button>
+              );
+            })}
+          </div>
+        </details>
+      )}
+    </div>
+  </div>
+
+  <div class="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
+    <div id="results-count" class="text-sm text-neutral-300">
+      <span data-resource-count>{allResources.length}</span> resources
+    </div>
+    <button
+      id="clear-filters"
+      class="pointer-events-none rounded-lg px-3 py-1.5 text-sm font-medium text-neutral-300 opacity-0 transition-colors hover:bg-white/10 hover:text-white"
+    >
+      Clear all
+    </button>
+  </div>
+</div>
+
+<script>
+  const filterBar = document.getElementById('filter-bar');
+  const searchInput = document.getElementById('search-input');
+  const clearFiltersBtn = document.getElementById('clear-filters');
+  const activeFiltersContainer = document.getElementById('active-filters');
+  const resultsCount = document.getElementById('results-count');
+  
+  const resourceCards = Array.from(document.querySelectorAll('[data-resource]'));
+  const categorySections = Array.from(document.querySelectorAll('[data-category-section]'));
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  const filters = {
+    techStack: urlParams.get('techStack')?.split(',').filter(Boolean) || [],
+    features: urlParams.get('features')?.split(',').filter(Boolean) || [],
+    badges: urlParams.get('badges')?.split(',').filter(Boolean) || [],
+    pricing: urlParams.get('pricing')?.split(',').filter(Boolean) || [],
+    integrations: urlParams.get('integrations')?.split(',').filter(Boolean) || [],
+    search: urlParams.get('search') || '',
+  };
+
+  function updateURL() {
+    const params = new URLSearchParams();
+    if (filters.techStack.length) params.set('techStack', filters.techStack.join(','));
+    if (filters.features.length) params.set('features', filters.features.join(','));
+    if (filters.badges.length) params.set('badges', filters.badges.join(','));
+    if (filters.pricing.length) params.set('pricing', filters.pricing.join(','));
+    if (filters.integrations.length) params.set('integrations', filters.integrations.join(','));
+    if (filters.search) params.set('search', filters.search);
+    
+    const newURL = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+    window.history.pushState({}, '', newURL);
+  }
+
+  function renderActiveFilters() {
+    activeFiltersContainer.innerHTML = '';
+    const allActive = [
+      ...filters.techStack.map(t => ({ type: 'techStack', label: t, value: t })),
+      ...filters.features.map(f => ({ type: 'features', label: f, value: f })),
+      ...filters.badges.map(b => ({ type: 'badges', label: b.charAt(0).toUpperCase() + b.slice(1), value: b })),
+      ...filters.pricing.map(p => ({ type: 'pricing', label: p.charAt(0).toUpperCase() + p.slice(1), value: p })),
+      ...filters.integrations.map(i => ({ type: 'integrations', label: i, value: i })),
+    ];
+
+    const hasFilters = allActive.length > 0 || filters.search;
+    
+    if (clearFiltersBtn) {
+      clearFiltersBtn.classList.toggle('opacity-0', !hasFilters);
+      clearFiltersBtn.classList.toggle('pointer-events-none', !hasFilters);
+    }
+
+    if (!hasFilters) return;
+
+    allActive.forEach(filter => {
+      const chip = document.createElement('span');
+      chip.className = 'inline-flex items-center gap-2 rounded-md border border-indigo-300/25 bg-indigo-400/10 px-2.5 py-1 text-sm font-medium text-indigo-100';
+      chip.innerHTML = `
+        ${filter.label}
+        <button 
+          onclick="removeFilter('${filter.type}', '${filter.value}')"
+          class="rounded p-0.5 transition-colors hover:bg-white/15"
+          aria-label="Remove filter"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      `;
+      activeFiltersContainer.appendChild(chip);
+    });
+
+    if (filters.search) {
+      const chip = document.createElement('span');
+      chip.className = 'inline-flex items-center gap-2 rounded-md border border-indigo-300/25 bg-indigo-400/10 px-2.5 py-1 text-sm font-medium text-indigo-100';
+      chip.innerHTML = `
+        Search: "${filters.search}"
+        <button 
+          onclick="removeFilter('search', '')"
+          class="rounded p-0.5 transition-colors hover:bg-white/15"
+          aria-label="Clear search"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      `;
+      activeFiltersContainer.appendChild(chip);
+    }
+  }
+
+  function filterResources() {
+    let visibleCount = 0;
+    
+    resourceCards.forEach(card => {
+      const resourceData = JSON.parse(card.getAttribute('data-resource') || '{}');
+      let visible = true;
+
+      if (filters.search) {
+        const searchLower = filters.search.toLowerCase();
+        const matchesSearch = 
+          resourceData.name?.toLowerCase().includes(searchLower) ||
+          resourceData.description?.toLowerCase().includes(searchLower) ||
+          resourceData.tags?.some((t: string) => t.toLowerCase().includes(searchLower)) ||
+          resourceData.techStack?.some((t: string) => t.toLowerCase().includes(searchLower)) ||
+          resourceData.features?.some((feature: string) => feature.toLowerCase().includes(searchLower)) ||
+          resourceData.integrations?.some((integration: string) => integration.toLowerCase().includes(searchLower));
+        if (!matchesSearch) visible = false;
+      }
+
+      if (filters.techStack.length && visible) {
+        const hasTechStack = filters.techStack.some(tech => 
+          resourceData.techStack?.includes(tech)
+        );
+        if (!hasTechStack) visible = false;
+      }
+
+      if (filters.features.length && visible) {
+        const hasFeature = filters.features.some(feature => 
+          resourceData.features?.includes(feature)
+        );
+        if (!hasFeature) visible = false;
+      }
+
+      if (filters.badges.length && visible) {
+        const hasBadge = filters.badges.some(badge => 
+          resourceData.badges?.[badge] === true
+        );
+        if (!hasBadge) visible = false;
+      }
+
+      if (filters.pricing.length && visible) {
+        const matchesPricing = filters.pricing.includes(resourceData.pricing?.type);
+        if (!matchesPricing) visible = false;
+      }
+
+      if (filters.integrations.length && visible) {
+        const hasIntegration = filters.integrations.some(integration => 
+          resourceData.integrations?.includes(integration)
+        );
+        if (!hasIntegration) visible = false;
+      }
+
+      card.style.display = visible ? '' : 'none';
+      if (visible) visibleCount++;
+    });
+
+    categorySections.forEach(section => {
+      const visibleCards = Array.from(section.querySelectorAll('[data-resource]')).filter(card => {
+        return (card as HTMLElement).style.display !== 'none';
+      });
+      (section as HTMLElement).style.display = visibleCards.length > 0 ? '' : 'none';
+    });
+
+    if (resultsCount) {
+      const total = resourceCards.length;
+      resultsCount.innerHTML = `<span data-resource-count>${visibleCount}</span> of ${total} resources`;
+    }
+  }
+
+  function updateFilterButtons() {
+    filterBar?.querySelectorAll('[data-filter-type]').forEach(btn => {
+      const type = btn.getAttribute('data-filter-type');
+      const value = btn.getAttribute('data-filter-value');
+      const filterArray = filters[type as keyof typeof filters] as string[];
+      const isActive = filterArray?.includes(value || '');
+      
+      btn.classList.toggle('border-white', isActive);
+      btn.classList.toggle('bg-white', isActive);
+      btn.classList.toggle('text-neutral-950', isActive);
+      btn.classList.toggle('border-white/10', !isActive);
+      btn.classList.toggle('bg-white/[0.04]', !isActive);
+      btn.classList.toggle('text-neutral-300', !isActive);
+    });
+  }
+
+  (window as any).removeFilter = function(type: string, value: string) {
+    if (type === 'search') {
+      filters.search = '';
+      if (searchInput) searchInput.value = '';
+    } else {
+      const filterArray = filters[type as keyof typeof filters] as string[];
+      const index = filterArray.indexOf(value);
+      if (index > -1) filterArray.splice(index, 1);
+    }
+    updateURL();
+    updateFilterButtons();
+    renderActiveFilters();
+    filterResources();
+  };
+
+  if (searchInput) {
+    searchInput.value = filters.search;
+    let searchTimeout: ReturnType<typeof setTimeout>;
+    searchInput.addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        filters.search = (e.target as HTMLInputElement).value;
+        updateURL();
+        renderActiveFilters();
+        filterResources();
+      }, 300);
+    });
+  }
+
+  filterBar?.querySelectorAll('[data-filter-type]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.getAttribute('data-filter-type');
+      const value = btn.getAttribute('data-filter-value');
+      if (!type || !value) return;
+      
+      const filterArray = filters[type as keyof typeof filters] as string[];
+      const index = filterArray.indexOf(value);
+      
+      if (index > -1) {
+        filterArray.splice(index, 1);
+      } else {
+        filterArray.push(value);
+      }
+      
+      updateURL();
+      updateFilterButtons();
+      renderActiveFilters();
+      filterResources();
+    });
+  });
+
+  clearFiltersBtn?.addEventListener('click', () => {
+    filters.techStack = [];
+    filters.features = [];
+    filters.badges = [];
+    filters.pricing = [];
+    filters.integrations = [];
+    filters.search = '';
+    
+    if (searchInput) searchInput.value = '';
+    updateFilterButtons();
+    updateURL();
+    renderActiveFilters();
+    filterResources();
+  });
+
+  updateFilterButtons();
+  renderActiveFilters();
+  filterResources();
+</script>

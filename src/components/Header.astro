@@ -12,11 +12,11 @@ const { title, description, class: className = '' } = Astro.props;
   'text-center mb-12 max-w-3xl mx-auto',
   className
 ]}>
-  <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-4">
+  <h1 class="text-4xl font-semibold text-gray-900 dark:text-white md:text-5xl mb-4">
     {title}
   </h1>
   {description && (
-    <p class="text-xl text-neutral-500 dark:text-neutral-400">
+    <p class="text-lg leading-8 text-neutral-500 dark:text-neutral-400">
       {description}
     </p>
   )}

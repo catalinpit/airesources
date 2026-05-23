@@ -2,7 +2,7 @@
 import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
 import ResourceCard from '../../components/ui/Resource-Card.astro';
-import Header from '../../components/Header.astro';
+import FilterBar from '../../components/ui/FilterBar.astro';
 import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
 import { getCollection } from 'astro:content';
 
@@ -37,6 +37,14 @@ const allItems = allResources.map(r => ({
 }));
 
 const categoryItems = items.filter(item => !item.sponsored || item.sponsored === "small");
+
+const activeFilters = {
+	techStack: [],
+	features: [],
+	badges: [],
+	pricing: [],
+	integrations: [],
+};
 ---
 
 <Layout description={category.description} pageTitle={category.title}>
@@ -78,32 +86,45 @@ const categoryItems = items.filter(item => !item.sponsored || item.sponsored ===
 			}))
 		}
 	})} />
-	<main class="container mx-auto px-4 py-8">
-		<Header
-			title={`${category.title} (${categoryItems.length})`}
-			description={category.description}
-		/>
+	<main class="relative isolate min-h-screen overflow-hidden bg-[#090a0f] text-white">
+		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(129,140,248,0.08)_0%,transparent_22rem)]"></div>
+		<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+		<SponsoredProducts items={allItems} class="w-full" />
 
-		<SponsoredProducts items={allItems} />
+		<nav class="mb-8" aria-label="Breadcrumb">
+			<ol class="flex flex-wrap items-center gap-2 text-sm text-neutral-400" itemscope itemtype="https://schema.org/BreadcrumbList">
+				<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+					<a href="/" class="transition-colors hover:text-white" itemprop="item">
+						<span itemprop="name">Resources</span>
+					</a>
+					<meta itemprop="position" content="1" />
+				</li>
+				<span aria-hidden="true">/</span>
+				<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+					<span class="font-medium text-white" itemprop="name" aria-current="page">{category.title}</span>
+					<meta itemprop="position" content="2" />
+				</li>
+			</ol>
+		</nav>
 
-		<section class="space-y-6 p-10 w-full bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_0_0_1px_rgba(0,0,0,0.1)_inset,0_0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_-0.5px_0.5px_rgba(0,0,0,0.05)_inset,0_1px_2px_rgba(0,0,0,0.1)] dark:shadow-[0_0_0_0.5px_rgba(255,255,255,0.06)_inset,0_0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_-0.5px_0.5px_rgba(255,255,255,0.1)_inset,0_0.5px_1px_rgba(0,0,0,0.3),0_1px_2px_rgba(0,0,0,0.4)]">
-			<nav class="mb-8" aria-label="Breadcrumb">
-				<ol class="flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-400" itemscope itemtype="https://schema.org/BreadcrumbList">
-					<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-						<a href="/" class="hover:text-neutral-900 dark:hover:text-neutral-100" itemprop="item">
-							<span itemprop="name">Resources</span>
-						</a>
-						<meta itemprop="position" content="1" />
-					</li>
-					<span aria-hidden="true">/</span>
-					<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-						<span class="text-neutral-900 dark:text-neutral-100" itemprop="name" aria-current="page">{category.title}</span>
-						<meta itemprop="position" content="2" />
-					</li>
-				</ol>
-			</nav>
+		<header class="mb-8">
+			<div>
+				<h1 class="flex flex-wrap items-center gap-2 text-white">
+					<span class="font-mono text-3xl font-semibold">/{category.title}</span>
+					<span class="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-xs font-medium text-neutral-300">
+						{categoryItems.length} resources
+					</span>
+				</h1>
+				<p class="mt-2 max-w-2xl text-sm leading-6 text-neutral-300">
+					{category.description}
+				</p>
+			</div>
+		</header>
 
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+		<FilterBar allResources={categoryItems} activeFilters={activeFilters} />
+
+		<section class="mb-20" data-category-section>
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{categoryItems.map((item) => (
 					<ResourceCard
 						name={item.name}
@@ -112,9 +133,16 @@ const categoryItems = items.filter(item => !item.sponsored || item.sponsored ===
 						categorySlug={category.categorySlug}
 						sponsored={item.sponsored}
 						prompt={item.prompt}
+						badges={item.badges}
+						techStack={item.techStack}
+						features={item.features}
+						pricing={item.pricing}
+						integrations={item.integrations}
+						tags={item.tags}
 					/>
 				))}
 			</div>
 		</section>
+		</div>
 	</main>
 </Layout>

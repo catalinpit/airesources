@@ -8,6 +8,20 @@ interface Props {
 		iconUrl?: string;
 		categorySlug: string;
 		sponsored?: "small" | "big";
+		prompt?: string;
+		badges?: {
+			featured?: boolean;
+			bestseller?: boolean;
+			verified?: boolean;
+			new?: boolean;
+		};
+		techStack?: string[];
+		features?: string[];
+		pricing?: {
+			type: 'free' | 'paid' | 'freemium' | 'byok' | 'top-up';
+		};
+		integrations?: string[];
+		tags?: string[];
 	}>;
 	class?: string;
 }
@@ -20,10 +34,14 @@ const sponsoredItems = items.filter((item) => item.sponsored === "big");
 
 {sponsoredItems.length > 0 && (
 	<section class:list={[
-		"mb-8",
+		"mb-10 border-b border-white/10 pb-10",
 		className
 	]}>
-    <div class="max-w-3xl mx-auto">
+    <div class="mb-4 flex items-center justify-between gap-4">
+        <div class="font-mono text-xs uppercase tracking-[0.2em] text-amber-200">Featured</div>
+        <div class="h-px flex-1 bg-gradient-to-r from-amber-300/40 to-transparent"></div>
+    </div>
+    <div class="grid gap-4 md:grid-cols-2">
         {sponsoredItems.map((item) => (
             <ResourceCard
                 name={item.name}
@@ -31,6 +49,13 @@ const sponsoredItems = items.filter((item) => item.sponsored === "big");
                 iconUrl={item.iconUrl || ""}
                 categorySlug={item.categorySlug}
                 sponsored={item.sponsored}
+                prompt={item.prompt}
+                badges={item.badges}
+                techStack={item.techStack}
+                features={item.features}
+                pricing={item.pricing}
+                integrations={item.integrations}
+                tags={item.tags}
             />
         ))}
     </div>

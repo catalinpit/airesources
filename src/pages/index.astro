@@ -2,8 +2,8 @@
 import '../styles/global.css';
 import Layout from '../layouts/layout.astro';
 import CategoryCard from '../components/ui/Category-Card.astro';
-import Tag from '../components/ui/Tag.astro';
-import Header from '../components/Header.astro';
+import Hero from '../components/ui/Hero.astro';
+import FilterBar from '../components/ui/FilterBar.astro';
 import SponsoredProducts from '../components/ui/Sponsored-Products.astro';
 import { getCollection } from 'astro:content';
 
@@ -30,38 +30,54 @@ const resourcesByCategory = allCategories.map(category => {
 		items
 	};
 });
+
+const highlightedCategories = resourcesByCategory
+	.map(category => ({
+		title: category.title,
+		count: category.items.filter(item => !item.sponsored || item.sponsored === "small").length,
+		href: `/category/${category.categorySlug}/`,
+	}))
+	.sort((a, b) => b.count - a.count)
+	.slice(0, 5);
+
+const activeFilters = {
+	techStack: [],
+	features: [],
+	badges: [],
+	pricing: [],
+	integrations: [],
+};
 ---
 
 <Layout description={description}>
-	<main class="container mx-auto px-4 py-8">
-		<Header
+	<div class="relative isolate overflow-hidden bg-[#090a0f]">
+		<div class="absolute inset-x-0 top-0 -z-10 h-[34rem] bg-[linear-gradient(180deg,rgba(129,140,248,0.08)_0%,transparent_100%)]"></div>
+		<Hero
 			title="AI Resources Directory"
 			description={description}
-			class="mb-20"
+			stats={[
+				{ label: 'Resources', value: totalItemsCount },
+				{ label: 'Categories', value: allCategories.length },
+			]}
+			highlights={highlightedCategories}
 		/>
 
-		<nav class="flex flex-wrap gap-2 justify-center mx-auto mb-12" aria-label="Categories">
-			<Tag href="/">
-				All ({totalItemsCount})
-			</Tag>
-			{resourcesByCategory.map((category) => (
-				<Tag href={`/category/${category.categorySlug}/`}>
-					{category.title} ({category.items.length})
-				</Tag>
-			))}
-		</nav>
+		<div id="catalog" class="scroll-mt-20">
+			<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+				<SponsoredProducts items={allItems} class="w-full" />
+				<FilterBar allResources={allItems} activeFilters={activeFilters} />
 
-		<SponsoredProducts items={allItems} class="w-full" />
-
-		<div class="space-y-16">
-			{resourcesByCategory.map((category) => (
-				<CategoryCard
-					title={category.title}
-					description={category.description}
-					items={category.items}
-					categorySlug={category.categorySlug}
-				/>
-			))}
+				<div class="space-y-14">
+					{resourcesByCategory.map((category) => (
+						<CategoryCard
+							title={category.title}
+							description={category.description}
+							items={category.items}
+							categorySlug={category.categorySlug}
+						/>
+					))}
+				</div>
+			</div>
 		</div>
-	</main>
+	</div>
 </Layout>

@@ -39,6 +39,18 @@ const resources = defineCollection({
       iconUrl: z.string(),
     }).optional(),
     sponsored: z.enum(['small', 'big']).optional(),
+    // New fields for enhanced filtering
+    techStack: z.array(z.string()).optional(), // e.g., ['Next.js', 'React', 'TypeScript']
+    features: z.array(z.string()).optional(), // e.g., ['AI', 'Authentication', 'Blog', 'SEO']
+    badges: z.object({
+      featured: z.boolean().optional(),
+      bestseller: z.boolean().optional(),
+      verified: z.boolean().optional(),
+      new: z.boolean().optional(),
+    }).optional(),
+    integrations: z.array(z.string()).optional(), // e.g., ['Stripe', 'LemonSqueezy', 'Firebase']
+    createdAt: z.string().optional(), // ISO date string for sorting "latest"
+    popularity: z.number().optional(), // For sorting popular items
   }),
 });
 
