@@ -11,6 +11,7 @@ interface Props {
     iconUrl: string;
     sponsored?: "small" | "big";
     prompt?: string;
+    skill?: string;
     badges?: {
       featured?: boolean;
       bestseller?: boolean;
@@ -60,6 +61,7 @@ const filteredItems = items.filter(item => !item.sponsored || item.sponsored ===
         categorySlug={categorySlug}
         sponsored={item.sponsored}
         prompt={item.prompt}
+        skill={item.skill}
         badges={item.badges}
         techStack={item.techStack}
         features={item.features}

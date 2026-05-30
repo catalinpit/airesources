@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+import Layout from '../layouts/layout.astro';
+import LogoIcon from '../components/icons/LogoIcon.astro';
+import { getCollection } from 'astro:content';
+
+const description = 'The resource you are looking for is not in the AI Resources directory.';
+
+const categories = await getCollection('categories');
+const resources = await getCollection('resources');
+
+const categoryLinks = categories
+  .map(category => ({
+    title: category.data.title,
+    href: `/category/${category.data.categorySlug}/`,
+    count: resources.filter(resource => resource.data.categorySlug === category.data.categorySlug).length,
+  }))
+  .filter(category => category.count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 4);
+---
+
+<Layout description={description} pageTitle="Resource Not Found">
+  <div class="relative isolate min-h-screen overflow-hidden bg-[#090a0f] text-white">
+    <div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(129,140,248,0.08)_0%,transparent_22rem)]"></div>
+    <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-18 lg:px-8">
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
+        <div class="max-w-3xl">
+          <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-indigo-300/20 bg-indigo-300/10 px-3 py-1 text-xs font-medium text-indigo-100">
+            <LogoIcon class="h-3.5 w-3.5" />
+            Missing resource
+          </div>
+
+          <h1 class="max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            Resource not found
+          </h1>
+          <p class="mt-5 max-w-2xl text-lg leading-8 text-neutral-300">
+            This resource may have moved, been removed, or never made it into the directory.
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              href="/"
+              class="inline-flex h-10 items-center rounded-lg border border-white/10 bg-white/[0.04] px-4 text-sm font-medium text-neutral-200 transition-colors hover:border-indigo-300/40 hover:text-white"
+            >
+              Browse all resources
+            </a>
+          </div>
+        </div>
+
+        {categoryLinks.length > 0 && (
+          <aside class="pt-1 lg:border-l lg:border-white/10 lg:pl-6">
+            <div class="mb-3 flex items-center justify-between gap-4">
+              <p class="font-mono text-xs font-medium uppercase tracking-[0.18em] text-neutral-300">
+                /Popular sections
+              </p>
+              <div class="h-px flex-1 bg-gradient-to-r from-indigo-300/35 to-transparent"></div>
+            </div>
+            <div class="space-y-1">
+              {categoryLinks.map(category => (
+                <a
+                  href={category.href}
+                  class="group flex items-center justify-between gap-4 rounded-lg px-2 py-2 transition-colors hover:bg-white/[0.05]"
+                >
+                  <span class="truncate text-sm font-medium text-neutral-200 transition-colors group-hover:text-white">
+                    /{category.title}
+                  </span>
+                  <span class="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-xs font-medium text-neutral-300">
+                    {category.count}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </aside>
+        )}
+      </div>
+    </section>
+  </div>
+</Layout>

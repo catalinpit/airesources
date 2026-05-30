@@ -15,5 +15,13 @@ export default defineConfig({
   integrations: [sitemap(), partytown()],
   redirects: {
     "/category/ides": "/category/coding-tools",
+    "/category/people": "/",
+    "/people": "/",
+    "/people/andrej-karpathy": "/",
+    "/people/andrew-ng": "/",
+    "/people/simon-willison": "/",
+    "/category/posts": "/",
+    "/posts": "/",
+    "/posts/vibing-a-non-trivial-ghostty-feature": "/",
   },
 });

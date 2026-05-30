@@ -6,6 +6,7 @@ import Tag from '../../components/ui/Tag.astro';
 import Divider from '../../components/ui/Divider.astro';
 import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
 import PromptIcon from '../../components/icons/PromptIcon.astro';
+import SkillIcon from '../../components/icons/SkillIcon.astro';
 import DocumentIcon from '../../components/icons/DocumentIcon.astro';
 import CopyIcon from '../../components/icons/CopyIcon.astro';
 import CheckIcon from '../../components/icons/CheckIcon.astro';
@@ -54,6 +55,10 @@ const allItems = allResources.map(r => ({
 const filteredItems = allItems.filter(product =>
   product.name !== item.name || product.categorySlug !== category.categorySlug
 );
+
+const reusableContent = item.skill || item.prompt;
+const reusableContentLabel = item.skill ? 'Skill' : 'Prompt';
+const reusableContentAccent = item.skill ? 'text-emerald-400' : 'text-indigo-500';
 ---
 
 <Layout description={item.description} pageTitle={item.name}>
@@ -134,7 +139,9 @@ const filteredItems = allItems.filter(product =>
             <div class="mb-8 flex items-start gap-4">
               <div class="flex-shrink-0">
                 <div class="h-14 w-14 rounded-lg border border-white/10 bg-black/25 p-2.5">
-                  {item.prompt ? (
+                  {item.skill ? (
+                    <SkillIcon class="w-full h-full text-emerald-400" />
+                  ) : item.prompt ? (
                     <PromptIcon class="w-full h-full text-indigo-500" />
                   ) : item.iconUrl ? (
                   <img
@@ -163,7 +170,7 @@ const filteredItems = allItems.filter(product =>
               </div>
             </div>
 
-            {item.prompt && (
+            {reusableContent && (
               <>
                 {item.tags && item.tags.length > 0 && (
                   <div class="mb-6">
@@ -180,14 +187,14 @@ const filteredItems = allItems.filter(product =>
                 <div class="space-y-4">
                   <div class="flex items-center justify-between">
                     <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-white">
-                      <DocumentIcon class="w-5 h-5 text-indigo-500" />
-                      Prompt
+                      <DocumentIcon class={`w-5 h-5 ${reusableContentAccent}`} />
+                      {reusableContentLabel}
                     </h3>
                     <button
-                      id="copy-prompt-btn"
+                      id="copy-resource-content-btn"
                       type="button"
                       class="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm font-medium text-neutral-300 transition-colors hover:border-indigo-300/40 hover:text-white"
-                      title="Copy prompt to clipboard"
+                      title={`Copy ${reusableContentLabel.toLowerCase()} to clipboard`}
                     >
                       <CopyIcon id="copy-icon" class="w-4 h-4" />
                       <CheckIcon id="check-icon" class="w-4 h-4 hidden" />
@@ -195,10 +202,10 @@ const filteredItems = allItems.filter(product =>
                     </button>
                   </div>
                   <div
-                    id="prompt-content"
-                    class="prompt-content rounded-lg border border-white/10 bg-black/25 p-6 font-mono text-sm text-neutral-200 whitespace-pre-line"
+                    id="resource-content"
+                    class="rounded-lg border border-white/10 bg-black/25 p-6 font-mono text-sm text-neutral-200 whitespace-pre-line"
                   >
-                    {item.prompt}
+                    {reusableContent}
                   </div>
                   {item.example && (
                     <div class="mt-6">
@@ -257,7 +264,7 @@ const filteredItems = allItems.filter(product =>
               </>
             )}
 
-            {!item.prompt && item.models && item.models.length > 0 && (
+            {!reusableContent && item.models && item.models.length > 0 && (
               <Divider class="my-8" />
               <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-white">
                     <EyeIcon class="w-5 h-5 text-indigo-500" />
@@ -303,7 +310,7 @@ const filteredItems = allItems.filter(product =>
               </div>
             )}
 
-            {!item.prompt && (
+            {!reusableContent && (
             <div class="flex items-center justify-between mt-10">
               <div class="flex flex-wrap gap-2">
                 {tags.map(tag => (
@@ -323,20 +330,20 @@ const filteredItems = allItems.filter(product =>
       </div>
     </main>
   </div>
-  {item.prompt && (
+  {reusableContent && (
     <script>
       async function writeClipboardText(text: string) {
         await navigator.clipboard.writeText(text);
       }
 
-      const copyBtn = document.getElementById('copy-prompt-btn');
+      const copyBtn = document.getElementById('copy-resource-content-btn');
       const copyIcon = document.getElementById('copy-icon');
       const checkIcon = document.getElementById('check-icon');
       const copyText = document.getElementById('copy-text');
-      const promptContent = document.getElementById('prompt-content');
+      const resourceContent = document.getElementById('resource-content');
 
       copyBtn?.addEventListener('click', async () => {
-        const text = promptContent?.textContent || promptContent?.innerText || '';
+        const text = resourceContent?.textContent || resourceContent?.innerText || '';
         try {
           await writeClipboardText(text);
           copyIcon?.classList.add('hidden');

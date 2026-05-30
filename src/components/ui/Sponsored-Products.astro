@@ -9,6 +9,7 @@ interface Props {
 		categorySlug: string;
 		sponsored?: "small" | "big";
 		prompt?: string;
+		skill?: string;
 		badges?: {
 			featured?: boolean;
 			bestseller?: boolean;
@@ -50,6 +51,7 @@ const sponsoredItems = items.filter((item) => item.sponsored === "big");
                 categorySlug={item.categorySlug}
                 sponsored={item.sponsored}
                 prompt={item.prompt}
+                skill={item.skill}
                 badges={item.badges}
                 techStack={item.techStack}
                 features={item.features}
