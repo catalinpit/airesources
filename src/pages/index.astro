@@ -1,8 +1,8 @@
 ---
 import '../styles/global.css';
 import Layout from '../layouts/layout.astro';
-import CategoryCard from '../components/ui/Category-Card.astro';
-import Hero from '../components/ui/Hero.astro';
+import SectionLabel from '../components/ui/Section-Label.astro';
+import ResourceList from '../components/ui/Resource-List.astro';
 import FilterBar from '../components/ui/FilterBar.astro';
 import SponsoredProducts from '../components/ui/Sponsored-Products.astro';
 import { getCollection } from 'astro:content';
@@ -12,33 +12,26 @@ const description = 'A curated collection of the best AI tools, courses, and res
 const allCategories = await getCollection('categories');
 const allResources = await getCollection('resources');
 
-// Transform resources to include categorySlug for compatibility
+const categoryTitles = new Map(
+	allCategories.map(category => [category.data.categorySlug, category.data.title])
+);
+
 const allItems = allResources.map(resource => ({
 	...resource.data,
-	categorySlug: resource.data.categorySlug
+	categoryTitle: categoryTitles.get(resource.data.categorySlug),
 }));
 
-const totalItemsCount = allItems.length;
+const listedItems = allItems
+	.filter(item => !item.sponsored || item.sponsored === "small")
+	.sort((a, b) => a.name.localeCompare(b.name));
 
-// Group resources by category for CategoryCard
-const resourcesByCategory = allCategories.map(category => {
-	const items = allResources
-		.filter(r => r.data.categorySlug === category.data.categorySlug)
-		.map(r => r.data);
-	return {
-		...category.data,
-		items
-	};
-});
-
-const highlightedCategories = resourcesByCategory
+const categoryLinks = allCategories
 	.map(category => ({
-		title: category.title,
-		count: category.items.filter(item => !item.sponsored || item.sponsored === "small").length,
-		href: `/category/${category.categorySlug}/`,
+		title: category.data.title,
+		href: `/category/${category.data.categorySlug}/`,
+		count: listedItems.filter(item => item.categorySlug === category.data.categorySlug).length,
 	}))
-	.sort((a, b) => b.count - a.count)
-	.slice(0, 5);
+	.filter(category => category.count > 0);
 
 const activeFilters = {
 	techStack: [],
@@ -50,34 +43,44 @@ const activeFilters = {
 ---
 
 <Layout description={description}>
-	<div class="relative isolate overflow-hidden bg-[#090a0f]">
+	<div class="relative isolate overflow-hidden bg-[#090a0f] text-white">
 		<div class="absolute inset-x-0 top-0 -z-10 h-[34rem] bg-[linear-gradient(180deg,rgba(129,140,248,0.08)_0%,transparent_100%)]"></div>
-		<Hero
-			title="AI Resources Directory"
-			description={description}
-			stats={[
-				{ label: 'Resources', value: totalItemsCount },
-				{ label: 'Categories', value: allCategories.length },
-			]}
-			highlights={highlightedCategories}
-		/>
 
-		<div id="catalog" class="scroll-mt-20">
-			<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-				<SponsoredProducts items={allItems} class="w-full" />
-				<FilterBar allResources={allItems} activeFilters={activeFilters} />
+		<div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+			<header class="mb-10">
+				<h1 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+					AI Resources Directory
+				</h1>
+				<p class="mt-3 max-w-2xl text-base leading-7 text-neutral-300">
+					{description}
+				</p>
+				<p class="mt-3 text-sm text-neutral-400">
+					{listedItems.length} resources across {categoryLinks.length} categories.
+				</p>
+			</header>
 
-				<div class="space-y-14">
-					{resourcesByCategory.map((category) => (
-						<CategoryCard
-							title={category.title}
-							description={category.description}
-							items={category.items}
-							categorySlug={category.categorySlug}
-						/>
+			<section class="mb-10">
+				<SectionLabel label="Categories" class="mb-3" />
+				<nav class="flex flex-wrap gap-2" aria-label="Categories">
+					{categoryLinks.map((category) => (
+						<a
+							href={category.href}
+							class="inline-flex h-8 items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm font-medium text-neutral-300 transition-colors hover:border-indigo-300/40 hover:text-white"
+						>
+							{category.title}
+							<span class="text-xs text-neutral-500">{category.count}</span>
+						</a>
 					))}
-				</div>
-			</div>
+				</nav>
+			</section>
+
+			<SponsoredProducts items={allItems} class="mb-10" />
+
+			<section id="catalog" class="scroll-mt-20">
+				<SectionLabel label="All resources" class="mb-3" />
+				<FilterBar allResources={listedItems} activeFilters={activeFilters} />
+				<ResourceList items={listedItems} showCategory />
+			</section>
 		</div>
 	</div>
 </Layout>

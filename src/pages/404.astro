@@ -50,12 +50,9 @@ const categoryLinks = categories
 
         {categoryLinks.length > 0 && (
           <aside class="pt-1 lg:border-l lg:border-white/10 lg:pl-6">
-            <div class="mb-3 flex items-center justify-between gap-4">
-              <p class="font-mono text-xs font-medium uppercase tracking-[0.18em] text-neutral-300">
-                /Popular sections
-              </p>
-              <div class="h-px flex-1 bg-gradient-to-r from-indigo-300/35 to-transparent"></div>
-            </div>
+            <p class="mb-3 font-mono text-xs font-medium uppercase tracking-[0.18em] text-neutral-300">
+              Popular sections
+            </p>
             <div class="space-y-1">
               {categoryLinks.map(category => (
                 <a
@@ -63,7 +60,7 @@ const categoryLinks = categories
                   class="group flex items-center justify-between gap-4 rounded-lg px-2 py-2 transition-colors hover:bg-white/[0.05]"
                 >
                   <span class="truncate text-sm font-medium text-neutral-200 transition-colors group-hover:text-white">
-                    /{category.title}
+                    {category.title}
                   </span>
                   <span class="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-xs font-medium text-neutral-300">
                     {category.count}

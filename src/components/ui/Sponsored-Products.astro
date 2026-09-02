@@ -1,67 +1,21 @@
 ---
-import ResourceCard from './Resource-Card.astro';
+import ResourceList from './Resource-List.astro';
+import SectionLabel from './Section-Label.astro';
+import type { ResourceListItem } from './Resource-Row.astro';
 
 interface Props {
-	items: Array<{
-		name: string;
-		description: string;
-		iconUrl?: string;
-		categorySlug: string;
-		sponsored?: "small" | "big";
-		prompt?: string;
-		skill?: string;
-		useCase?: string;
-		badges?: {
-			featured?: boolean;
-			bestseller?: boolean;
-			verified?: boolean;
-			new?: boolean;
-		};
-		techStack?: string[];
-		features?: string[];
-		pricing?: {
-			type: 'free' | 'paid' | 'freemium' | 'byok' | 'top-up';
-		};
-		integrations?: string[];
-		tags?: string[];
-	}>;
+	items: ResourceListItem[];
 	class?: string;
 }
 
 const { items, class: className } = Astro.props;
 
 const sponsoredItems = items.filter((item) => item.sponsored === "big");
-
 ---
 
 {sponsoredItems.length > 0 && (
-	<section class:list={[
-		"mb-10 border-b border-white/10 pb-10",
-		className
-	]}>
-    <div class="mb-4 flex items-center justify-between gap-4">
-        <div class="font-mono text-xs uppercase tracking-[0.2em] text-amber-200">Featured</div>
-        <div class="h-px flex-1 bg-gradient-to-r from-amber-300/40 to-transparent"></div>
-    </div>
-    <div class="grid gap-4 md:grid-cols-2">
-        {sponsoredItems.map((item) => (
-            <ResourceCard
-                name={item.name}
-                description={item.description}
-                iconUrl={item.iconUrl || ""}
-                categorySlug={item.categorySlug}
-                sponsored={item.sponsored}
-                prompt={item.prompt}
-                skill={item.skill}
-                useCase={item.useCase}
-                badges={item.badges}
-                techStack={item.techStack}
-                features={item.features}
-                pricing={item.pricing}
-                integrations={item.integrations}
-                tags={item.tags}
-            />
-        ))}
-    </div>
+	<section class={className}>
+		<SectionLabel label="Featured" tone="amber" class="mb-3" />
+		<ResourceList items={sponsoredItems} showCategory />
 	</section>
 )}
