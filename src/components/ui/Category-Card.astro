@@ -12,6 +12,7 @@ interface Props {
     sponsored?: "small" | "big";
     prompt?: string;
     skill?: string;
+    useCase?: string;
     badges?: {
       featured?: boolean;
       bestseller?: boolean;
@@ -62,6 +63,7 @@ const filteredItems = items.filter(item => !item.sponsored || item.sponsored ===
         sponsored={item.sponsored}
         prompt={item.prompt}
         skill={item.skill}
+        useCase={item.useCase}
         badges={item.badges}
         techStack={item.techStack}
         features={item.features}

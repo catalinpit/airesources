@@ -33,6 +33,7 @@ const resources = defineCollection({
     tags: z.array(z.string()).optional(),
     prompt: z.string().optional(),
     skill: z.string().optional(),
+    useCase: z.string().optional(),
     example: z.string().optional(),
     author: z.object({
       name: z.string(),

@@ -1,6 +1,7 @@
 ---
 import PromptIcon from '../icons/PromptIcon.astro';
 import SkillIcon from '../icons/SkillIcon.astro';
+import UseCaseIcon from '../icons/UseCaseIcon.astro';
 
 interface Props {
   name: string;
@@ -10,6 +11,7 @@ interface Props {
   sponsored?: "small" | "big";
   prompt?: string;
   skill?: string;
+  useCase?: string;
   class?: string;
   badges?: {
     featured?: boolean;
@@ -34,6 +36,7 @@ const {
   sponsored, 
   prompt, 
   skill,
+  useCase,
   class: className,
   badges,
   techStack,
@@ -48,6 +51,7 @@ const initial = name.charAt(0).toUpperCase();
 const usesGenericIcon = !iconUrl || iconUrl.includes('github.com/favicon.ico');
 const hasPrompt = Boolean(prompt);
 const hasSkill = Boolean(skill);
+const hasUseCase = Boolean(useCase);
 
 const resourceData = {
   name,
@@ -119,6 +123,8 @@ const pricingLabel = pricing?.type === 'byok'
           <SkillIcon class="h-full w-full text-emerald-400" />
         ) : hasPrompt ? (
           <PromptIcon class="h-full w-full text-indigo-500" />
+        ) : hasUseCase ? (
+          <UseCaseIcon class="h-full w-full text-sky-400" />
         ) : !usesGenericIcon ? (
           <>
             <img

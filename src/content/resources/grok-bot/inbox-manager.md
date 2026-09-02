@@ -10,4 +10,6 @@ tags:
   - email
 features:
   - use-case
+useCase: |
+  Manage my inbox, always on. Walk me through connecting Gmail, then configure it: work through every incoming message, archive the noise, label and file what's informational, draft replies for routine requests, and leave me only the messages that genuinely need a person. Never send a reply or delete anything without my approval, and post one daily digest of what it handled and what's waiting on me. Ask me who always gets through, which senders and topics are routine, and how I like things labeled, run the first inbox pass with me watching, then save it.
 ---

@@ -7,6 +7,7 @@ import Divider from '../../components/ui/Divider.astro';
 import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
 import PromptIcon from '../../components/icons/PromptIcon.astro';
 import SkillIcon from '../../components/icons/SkillIcon.astro';
+import UseCaseIcon from '../../components/icons/UseCaseIcon.astro';
 import DocumentIcon from '../../components/icons/DocumentIcon.astro';
 import CopyIcon from '../../components/icons/CopyIcon.astro';
 import CheckIcon from '../../components/icons/CheckIcon.astro';
@@ -56,9 +57,9 @@ const filteredItems = allItems.filter(product =>
   product.name !== item.name || product.categorySlug !== category.categorySlug
 );
 
-const reusableContent = item.skill || item.prompt;
-const reusableContentLabel = item.skill ? 'Skill' : 'Prompt';
-const reusableContentAccent = item.skill ? 'text-emerald-400' : 'text-indigo-500';
+const reusableContent = item.skill || item.prompt || item.useCase;
+const reusableContentLabel = item.skill ? 'Skill' : item.prompt ? 'Prompt' : 'Use Case';
+const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 'text-indigo-500' : 'text-sky-400';
 ---
 
 <Layout description={item.description} pageTitle={item.name}>
@@ -143,6 +144,8 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : 'text-indigo-500
                     <SkillIcon class="w-full h-full text-emerald-400" />
                   ) : item.prompt ? (
                     <PromptIcon class="w-full h-full text-indigo-500" />
+                  ) : item.useCase ? (
+                    <UseCaseIcon class="w-full h-full text-sky-400" />
                   ) : item.iconUrl ? (
                   <img
                     src={item.iconUrl}
