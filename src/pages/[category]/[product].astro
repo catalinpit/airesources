@@ -5,9 +5,7 @@ import Button from '../../components/ui/Button.astro';
 import Tag from '../../components/ui/Tag.astro';
 import Divider from '../../components/ui/Divider.astro';
 import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
-import PromptIcon from '../../components/icons/PromptIcon.astro';
-import SkillIcon from '../../components/icons/SkillIcon.astro';
-import UseCaseIcon from '../../components/icons/UseCaseIcon.astro';
+import ResourceIcon from '../../components/ui/Resource-Icon.astro';
 import DocumentIcon from '../../components/icons/DocumentIcon.astro';
 import CopyIcon from '../../components/icons/CopyIcon.astro';
 import CheckIcon from '../../components/icons/CheckIcon.astro';
@@ -59,7 +57,9 @@ const filteredItems = allItems.filter(product =>
 
 const reusableContent = item.skill || item.prompt || item.useCase;
 const reusableContentLabel = item.skill ? 'Skill' : item.prompt ? 'Prompt' : 'Use Case';
-const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 'text-indigo-500' : 'text-sky-400';
+const reusableContentAccent = item.skill ? 'text-emerald-600' : item.prompt ? 'text-indigo-600' : 'text-sky-600';
+const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[0.04] text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40';
+const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000 || reusableContent.split('\n').length > 30);
 ---
 
 <Layout description={item.description} pageTitle={item.name}>
@@ -105,27 +105,27 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
 			]
 		}
 	})} />
-  <div class="relative isolate min-h-screen overflow-hidden bg-[#090a0f] text-white">
-    <div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(129,140,248,0.08)_0%,transparent_22rem)]"></div>
+  <div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
+    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]"></div>
   <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
     <nav class="mx-auto mb-6 max-w-3xl" aria-label="Breadcrumb">
-      <ol class="flex items-center gap-2 text-sm text-neutral-400" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <ol class="flex items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href="/" class="transition-colors hover:text-white" itemprop="item">
+          <a href="/" class="transition-colors hover:text-neutral-900" itemprop="item">
             <span itemprop="name">Resources</span>
           </a>
           <meta itemprop="position" content="1" />
         </li>
         <span aria-hidden="true">/</span>
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href={`/category/${category.categorySlug}/`} class="transition-colors hover:text-white" itemprop="item">
+          <a href={`/category/${category.categorySlug}/`} class="transition-colors hover:text-neutral-900" itemprop="item">
             <span itemprop="name">{category.title}</span>
           </a>
           <meta itemprop="position" content="2" />
         </li>
         <span aria-hidden="true">/</span>
         <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <span class="font-medium text-white" itemprop="name" aria-current="page">{item.name}</span>
+          <span class="font-medium text-neutral-900" itemprop="name" aria-current="page">{item.name}</span>
           <meta itemprop="position" content="3" />
         </li>
       </ol>
@@ -135,39 +135,18 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
 
     <main>
       <div class="max-w-3xl mx-auto">
-        <div class="rounded-lg border border-white/10 bg-[#10131b] shadow-[0_24px_80px_rgba(0,0,0,0.24)]">
+        <div class="rounded-xl border border-black/[0.06] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
           <div class="p-6 md:p-8">
             <div class="mb-8 flex items-start gap-4">
-              <div class="flex-shrink-0">
-                <div class="h-14 w-14 rounded-lg border border-white/10 bg-black/25 p-2.5">
-                  {item.skill ? (
-                    <SkillIcon class="w-full h-full text-emerald-400" />
-                  ) : item.prompt ? (
-                    <PromptIcon class="w-full h-full text-indigo-500" />
-                  ) : item.useCase ? (
-                    <UseCaseIcon class="w-full h-full text-sky-400" />
-                  ) : item.iconUrl ? (
-                  <img
-                    src={item.iconUrl}
-                    alt={`${item.name} icon`}
-                    class="w-full h-full rounded-lg object-contain icon-with-fallback"
-                    data-fallback-letter={item.name.charAt(0).toUpperCase()}
-                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-                  />
-                  <span class="hidden w-full h-full rounded-lg bg-white items-center justify-center text-neutral-950 font-bold text-xl">{item.name.charAt(0).toUpperCase()}</span>
-                  ) : (
-                  <span class="flex w-full h-full rounded-lg bg-white items-center justify-center text-neutral-950 font-bold text-xl">{item.name.charAt(0).toUpperCase()}</span>
-                  )}
-                </div>
-              </div>
+              <ResourceIcon item={item} size="lg" />
               <div class="min-w-0">
-                <p class="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-neutral-400">
+                <p class="mb-2 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-neutral-500">
                   {category.title}
                 </p>
-                <h1 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                <h1 class="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
                   {item.name}
                 </h1>
-                <p class="mt-3 text-base leading-7 text-neutral-300">
+                <p class="mt-3 text-base leading-7 text-neutral-600">
                   {item.description}
                 </p>
               </div>
@@ -179,7 +158,7 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
                   <div class="mb-6">
                     <div class="flex flex-wrap items-center gap-2">
                       {item.tags.map(tag => (
-                        <span class="relative inline-flex items-center justify-center rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-neutral-300">
+                        <span class="inline-flex items-center rounded-md bg-black/[0.04] px-2.5 py-1 text-xs text-neutral-600">
                           #{tag}
                         </span>
                       ))}
@@ -189,14 +168,14 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
                 <Divider class="mb-8" />
                 <div class="space-y-4">
                   <div class="flex items-center justify-between">
-                    <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-white">
+                    <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-neutral-900">
                       <DocumentIcon class={`w-5 h-5 ${reusableContentAccent}`} />
                       {reusableContentLabel}
                     </h3>
                     <button
                       id="copy-resource-content-btn"
                       type="button"
-                      class="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-sm font-medium text-neutral-300 transition-colors hover:border-indigo-300/40 hover:text-white"
+                      class:list={[tonalButtonClass, "px-3 py-1.5"]}
                       title={`Copy ${reusableContentLabel.toLowerCase()} to clipboard`}
                     >
                       <CopyIcon id="copy-icon" class="w-4 h-4" />
@@ -204,43 +183,65 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
                       <span id="copy-text">Copy</span>
                     </button>
                   </div>
-                  <div
-                    id="resource-content"
-                    class="rounded-lg border border-white/10 bg-black/25 p-6 font-mono text-sm text-neutral-200 whitespace-pre-line"
-                  >
-                    {reusableContent}
+                  <div class="relative">
+                    <div
+                      id="resource-content"
+                      class:list={[
+                        "rounded-lg bg-neutral-100 p-6 font-mono text-sm leading-6 text-neutral-800 whitespace-pre-line",
+                        isLongContent && "max-h-[30rem] overflow-hidden"
+                      ]}
+                    >
+                      {reusableContent}
+                    </div>
+                    {isLongContent && (
+                      <div id="resource-content-fade" class="pointer-events-none absolute inset-x-0 bottom-0 h-28 rounded-b-lg bg-gradient-to-t from-neutral-100 to-transparent"></div>
+                    )}
                   </div>
+                  {isLongContent && (
+                    <div class="flex justify-center">
+                      <button
+                        id="expand-resource-content"
+                        type="button"
+                        class:list={[tonalButtonClass, "px-3.5 py-1.5"]}
+                      >
+                        Show full {reusableContentLabel.toLowerCase()}
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
                   {item.example && (
                     <div class="mt-6">
-                      <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-white">
-                        <DocumentIcon class="w-5 h-5 text-indigo-500" />
+                      <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-neutral-900">
+                        <DocumentIcon class="w-5 h-5 text-indigo-600" />
                         Usage Example
                       </h3>
                       <div
-                        class="example-content mt-4 rounded-lg border border-indigo-300/20 bg-indigo-400/10 p-6 font-mono text-sm text-neutral-200 whitespace-pre-line"
+                        class="example-content mt-4 rounded-lg bg-indigo-50 p-6 font-mono text-sm leading-6 text-neutral-800 whitespace-pre-line"
                       >
                         {item.example}
                       </div>
                     </div>
                   )}
                   {(item.author || item.link) && (
-                    <div class="mt-8 space-y-4 border-t border-white/10 pt-8">
+                    <div class="mt-8 space-y-4 border-t border-black/[0.06] pt-8">
                       {item.author && (
                         <div class="flex items-center gap-3">
                           {item.author.iconUrl && (
                             <img
                               src={item.author.iconUrl}
                               alt={`${item.author.name} avatar`}
-                              class="w-10 h-10 rounded-full ring-2 ring-white/10"
+                              class="w-10 h-10 rounded-full ring-2 ring-black/[0.06]"
                             />
                           )}
                           <div>
-                            <p class="mb-1 text-xs font-medium uppercase tracking-wide text-neutral-400">Created by</p>
+                            <p class="mb-1 text-xs font-medium uppercase tracking-wide text-neutral-500">Created by</p>
                             <a
                               href={item.author.link}
                               target="_blank"
                               rel="noopener noreferrer"
-                            class="group inline-flex items-center gap-1.5 text-base font-semibold text-white transition-colors hover:text-indigo-300"
+                            class="group inline-flex items-center gap-1.5 text-base font-semibold text-neutral-900 transition-colors hover:text-indigo-600"
                             >
                               <span>{item.author.name}</span>
                               <ExternalLinkIcon class="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity" />
@@ -254,7 +255,7 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
                             href={item.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="inline-flex items-center gap-1.5 text-sm text-indigo-300 transition-colors hover:text-indigo-200"
+                            class="inline-flex items-center gap-1.5 text-sm text-indigo-600 transition-colors hover:text-indigo-500"
                           >
                             <ExternalLinkIcon class="w-4 h-4" />
                             View source
@@ -269,13 +270,13 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
 
             {!reusableContent && item.models && item.models.length > 0 && (
               <Divider class="my-8" />
-              <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-white">
-                    <EyeIcon class="w-5 h-5 text-indigo-500" />
+              <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-neutral-900">
+                    <EyeIcon class="w-5 h-5 text-indigo-600" />
                     Available Models
                   </h3>
                 <div class="flex flex-wrap gap-2">
                   {item.models.map(model => (
-                    <span class="relative inline-flex items-center justify-center rounded-md border border-white/10 bg-white/[0.04] px-3 py-1 text-sm text-neutral-300">
+                    <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm text-neutral-600">
                       {model}
                     </span>
                   ))}
@@ -284,29 +285,29 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
 
             {item.pricing && (
               <div class="space-y-6 mt-8">
-                  <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-white">
-                    <DollarIcon class="w-5 h-5 text-indigo-500" />
+                  <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-neutral-900">
+                    <DollarIcon class="w-5 h-5 text-indigo-600" />
                     Pricing
                   </h3>
-                    <span class="relative inline-flex items-center justify-center rounded-md border border-white/10 bg-white/[0.04] px-3 py-1 text-sm font-medium text-neutral-300">
+                    <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm font-medium text-neutral-600">
                       {item.pricing.type.charAt(0).toUpperCase() + item.pricing.type.slice(1)}
                     </span>
                   <div class="grid gap-3">
                     {item.pricing.tiers.map(tier => (
-                      <div class="group relative flex items-center justify-between rounded-lg border border-white/10 bg-black/25 p-4">
+                      <div class="flex items-center justify-between rounded-lg bg-neutral-100 p-4">
                         <div class="flex items-center gap-3">
-                          <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-white/10">
-                            <DollarIcon class="w-4 h-4 text-indigo-500" />
+                          <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-black/[0.06]">
+                            <DollarIcon class="w-4 h-4 text-indigo-600" />
                           </div>
-                          <span class="font-medium text-white">{tier.name}</span>
+                          <span class="font-medium text-neutral-900">{tier.name}</span>
                         </div>
-                        <span class="rounded-md bg-white/10 px-3 py-1.5 text-sm font-semibold text-white">{tier.price}</span>
+                        <span class="rounded-md bg-black/[0.06] px-3 py-1.5 text-sm font-semibold text-neutral-900">{tier.price}</span>
                       </div>
                     ))}
                   </div>
                   {item.pricing.details && (
-                    <div class="flex items-start gap-2.5 rounded-lg p-4 text-sm text-neutral-300">
-                      <InfoIcon class="w-4 h-4 mt-0.5 flex-shrink-0 text-indigo-500" />
+                    <div class="flex items-start gap-2.5 rounded-lg p-4 text-sm text-neutral-600">
+                      <InfoIcon class="w-4 h-4 mt-0.5 flex-shrink-0 text-indigo-600" />
                       <span>{item.pricing.details}</span>
                     </div>
                   )}
@@ -322,7 +323,7 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
                   </Tag>
                 ))}
               </div>
-              <Button href={item.link} class="inline-flex items-center rounded-lg px-6 py-2.5 font-medium">
+              <Button href={item.link} class="h-10 px-5">
                 Check out site
                 <ExternalLinkIcon class="w-4 h-4 ml-2" />
               </Button>
@@ -344,6 +345,14 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
       const checkIcon = document.getElementById('check-icon');
       const copyText = document.getElementById('copy-text');
       const resourceContent = document.getElementById('resource-content');
+      const expandBtn = document.getElementById('expand-resource-content');
+      const contentFade = document.getElementById('resource-content-fade');
+
+      expandBtn?.addEventListener('click', () => {
+        resourceContent?.classList.remove('max-h-[30rem]', 'overflow-hidden');
+        contentFade?.remove();
+        expandBtn.remove();
+      });
 
       copyBtn?.addEventListener('click', async () => {
         const text = resourceContent?.textContent || resourceContent?.innerText || '';
@@ -352,14 +361,14 @@ const reusableContentAccent = item.skill ? 'text-emerald-400' : item.prompt ? 't
           copyIcon?.classList.add('hidden');
           checkIcon?.classList.remove('hidden');
           copyText && (copyText.textContent = 'Copied!');
-          copyBtn.classList.remove('text-neutral-300');
-          copyBtn.classList.add('text-green-400');
+          copyBtn.classList.remove('text-neutral-700');
+          copyBtn.classList.add('text-green-600');
           setTimeout(() => {
             copyIcon?.classList.remove('hidden');
             checkIcon?.classList.add('hidden');
             copyText && (copyText.textContent = 'Copy');
-            copyBtn.classList.remove('text-green-400');
-            copyBtn.classList.add('text-neutral-300');
+            copyBtn.classList.remove('text-green-600');
+            copyBtn.classList.add('text-neutral-700');
           }, 2000);
         } catch {
           copyText && (copyText.textContent = 'Failed');

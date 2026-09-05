@@ -12,15 +12,15 @@ const { items, showCategory = false, class: className } = Astro.props;
 ---
 
 <div class:list={[
-  "overflow-hidden rounded-lg border border-white/10 bg-[#10131b] shadow-[0_20px_45px_rgba(0,0,0,0.18)]",
+  "overflow-hidden rounded-xl border border-black/[0.06] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]",
   className
 ]}>
-  <div class="divide-y divide-white/[0.06]">
+  <div class="divide-y divide-black/[0.05]">
     {items.map((item) => (
       <ResourceRow item={item} showCategory={showCategory} />
     ))}
   </div>
-  <p data-empty-state hidden class="px-4 py-10 text-center text-sm text-neutral-400">
+  <p data-empty-state hidden class="px-4 py-10 text-center text-sm text-neutral-500">
     No resources match your search.
   </p>
 </div>

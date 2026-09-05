@@ -1,0 +1,47 @@
+---
+interface Props {
+  size?: 'default' | 'large';
+  class?: string;
+}
+
+const { size = 'default', class: className } = Astro.props;
+const isLarge = size === 'large';
+---
+
+<div class:list={["relative", className]}>
+  <div class:list={["pointer-events-none absolute inset-y-0 left-0 flex items-center text-neutral-400", isLarge ? "pl-4" : "pl-3.5"]}>
+    <svg class={isLarge ? "h-5 w-5" : "h-4 w-4"} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+    </svg>
+  </div>
+  <input
+    type="text"
+    id="search-input"
+    autocomplete="off"
+    spellcheck="false"
+    placeholder="Search by name..."
+    aria-label="Search resources by name"
+    class:list={[
+      "w-full bg-white text-neutral-900 placeholder-neutral-400 shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-inset ring-black/[0.08] transition focus:outline-none focus:ring-2 focus:ring-indigo-500/50",
+      isLarge ? "h-12 rounded-xl pl-12 pr-14 text-base" : "h-10 rounded-lg pl-10 pr-12 text-sm"
+    ]}
+  />
+  <kbd class="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 items-center rounded-md bg-black/[0.05] px-1.5 py-0.5 font-mono text-[11px] text-neutral-500 sm:inline-flex" aria-hidden="true">/</kbd>
+</div>
+
+<script>
+  const input = document.getElementById('search-input') as HTMLInputElement | null;
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== '/' || event.metaKey || event.ctrlKey || event.altKey || !input) return;
+    const target = event.target as HTMLElement | null;
+    const isTyping =
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target?.isContentEditable;
+    if (isTyping) return;
+    event.preventDefault();
+    input.focus();
+    input.select();
+  });
+</script>

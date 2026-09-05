@@ -21,7 +21,7 @@ const currentPath = Astro.url.pathname;
 <div class="relative">
 	<button
 		id="categories-toggle"
-		class="flex h-9 items-center gap-2 rounded-lg border border-white/10 bg-white/[0.04] px-3 text-sm font-medium text-neutral-300 transition-colors hover:border-indigo-300/40 hover:text-white"
+		class="flex h-9 items-center gap-2 rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
 		aria-label="Toggle categories"
 		aria-expanded="false"
 	>
@@ -33,7 +33,7 @@ const currentPath = Astro.url.pathname;
 
 	<div
 		id="categories-dropdown"
-		class="pointer-events-none absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-6rem)] w-[min(20rem,calc(100vw-2rem))] origin-top-right translate-y-1 scale-[0.98] overflow-y-auto rounded-lg border border-white/10 bg-[#0f121a] opacity-0 shadow-xl shadow-black/40 transition-all duration-150 md:left-0 md:right-auto md:origin-top-left"
+		class="pointer-events-none absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-6rem)] w-[min(20rem,calc(100vw-2rem))] origin-top-right translate-y-1 scale-[0.98] overflow-y-auto rounded-xl border border-black/[0.08] bg-white opacity-0 shadow-xl shadow-black/10 transition-all duration-150 md:left-0 md:right-auto md:origin-top-left"
 	>
 		<div class="p-2">
 			<nav class="space-y-1" aria-label="Categories">
@@ -42,16 +42,16 @@ const currentPath = Astro.url.pathname;
 					class:list={[
 						"flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
 						currentPath === "/"
-							? "bg-white text-neutral-950"
-							: "text-neutral-300 hover:bg-white/[0.06] hover:text-white"
+							? "bg-indigo-600 text-white"
+							: "text-neutral-700 hover:bg-black/[0.04] hover:text-neutral-900"
 					]}
 				>
 					<span>All</span>
 					<span class:list={[
 						"ml-2 flex-shrink-0 rounded-md px-2 py-0.5 text-xs",
 						currentPath === "/"
-							? "bg-neutral-950/10 text-neutral-950"
-							: "bg-white/[0.06] text-neutral-400"
+							? "bg-white/20 text-white"
+							: "bg-black/[0.05] text-neutral-500"
 					]}>
 						{totalItemsCount}
 					</span>
@@ -64,16 +64,16 @@ const currentPath = Astro.url.pathname;
 							class:list={[
 								"flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors",
 								isActive
-									? "bg-white text-neutral-950"
-									: "text-neutral-300 hover:bg-white/[0.06] hover:text-white"
+									? "bg-indigo-600 text-white"
+									: "text-neutral-700 hover:bg-black/[0.04] hover:text-neutral-900"
 							]}
 						>
 							<span class="truncate">{category.title}</span>
 							<span class:list={[
 								"ml-2 flex-shrink-0 rounded-md px-2 py-0.5 text-xs",
 								isActive
-									? "bg-neutral-950/10 text-neutral-950"
-									: "bg-white/[0.06] text-neutral-400"
+									? "bg-white/20 text-white"
+									: "bg-black/[0.05] text-neutral-500"
 							]}>
 								{category.items.length}
 							</span>

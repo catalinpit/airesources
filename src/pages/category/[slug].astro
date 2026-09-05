@@ -88,34 +88,32 @@ const activeFilters = {
 			}))
 		}
 	})} />
-	<div class="relative isolate min-h-screen overflow-hidden bg-[#090a0f] text-white">
-		<div class="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(129,140,248,0.08)_0%,transparent_22rem)]"></div>
+	<div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
+		<div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]"></div>
 		<div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
 		<nav class="mb-8" aria-label="Breadcrumb">
-			<ol class="flex flex-wrap items-center gap-2 text-sm text-neutral-400" itemscope itemtype="https://schema.org/BreadcrumbList">
+			<ol class="flex flex-wrap items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
 				<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-					<a href="/" class="transition-colors hover:text-white" itemprop="item">
+					<a href="/" class="transition-colors hover:text-neutral-900" itemprop="item">
 						<span itemprop="name">Resources</span>
 					</a>
 					<meta itemprop="position" content="1" />
 				</li>
 				<span aria-hidden="true">/</span>
 				<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-					<span class="font-medium text-white" itemprop="name" aria-current="page">{category.title}</span>
+					<span class="font-medium text-neutral-900" itemprop="name" aria-current="page">{category.title}</span>
 					<meta itemprop="position" content="2" />
 				</li>
 			</ol>
 		</nav>
 
 		<header class="mb-8">
-			<div>
-				<h1 class="text-3xl font-semibold tracking-tight text-white">
-					{category.title}
-				</h1>
-				<p class="mt-2 max-w-2xl text-sm leading-6 text-neutral-300">
-					{category.description}
-				</p>
-			</div>
+			<h1 class="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
+				{category.title}
+			</h1>
+			<p class="mt-3 max-w-2xl text-base leading-7 text-neutral-600">
+				{category.description}
+			</p>
 		</header>
 
 		<SponsoredProducts items={allItems} class="mb-10" />

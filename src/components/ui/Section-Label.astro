@@ -9,8 +9,8 @@ const { label, tone = 'default', class: className } = Astro.props;
 ---
 
 <p class:list={[
-  "font-mono text-xs font-medium uppercase tracking-[0.18em]",
-  tone === 'amber' ? "text-amber-200" : "text-neutral-300",
+  "font-mono text-[11px] font-medium uppercase tracking-[0.1em]",
+  tone === 'amber' ? "text-amber-700" : "text-neutral-500",
   className
 ]}>
   {label}

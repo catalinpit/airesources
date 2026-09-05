@@ -1,0 +1,83 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PromptIcon from '../icons/PromptIcon.astro';
+import SkillIcon from '../icons/SkillIcon.astro';
+import UseCaseIcon from '../icons/UseCaseIcon.astro';
+
+type Resource = Pick<CollectionEntry<'resources'>['data'], 'name' | 'iconUrl' | 'prompt' | 'skill' | 'useCase'>;
+
+interface Props {
+  item: Resource;
+  size?: 'sm' | 'lg';
+  class?: string;
+}
+
+const { item, size = 'sm', class: className } = Astro.props;
+
+const hues = [
+  'bg-rose-100 text-rose-700',
+  'bg-amber-100 text-amber-700',
+  'bg-emerald-100 text-emerald-700',
+  'bg-sky-100 text-sky-700',
+  'bg-indigo-100 text-indigo-700',
+  'bg-violet-100 text-violet-700',
+  'bg-fuchsia-100 text-fuchsia-700',
+  'bg-teal-100 text-teal-700',
+];
+
+const hash = Array.from(item.name).reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) >>> 0, 7);
+const hue = hues[hash % hues.length];
+const initial = item.name.charAt(0).toUpperCase();
+const hasFavicon = Boolean(item.iconUrl) && !item.iconUrl!.includes('github.com/favicon.ico');
+
+const TypeIcon = item.skill ? SkillIcon : item.prompt ? PromptIcon : item.useCase ? UseCaseIcon : null;
+const typeTint = item.skill
+  ? 'bg-emerald-100 text-emerald-700'
+  : item.prompt
+    ? 'bg-indigo-100 text-indigo-700'
+    : 'bg-sky-100 text-sky-700';
+
+const isLarge = size === 'lg';
+const tileClass = isLarge ? 'h-14 w-14 rounded-xl' : 'h-9 w-9 rounded-lg';
+const glyphClass = isLarge ? 'h-7 w-7' : 'h-[18px] w-[18px]';
+const imageClass = isLarge ? 'h-8 w-8 rounded-md' : 'h-5 w-5 rounded-sm';
+const letterClass = isLarge ? 'text-xl font-semibold' : 'text-sm font-semibold';
+---
+
+<div class:list={[
+  "resource-icon relative flex flex-shrink-0 items-center justify-center overflow-hidden",
+  tileClass,
+  TypeIcon ? typeTint : hue,
+  className
+]}>
+  {TypeIcon ? (
+    <TypeIcon class={glyphClass} />
+  ) : (
+    <>
+      <span class:list={["resource-icon-fallback", letterClass]}>{initial}</span>
+      {hasFavicon && (
+        <img
+          src={item.iconUrl}
+          alt=""
+          loading="lazy"
+          data-favicon
+          class:list={["absolute inset-0 m-auto object-contain", imageClass]}
+        />
+      )}
+    </>
+  )}
+</div>
+
+<script>
+  function markLoaded(img: HTMLImageElement) {
+    img.classList.add('is-loaded');
+  }
+
+  document.querySelectorAll<HTMLImageElement>('img[data-favicon]').forEach((img) => {
+    if (img.complete && img.naturalWidth > 0) {
+      markLoaded(img);
+    } else {
+      img.addEventListener('load', () => markLoaded(img), { once: true });
+    }
+  });
+</script>

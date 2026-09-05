@@ -8,6 +8,25 @@
   }
 }
 
+/* Favicons fade in over the letter fallback only once they have actually loaded,
+   so slow or dead icon hosts never leave an empty tile. */
+.resource-icon img[data-favicon] {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.resource-icon img[data-favicon].is-loaded {
+  opacity: 1;
+}
+
+.resource-icon:has(img[data-favicon].is-loaded) {
+  background-color: rgb(0 0 0 / 0.04);
+}
+
+.resource-icon:has(img[data-favicon].is-loaded) .resource-icon-fallback {
+  visibility: hidden;
+}
+
 @layer utilities {
   .scrollbar-hide {
     -ms-overflow-style: none;

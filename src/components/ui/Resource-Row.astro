@@ -1,8 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import PromptIcon from '../icons/PromptIcon.astro';
-import SkillIcon from '../icons/SkillIcon.astro';
-import UseCaseIcon from '../icons/UseCaseIcon.astro';
+import ResourceIcon from './Resource-Icon.astro';
 
 export type ResourceListItem = CollectionEntry<'resources'>['data'] & {
   categoryTitle?: string;
@@ -16,8 +14,6 @@ interface Props {
 const { item, showCategory = false } = Astro.props;
 
 const productSlug = item.name.toLowerCase().replace(/\s+/g, '-');
-const initial = item.name.charAt(0).toUpperCase();
-const usesGenericIcon = !item.iconUrl || item.iconUrl.includes('github.com/favicon.ico');
 
 const resourceData = {
   name: item.name,
@@ -36,61 +32,34 @@ const pricingLabels = {
   'top-up': 'Top-up',
 } as const;
 
-const pricingLabel = item.pricing ? pricingLabels[item.pricing.type] : undefined;
-const chipClass = "inline-flex items-center rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 text-xs font-medium text-neutral-400";
+const metaText = [
+  showCategory ? item.categoryTitle : undefined,
+  item.pricing ? pricingLabels[item.pricing.type] : undefined,
+].filter(Boolean).join(' · ');
 ---
 
 <a
   href={`/${item.categorySlug}/${productSlug}/`}
-  class="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-white/[0.03] focus:outline-none focus-visible:bg-white/[0.05] sm:gap-4"
+  class="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-black/[0.02] focus:outline-none focus-visible:bg-black/[0.04] sm:gap-4"
   data-resource={JSON.stringify(resourceData)}
 >
-  <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-white/10 bg-black/25 p-1.5">
-    {item.skill ? (
-      <SkillIcon class="h-full w-full text-emerald-400" />
-    ) : item.prompt ? (
-      <PromptIcon class="h-full w-full text-indigo-500" />
-    ) : item.useCase ? (
-      <UseCaseIcon class="h-full w-full text-sky-400" />
-    ) : !usesGenericIcon ? (
-      <>
-        <img
-          src={item.iconUrl}
-          alt=""
-          loading="lazy"
-          class="h-full w-full rounded-md object-contain"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
-        />
-        <span class="hidden h-full w-full items-center justify-center rounded-md bg-white text-xs font-semibold text-neutral-950">
-          {initial}
-        </span>
-      </>
-    ) : (
-      <span class="flex h-full w-full items-center justify-center rounded-md bg-white text-xs font-semibold text-neutral-950">
-        {initial}
-      </span>
-    )}
-  </div>
+  <ResourceIcon item={item} />
 
-  <div class="min-w-0 flex-1 sm:flex sm:items-baseline sm:gap-3">
-    <h3 class="truncate text-sm font-semibold text-white transition-colors group-hover:text-indigo-200 sm:max-w-[45%] sm:flex-shrink-0">
-      {item.name}
-    </h3>
-    <p class="min-w-0 flex-1 truncate text-sm text-neutral-400">
+  <div class="min-w-0 flex-1">
+    <div class="flex items-baseline justify-between gap-3">
+      <h3 class="truncate text-[15px] font-medium leading-6 text-neutral-900 transition-colors group-hover:text-indigo-600">
+        {item.name}
+      </h3>
+      {(item.sponsored || metaText) && (
+        <span class="hidden flex-shrink-0 items-center gap-1.5 text-xs text-neutral-400 sm:flex">
+          {item.sponsored && <span class="text-amber-600">Sponsored</span>}
+          {item.sponsored && metaText && <span aria-hidden="true">·</span>}
+          {metaText}
+        </span>
+      )}
+    </div>
+    <p class="mt-0.5 truncate text-sm leading-5 text-neutral-500">
       {item.description}
     </p>
-  </div>
-
-  <div class="hidden flex-shrink-0 items-center gap-2 sm:flex">
-    {item.sponsored && (
-      <span class="inline-flex items-center rounded-md border border-amber-300/25 bg-amber-400/10 px-2 py-0.5 text-xs font-medium text-amber-200">
-        Sponsored
-      </span>
-    )}
-    {pricingLabel && <span class={chipClass}>{pricingLabel}</span>}
-    {showCategory && item.categoryTitle && <span class={chipClass}>{item.categoryTitle}</span>}
-    <svg class="h-4 w-4 text-neutral-500 transition-all group-hover:translate-x-0.5 group-hover:text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-    </svg>
   </div>
 </a>
