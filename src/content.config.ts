@@ -40,6 +40,11 @@ const resources = defineCollection({
       link: z.string(),
       iconUrl: z.string(),
     }).optional(),
+    curriculum: z.array(z.object({
+      title: z.string(),
+      description: z.string().optional(),
+      lessons: z.array(z.string()),
+    })).optional(),
     sponsored: z.enum(['small', 'big']).optional(),
     // New fields for enhanced filtering
     techStack: z.array(z.string()).optional(), // e.g., ['Next.js', 'React', 'TypeScript']

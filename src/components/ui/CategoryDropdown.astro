@@ -21,7 +21,7 @@ const currentPath = Astro.url.pathname;
 <div class="relative">
 	<button
 		id="categories-toggle"
-		class="flex h-9 items-center gap-2 rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+		class="flex h-9 items-center gap-2 whitespace-nowrap rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
 		aria-label="Toggle categories"
 		aria-expanded="false"
 	>
@@ -33,7 +33,7 @@ const currentPath = Astro.url.pathname;
 
 	<div
 		id="categories-dropdown"
-		class="pointer-events-none absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-6rem)] w-[min(20rem,calc(100vw-2rem))] origin-top-right translate-y-1 scale-[0.98] overflow-y-auto rounded-xl border border-black/[0.08] bg-white opacity-0 shadow-xl shadow-black/10 transition-all duration-150 md:left-0 md:right-auto md:origin-top-left"
+		class="pointer-events-none absolute right-0 top-full z-50 mt-2 max-h-[calc(100vh-6rem)] w-[min(20rem,calc(100vw-2rem))] origin-top-right translate-y-1 scale-[0.98] overflow-y-auto rounded-xl border border-black/[0.08] bg-white opacity-0 shadow-xl shadow-black/10 transition-all duration-150"
 	>
 		<div class="p-2">
 			<nav class="space-y-1" aria-label="Categories">

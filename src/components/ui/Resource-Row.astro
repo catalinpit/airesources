@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import ResourceIcon from './Resource-Icon.astro';
+import { PRICING_LABELS } from '../../lib/pricing';
 
 export type ResourceListItem = CollectionEntry<'resources'>['data'] & {
   categoryTitle?: string;
@@ -24,23 +25,15 @@ const resourceData = {
   integrations: item.integrations || [],
 };
 
-const pricingLabels = {
-  free: 'Free',
-  paid: 'Paid',
-  freemium: 'Freemium',
-  byok: 'BYOK',
-  'top-up': 'Top-up',
-} as const;
-
 const metaText = [
   showCategory ? item.categoryTitle : undefined,
-  item.pricing ? pricingLabels[item.pricing.type] : undefined,
+  item.pricing ? PRICING_LABELS[item.pricing.type] : undefined,
 ].filter(Boolean).join(' · ');
 ---
 
 <a
   href={`/${item.categorySlug}/${productSlug}/`}
-  class="group flex items-center gap-3 px-4 py-3 transition-colors hover:bg-black/[0.02] focus:outline-none focus-visible:bg-black/[0.04] sm:gap-4"
+  class="group flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-black/[0.02] focus:outline-none focus-visible:bg-black/[0.04] sm:gap-4"
   data-resource={JSON.stringify(resourceData)}
 >
   <ResourceIcon item={item} />

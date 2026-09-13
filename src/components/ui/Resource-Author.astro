@@ -1,0 +1,36 @@
+---
+import ExternalLinkIcon from '../icons/ExternalLinkIcon.astro';
+
+interface Props {
+  author: {
+    name: string;
+    link: string;
+    iconUrl: string;
+  };
+  label?: string;
+  class?: string;
+}
+
+const { author, label = 'Created by', class: className } = Astro.props;
+---
+
+<div class:list={["flex items-center gap-3", className]}>
+  <img
+    src={author.iconUrl}
+    alt={`${author.name} avatar`}
+    loading="lazy"
+    class="h-10 w-10 rounded-full ring-2 ring-black/[0.06]"
+  />
+  <div>
+    <p class="mb-1 text-xs font-medium uppercase tracking-wide text-neutral-500">{label}</p>
+    <a
+      href={author.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="group inline-flex items-center gap-1.5 text-base font-semibold text-neutral-900 transition-colors hover:text-indigo-600"
+    >
+      <span>{author.name}</span>
+      <ExternalLinkIcon class="h-4 w-4 opacity-60 transition-opacity group-hover:opacity-100" />
+    </a>
+  </div>
+</div>

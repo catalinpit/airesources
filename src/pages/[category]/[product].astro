@@ -6,14 +6,13 @@ import Tag from '../../components/ui/Tag.astro';
 import Divider from '../../components/ui/Divider.astro';
 import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
 import ResourceIcon from '../../components/ui/Resource-Icon.astro';
-import DocumentIcon from '../../components/icons/DocumentIcon.astro';
+import ResourceAuthor from '../../components/ui/Resource-Author.astro';
 import CopyIcon from '../../components/icons/CopyIcon.astro';
 import CheckIcon from '../../components/icons/CheckIcon.astro';
 import ExternalLinkIcon from '../../components/icons/ExternalLinkIcon.astro';
-import EyeIcon from '../../components/icons/EyeIcon.astro';
-import DollarIcon from '../../components/icons/DollarIcon.astro';
 import InfoIcon from '../../components/icons/InfoIcon.astro';
 import { getCollection } from 'astro:content';
+import { PRICING_LABELS, isFreeOnly } from '../../lib/pricing';
 
 export async function getStaticPaths() {
   const categories = await getCollection('categories');
@@ -57,9 +56,23 @@ const filteredItems = allItems.filter(product =>
 
 const reusableContent = item.skill || item.prompt || item.useCase;
 const reusableContentLabel = item.skill ? 'Skill' : item.prompt ? 'Prompt' : 'Use Case';
-const reusableContentAccent = item.skill ? 'text-emerald-600' : item.prompt ? 'text-indigo-600' : 'text-sky-600';
+const sectionHeadingClass = 'text-lg font-semibold leading-6 text-neutral-900';
 const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[0.04] text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40';
 const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000 || reusableContent.split('\n').length > 30);
+const authorLabel = item.type === 'course' ? 'Author' : 'Created by';
+const showPricingType = Boolean(item.pricing) && !isFreeOnly(item.pricing!);
+
+let lessonCounter = 0;
+const curriculum = (item.curriculum ?? []).map(module => {
+  const firstLessonNumber = lessonCounter + 1;
+  lessonCounter += module.lessons.length;
+  return { ...module, firstLessonNumber };
+});
+const lessonCount = lessonCounter;
+const isSingleModule = curriculum.length === 1;
+const curriculumSummary = isSingleModule
+  ? `${lessonCount} lessons`
+  : `${curriculum.length} modules · ${lessonCount} lessons`;
 ---
 
 <Layout description={item.description} pageTitle={item.name}>
@@ -107,17 +120,17 @@ const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000
 	})} />
   <div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
     <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]"></div>
-  <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-4xl px-3 py-10 sm:px-6 lg:px-8">
     <nav class="mx-auto mb-6 max-w-3xl" aria-label="Breadcrumb">
-      <ol class="flex items-center gap-2 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li class="whitespace-nowrap" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
           <a href="/" class="transition-colors hover:text-neutral-900" itemprop="item">
             <span itemprop="name">Resources</span>
           </a>
           <meta itemprop="position" content="1" />
         </li>
         <span aria-hidden="true">/</span>
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <li class="whitespace-nowrap" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
           <a href={`/category/${category.categorySlug}/`} class="transition-colors hover:text-neutral-900" itemprop="item">
             <span itemprop="name">{category.title}</span>
           </a>
@@ -137,16 +150,16 @@ const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000
       <div class="max-w-3xl mx-auto">
         <div class="rounded-xl border border-black/[0.06] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
           <div class="p-6 md:p-8">
-            <div class="mb-8 flex items-start gap-4">
+            <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start">
               <ResourceIcon item={item} size="lg" />
               <div class="min-w-0">
                 <p class="mb-2 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-neutral-500">
                   {category.title}
                 </p>
-                <h1 class="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
+                <h1 class="break-words text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl md:text-4xl">
                   {item.name}
                 </h1>
-                <p class="mt-3 text-base leading-7 text-neutral-600">
+                <p class="mt-3 text-[15px] leading-6 text-neutral-600 sm:text-base sm:leading-7">
                   {item.description}
                 </p>
               </div>
@@ -168,10 +181,7 @@ const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000
                 <Divider class="mb-8" />
                 <div class="space-y-4">
                   <div class="flex items-center justify-between">
-                    <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-neutral-900">
-                      <DocumentIcon class={`w-5 h-5 ${reusableContentAccent}`} />
-                      {reusableContentLabel}
-                    </h3>
+                    <h3 class={sectionHeadingClass}>{reusableContentLabel}</h3>
                     <button
                       id="copy-resource-content-btn"
                       type="button"
@@ -213,10 +223,7 @@ const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000
                   )}
                   {item.example && (
                     <div class="mt-6">
-                      <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-neutral-900">
-                        <DocumentIcon class="w-5 h-5 text-indigo-600" />
-                        Usage Example
-                      </h3>
+                      <h3 class={sectionHeadingClass}>Usage Example</h3>
                       <div
                         class="example-content mt-4 rounded-lg bg-indigo-50 p-6 font-mono text-sm leading-6 text-neutral-800 whitespace-pre-line"
                       >
@@ -226,29 +233,7 @@ const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000
                   )}
                   {(item.author || item.link) && (
                     <div class="mt-8 space-y-4 border-t border-black/[0.06] pt-8">
-                      {item.author && (
-                        <div class="flex items-center gap-3">
-                          {item.author.iconUrl && (
-                            <img
-                              src={item.author.iconUrl}
-                              alt={`${item.author.name} avatar`}
-                              class="w-10 h-10 rounded-full ring-2 ring-black/[0.06]"
-                            />
-                          )}
-                          <div>
-                            <p class="mb-1 text-xs font-medium uppercase tracking-wide text-neutral-500">Created by</p>
-                            <a
-                              href={item.author.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            class="group inline-flex items-center gap-1.5 text-base font-semibold text-neutral-900 transition-colors hover:text-indigo-600"
-                            >
-                              <span>{item.author.name}</span>
-                              <ExternalLinkIcon class="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity" />
-                            </a>
-                          </div>
-                        </div>
-                      )}
+                      {item.author && <ResourceAuthor author={item.author} label={authorLabel} />}
                       {item.link && (
                         <div>
                           <a
@@ -268,12 +253,50 @@ const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000
               </>
             )}
 
+            {curriculum.length > 0 && (
+              <>
+                <Divider class="mb-8" />
+                <section class="space-y-4">
+                  <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                    <h3 class={sectionHeadingClass}>Curriculum</h3>
+                    <span class="text-sm text-neutral-500">{curriculumSummary}</span>
+                  </div>
+                  <ol class="space-y-3">
+                    {curriculum.map((module, moduleIndex) => (
+                      <li class="rounded-lg bg-neutral-100 p-5">
+                        {!isSingleModule && (
+                          <div class="flex items-start gap-3">
+                            <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-indigo-600 text-[11px] font-semibold text-white">
+                              {moduleIndex + 1}
+                            </span>
+                            <div class="min-w-0 flex-1">
+                              <h4 class="text-base font-semibold leading-none text-neutral-900">{module.title}</h4>
+                              {module.description && (
+                                <p class="mt-2 text-sm leading-6 text-neutral-600">{module.description}</p>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                        <ol class:list={["sm:columns-2 sm:gap-x-6", !isSingleModule && "mt-2 pl-9"]}>
+                          {module.lessons.map((lesson, lessonIndex) => (
+                            <li class="flex break-inside-avoid items-baseline gap-2 py-[3px] text-sm leading-6 text-neutral-700">
+                              <span class="font-mono text-[11px] text-neutral-400">
+                                {String(module.firstLessonNumber + lessonIndex).padStart(2, '0')}
+                              </span>
+                              <span>{lesson}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              </>
+            )}
+
             {!reusableContent && item.models && item.models.length > 0 && (
               <Divider class="my-8" />
-              <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-neutral-900">
-                    <EyeIcon class="w-5 h-5 text-indigo-600" />
-                    Available Models
-                  </h3>
+              <h3 class:list={[sectionHeadingClass, "mb-4"]}>Available Models</h3>
                 <div class="flex flex-wrap gap-2">
                   {item.models.map(model => (
                     <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm text-neutral-600">
@@ -284,29 +307,25 @@ const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000
             )}
 
             {item.pricing && (
-              <div class="space-y-6 mt-8">
-                  <h3 class="flex items-center gap-2 text-lg font-semibold leading-6 tracking-wide text-neutral-900">
-                    <DollarIcon class="w-5 h-5 text-indigo-600" />
-                    Pricing
-                  </h3>
-                    <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm font-medium text-neutral-600">
-                      {item.pricing.type.charAt(0).toUpperCase() + item.pricing.type.slice(1)}
-                    </span>
+              <div class="mt-8 space-y-4">
+                  <div class="flex items-center justify-between gap-4">
+                    <h3 class={sectionHeadingClass}>Pricing</h3>
+                    {showPricingType && (
+                      <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm font-medium text-neutral-600">
+                        {PRICING_LABELS[item.pricing.type]}
+                      </span>
+                    )}
+                  </div>
                   <div class="grid gap-3">
                     {item.pricing.tiers.map(tier => (
-                      <div class="flex items-center justify-between rounded-lg bg-neutral-100 p-4">
-                        <div class="flex items-center gap-3">
-                          <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-black/[0.06]">
-                            <DollarIcon class="w-4 h-4 text-indigo-600" />
-                          </div>
-                          <span class="font-medium text-neutral-900">{tier.name}</span>
-                        </div>
+                      <div class="flex items-center justify-between gap-4 rounded-lg bg-neutral-100 px-4 py-3">
+                        <span class="font-medium text-neutral-900">{tier.name}</span>
                         <span class="rounded-md bg-black/[0.06] px-3 py-1.5 text-sm font-semibold text-neutral-900">{tier.price}</span>
                       </div>
                     ))}
                   </div>
                   {item.pricing.details && (
-                    <div class="flex items-start gap-2.5 rounded-lg p-4 text-sm text-neutral-600">
+                    <div class="flex items-start gap-2.5 rounded-lg bg-neutral-100 p-4 text-sm text-neutral-600">
                       <InfoIcon class="w-4 h-4 mt-0.5 flex-shrink-0 text-indigo-600" />
                       <span>{item.pricing.details}</span>
                     </div>
@@ -315,19 +334,25 @@ const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000
             )}
 
             {!reusableContent && (
-            <div class="flex items-center justify-between mt-10">
+            <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div class="flex flex-wrap gap-2">
                 {tags.map(tag => (
-                  <Tag href={`/category/${category.categorySlug}/`}>
+                  <Tag href={`/category/${category.categorySlug}/`} class="whitespace-nowrap">
                     #{tag.label}
                   </Tag>
                 ))}
               </div>
-              <Button href={item.link} class="h-10 px-5">
+              <Button href={item.link} class="h-10 w-full justify-center whitespace-nowrap px-5 sm:w-auto">
                 Check out site
                 <ExternalLinkIcon class="w-4 h-4 ml-2" />
               </Button>
             </div>
+            )}
+
+            {!reusableContent && item.author && (
+              <div class="mt-8 border-t border-black/[0.06] pt-8">
+                <ResourceAuthor author={item.author} label={authorLabel} />
+              </div>
             )}
           </div>
         </div>

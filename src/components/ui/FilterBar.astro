@@ -1,5 +1,6 @@
 ---
 import SearchInput from './Search-Input.astro';
+import { PRICING_LABELS } from '../../lib/pricing';
 
 interface Props {
   allResources: Array<{
@@ -50,13 +51,7 @@ const badgeOptions = [
   { value: 'new', label: 'New' },
 ];
 
-const pricingOptions = [
-  { value: 'free', label: 'Free' },
-  { value: 'freemium', label: 'Freemium' },
-  { value: 'paid', label: 'Paid' },
-  { value: 'byok', label: 'BYOK' },
-  { value: 'top-up', label: 'Top-up' },
-];
+const pricingOptions = Object.entries(PRICING_LABELS).map(([value, label]) => ({ value, label }));
 
 const availableBadges = badgeOptions.filter(option =>
   allResources.some(resource => resource.badges?.[option.value as keyof NonNullable<typeof resource.badges>])
