@@ -3,7 +3,7 @@ name: AI Code Convert
 description: A web tool for translating code between programming languages
 categorySlug: snippet-generators
 link: "https://aicodeconvert.com/"
-iconUrl: "https://aicodeconvert.com/favicon.ico"
+iconUrl: "https://aicodeconvert.com/code.png"
 type: snippet-generator
 pricing:
   type: free

@@ -3,7 +3,7 @@ name: Cline
 description: Open-source collaborative AI coding agent with frontier model access
 categorySlug: extensions
 link: "https://cline.bot"
-iconUrl: "https://registry.npmmirror.com/@lobehub/icons-static-png/latest/files/light/cline.png"
+iconUrl: "https://cline.bot/assets/branding/favicons/favicon-32x32.png"
 type: extension
 pricing:
   type: freemium

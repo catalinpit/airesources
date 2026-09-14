@@ -38,7 +38,7 @@ const isSingleModule = modules.length === 1;
         <ol class:list={["sm:columns-2 sm:gap-x-6", !isSingleModule && "mt-2 pl-9"]}>
           {module.lessons.map((lesson, lessonIndex) => (
             <li class="flex break-inside-avoid items-baseline gap-2 py-[3px] text-sm leading-6 text-neutral-700">
-              <span class="font-mono text-[11px] text-neutral-400">
+              <span class="font-mono text-[11px] text-neutral-600">
                 {String(module.firstLessonNumber + lessonIndex).padStart(2, '0')}
               </span>
               <span>{lesson}</span>
