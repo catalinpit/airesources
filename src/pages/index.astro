@@ -71,13 +71,13 @@ const activeFilters = {
 					{prominentCategories.map((category) => (
 						<a href={category.href} class={chipClass}>
 							{category.title}
-							<span class="text-xs text-neutral-400">{category.count}</span>
+							<span class="text-xs text-neutral-600">{category.count}</span>
 						</a>
 					))}
 					{smallCategories.map((category) => (
 						<a href={category.href} class={chipClass} hidden data-small-category>
 							{category.title}
-							<span class="text-xs text-neutral-400">{category.count}</span>
+							<span class="text-xs text-neutral-600">{category.count}</span>
 						</a>
 					))}
 					{smallCategories.length > 0 && (
