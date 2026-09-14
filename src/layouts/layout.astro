@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { Font } from 'astro:assets';
 import Footer from '../components/footer.astro';
 import Navbar from '../components/ui/Navbar.astro';
 
@@ -17,6 +18,7 @@ const fullTitle = pageTitle ? `${siteTitle} - ${pageTitle}` : siteTitle;
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="theme-color" content="#fafafa" />
 		<meta name="robots" content="index, follow" />
+		<Font cssVariable="--font-hanken-grotesk" preload />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="apple-touch-icon" href="/favicon.svg" />
 		<title>{fullTitle}</title>
