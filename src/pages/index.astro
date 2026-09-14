@@ -8,7 +8,7 @@ import FilterBar from '../components/ui/FilterBar.astro';
 import SponsoredProducts from '../components/ui/Sponsored-Products.astro';
 import { getCollection } from 'astro:content';
 
-const description = 'Hand-picked AI coding tools, agents, extensions, prompts, and courses that are actually maintained.';
+const description = 'Hand-picked AI coding tools, agents, extensions, prompts, and courses for busy builders, all of them actually maintained.';
 
 const allCategories = await getCollection('categories');
 const allResources = await getCollection('resources');
@@ -57,7 +57,7 @@ const activeFilters = {
 		<div class="mx-auto max-w-4xl px-3 pb-16 sm:px-6 pt-14 sm:pt-20 lg:px-8">
 			<header class="mx-auto max-w-2xl text-center">
 				<h1 class="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-5xl">
-					Vetted AI resources for busy builders
+					Vetted AI resources
 				</h1>
 				<p class="mt-4 text-[15px] leading-6 text-neutral-600 sm:text-lg sm:leading-8">
 					{description}
