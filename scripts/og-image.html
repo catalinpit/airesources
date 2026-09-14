@@ -9,7 +9,9 @@
       --window-size=1200,630 --virtual-time-budget=5000 \
       --screenshot=public/og-image.png scripts/og-image.html
 
-  Social caches key on the URL, so rename the file when the design changes.
+  Social caches key on the URL; if a stale card shows up after a change,
+  re-scrape (Facebook Sharing Debugger / LinkedIn Post Inspector) or rename
+  the file.
 -->
 <html lang="en">
   <head>
@@ -33,7 +35,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 64px 72px 60px;
+        padding: 56px 72px 56px;
         font-family: "Hanken Grotesk", system-ui, sans-serif;
         color: #171717;
         background:
@@ -71,16 +73,16 @@
       .brand-name span { color: #737373; }
 
       h1 {
-        font-size: 92px;
+        font-size: 80px;
         font-weight: 600;
-        line-height: 1;
+        line-height: 1.02;
         letter-spacing: -0.035em;
       }
 
       .tagline {
-        margin-top: 26px;
-        max-width: 930px;
-        font-size: 34px;
+        margin-top: 24px;
+        max-width: 1000px;
+        font-size: 31px;
         line-height: 1.35;
         color: #525252;
       }
@@ -124,8 +126,8 @@
     </div>
 
     <div>
-      <h1>AI Resources Directory</h1>
-      <p class="tagline">A curated directory of AI coding tools, agents, extensions, prompts, and courses for developers.</p>
+      <h1>Vetted AI Resources<br />for Busy Builders</h1>
+      <p class="tagline">Hand-picked coding tools, agents, extensions, prompts, and courses that are actually maintained. Abandoned projects get pruned.</p>
     </div>
 
     <div class="chips">
