@@ -5,10 +5,11 @@ import type { ResourceListItem } from './Resource-Row.astro';
 interface Props {
   items: ResourceListItem[];
   showCategory?: boolean;
+  showAuthor?: boolean;
   class?: string;
 }
 
-const { items, showCategory = false, class: className } = Astro.props;
+const { items, showCategory = false, showAuthor = true, class: className } = Astro.props;
 ---
 
 <div class:list={[
@@ -17,7 +18,7 @@ const { items, showCategory = false, class: className } = Astro.props;
 ]}>
   <div class="divide-y divide-black/[0.05]">
     {items.map((item) => (
-      <ResourceRow item={item} showCategory={showCategory} />
+      <ResourceRow item={item} showCategory={showCategory} showAuthor={showAuthor} />
     ))}
   </div>
   <p data-empty-state hidden class="px-4 py-10 text-center text-sm text-neutral-500">

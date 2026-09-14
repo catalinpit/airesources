@@ -1,6 +1,7 @@
 ---
 name: Auditing Your Code
-description: Aaron Francis' 8-episode video series on auditing an entire codebase, a module, or recent changes with AI to find bad state management, boolean explosions, dead code, naming problems, and other code smells, then fixing them.
+description: Audit an entire codebase, a module, or recent changes with AI to find bad state management, boolean explosions, dead code, naming problems, and other code smells, then fix them.
+accessNote: 30m of video. The first episode is free to watch; the remaining 7 require a faster.dev membership, which unlocks every series on the site.
 categorySlug: courses
 link: "https://faster.dev/series/auditing-your-code"
 iconUrl: "https://faster.dev/favicon.ico"
@@ -12,7 +13,7 @@ pricing:
       price: $0
     - name: Membership
       price: $299/year
-  details: 8 episodes, 30m of video. The first episode is free to watch; the remaining 7 require a faster.dev membership, which unlocks every series on the site.
+lessonLabel: episodes
 curriculum:
   - title: Episodes
     lessons:

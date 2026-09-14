@@ -19,6 +19,7 @@ const buttonClass = 'inline-flex h-9 items-center rounded-lg bg-indigo-600 px-4 
       class:list={[buttonClass, className]}
     >
       <slot />
+      <span class="sr-only">(opens in new tab)</span>
     </a>
   ) : (
     <button type={type} class:list={[buttonClass, className]}>

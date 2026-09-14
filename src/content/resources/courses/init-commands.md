@@ -1,6 +1,7 @@
 ---
 name: Init Commands
-description: 'Aaron Francis'' 8-episode video series "Init Commands: Guardrails from the Start" on setting up any project for AI-assisted development with a single command, writing framework rules, and establishing guardrails that keep AI output consistent and correct.'
+description: Set up any project for AI-assisted development with a single command, write framework rules, and establish guardrails that keep AI output consistent and correct from the start.
+accessNote: 53m of video. The first 2 episodes are free to watch; the remaining 6 require a faster.dev membership, which unlocks every series on the site.
 categorySlug: courses
 link: "https://faster.dev/series/init-commands-guardrails-from-the-start"
 iconUrl: "https://faster.dev/favicon.ico"
@@ -12,7 +13,7 @@ pricing:
       price: $0
     - name: Membership
       price: $299/year
-  details: 8 episodes, 53m of video. The first 2 episodes are free to watch; the remaining 6 require a faster.dev membership, which unlocks every series on the site.
+lessonLabel: episodes
 curriculum:
   - title: Episodes
     lessons:

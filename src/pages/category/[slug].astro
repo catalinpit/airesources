@@ -5,6 +5,8 @@ import ResourceList from '../../components/ui/Resource-List.astro';
 import FilterBar from '../../components/ui/FilterBar.astro';
 import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
 import { getCollection } from 'astro:content';
+import { resourcePath } from '../../lib/resources';
+import { schemaOrgType } from '../../lib/structured-data';
 
 export async function getStaticPaths() {
   const categories = await getCollection('categories');
@@ -80,10 +82,10 @@ const activeFilters = {
 				"@type": "ListItem",
 				"position": index + 1,
 				"item": {
-					"@type": "SoftwareApplication",
+					"@type": schemaOrgType(item),
 					"name": item.name,
 					"description": item.description,
-					"url": new URL(`/${category.categorySlug}/${item.name.toLowerCase().replace(/\s+/g, '-')}/`, siteUrl).href
+					"url": new URL(resourcePath(item), siteUrl).href
 				}
 			}))
 		}

@@ -1,6 +1,7 @@
 ---
 name: Build a Language Model on Your Mac
-description: Flavio Copes' free 29-lesson course on training a small language model with Language Model Builder on a Mac, covering tokens and embeddings, designing the run, pre-training and reading loss, fine-tuning with SFT and DPO, and comparing checkpoints in a lab report.
+description: Train a small language model with Language Model Builder on a Mac. Covers tokens and embeddings, designing the run, pre-training and reading loss, fine-tuning with SFT and DPO, and comparing checkpoints in a lab report.
+accessNote: Readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 categorySlug: courses
 link: "https://flaviocopes.com/courses/language-model-builder/"
 iconUrl: "https://flaviocopes.com/favicon.ico"
@@ -10,7 +11,6 @@ pricing:
   tiers:
     - name: Full Course
       price: $0
-  details: 6 modules and 29 lessons, readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 curriculum:
   - title: Plan the experiment
     description: Install the app, set realistic expectations, and define what you will measure.

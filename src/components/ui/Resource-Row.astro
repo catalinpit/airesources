@@ -1,20 +1,20 @@
 ---
-import type { CollectionEntry } from 'astro:content';
 import ResourceIcon from './Resource-Icon.astro';
 import { PRICING_LABELS } from '../../lib/pricing';
+import { resourcePath } from '../../lib/resources';
+import type { Resource } from '../../lib/resources';
 
-export type ResourceListItem = CollectionEntry<'resources'>['data'] & {
+export type ResourceListItem = Resource & {
   categoryTitle?: string;
 };
 
 interface Props {
   item: ResourceListItem;
   showCategory?: boolean;
+  showAuthor?: boolean;
 }
 
-const { item, showCategory = false } = Astro.props;
-
-const productSlug = item.name.toLowerCase().replace(/\s+/g, '-');
+const { item, showCategory = false, showAuthor = true } = Astro.props;
 
 const resourceData = {
   name: item.name,
@@ -27,12 +27,13 @@ const resourceData = {
 
 const metaText = [
   showCategory ? item.categoryTitle : undefined,
+  showAuthor ? item.author?.name : undefined,
   item.pricing ? PRICING_LABELS[item.pricing.type] : undefined,
 ].filter(Boolean).join(' · ');
 ---
 
 <a
-  href={`/${item.categorySlug}/${productSlug}/`}
+  href={resourcePath(item)}
   class="group flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-black/[0.02] focus:outline-none focus-visible:bg-black/[0.04] sm:gap-4"
   data-resource={JSON.stringify(resourceData)}
 >

@@ -4,15 +4,24 @@ import Layout from '../../layouts/layout.astro';
 import Button from '../../components/ui/Button.astro';
 import Tag from '../../components/ui/Tag.astro';
 import Divider from '../../components/ui/Divider.astro';
+import SectionHeading from '../../components/ui/Section-Heading.astro';
+import SectionLabel from '../../components/ui/Section-Label.astro';
 import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
 import ResourceIcon from '../../components/ui/Resource-Icon.astro';
 import ResourceAuthor from '../../components/ui/Resource-Author.astro';
+import ResourceList from '../../components/ui/Resource-List.astro';
+import CourseCurriculum from '../../components/ui/Course-Curriculum.astro';
 import CopyIcon from '../../components/icons/CopyIcon.astro';
 import CheckIcon from '../../components/icons/CheckIcon.astro';
 import ExternalLinkIcon from '../../components/icons/ExternalLinkIcon.astro';
 import InfoIcon from '../../components/icons/InfoIcon.astro';
 import { getCollection } from 'astro:content';
 import { PRICING_LABELS, isFreeOnly } from '../../lib/pricing';
+import { curriculumSummary, resourceKind, resourceSlug, reusableContentOf } from '../../lib/resources';
+import { relatedResources } from '../../lib/related';
+import { resourceStructuredData } from '../../lib/structured-data';
+
+const RELATED_LIMIT = 6;
 
 export async function getStaticPaths() {
   const categories = await getCollection('categories');
@@ -24,7 +33,7 @@ export async function getStaticPaths() {
     return {
       params: {
         category: resource.data.categorySlug,
-        product: resource.data.name.toLowerCase().replace(/\s+/g, '-'),
+        product: resourceSlug(resource.data.name),
       },
       props: {
         category: category?.data,
@@ -36,88 +45,38 @@ export async function getStaticPaths() {
 
 const { category, item } = Astro.props;
 
-const siteUrl = Astro.site || 'https://airesources.dev';
-const productUrl = new URL(`/${category.categorySlug}/${item.name.toLowerCase().replace(/\s+/g, '-')}/`, siteUrl).href;
-const categoryUrl = new URL(`/category/${category.categorySlug}/`, siteUrl).href;
+const allItems = (await getCollection('resources')).map(r => r.data);
+const otherItems = allItems.filter(other => other.name !== item.name || other.categorySlug !== item.categorySlug);
 
-const tags = [
-  { label: item.type || 'tool', href: '#' },
-];
+const kind = resourceKind(item);
+const authorLabel = kind === 'course' ? 'Author' : 'Created by';
 
-const allResources = await getCollection('resources');
-const allItems = allResources.map(r => ({
-  ...r.data,
-  categorySlug: r.data.categorySlug
-}));
+const reusableContent = reusableContentOf(item);
+const reusable = kind === 'reusable' && reusableContent
+  ? {
+      content: reusableContent,
+      label: item.skill ? 'Skill' : item.prompt ? 'Prompt' : 'Use Case',
+      isLong: reusableContent.length > 2000 || reusableContent.split('\n').length > 30,
+    }
+  : undefined;
 
-const filteredItems = allItems.filter(product =>
-  product.name !== item.name || product.categorySlug !== category.categorySlug
-);
+// The header already shows "Free", so a free-only tier list only renders when it has details to add
+const isFree = item.pricing !== undefined && isFreeOnly(item.pricing);
+const pricing = item.pricing && (!isFree || item.pricing.details) ? item.pricing : undefined;
 
-const reusableContent = item.skill || item.prompt || item.useCase;
-const reusableContentLabel = item.skill ? 'Skill' : item.prompt ? 'Prompt' : 'Use Case';
-const sectionHeadingClass = 'text-lg font-semibold leading-6 text-neutral-900';
+const headerNote = [curriculumSummary(item), item.accessNote].filter(Boolean).join('. ');
+
+const related = kind === 'course'
+  ? relatedResources(item, allItems, { limit: RELATED_LIMIT, categoryTitle: category.title })
+  : undefined;
+
+const structuredData = resourceStructuredData(item, { categoryTitle: category.title });
+
 const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[0.04] text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40';
-const isLongContent = Boolean(reusableContent) && (reusableContent.length > 2000 || reusableContent.split('\n').length > 30);
-const authorLabel = item.type === 'course' ? 'Author' : 'Created by';
-const showPricingType = Boolean(item.pricing) && !isFreeOnly(item.pricing!);
-
-let lessonCounter = 0;
-const curriculum = (item.curriculum ?? []).map(module => {
-  const firstLessonNumber = lessonCounter + 1;
-  lessonCounter += module.lessons.length;
-  return { ...module, firstLessonNumber };
-});
-const lessonCount = lessonCounter;
-const isSingleModule = curriculum.length === 1;
-const curriculumSummary = isSingleModule
-  ? `${lessonCount} lessons`
-  : `${curriculum.length} modules · ${lessonCount} lessons`;
 ---
 
 <Layout description={item.description} pageTitle={item.name}>
-	<script type="application/ld+json" set:html={JSON.stringify({
-		"@context": "https://schema.org",
-		"@type": "SoftwareApplication",
-		"name": item.name,
-		"description": item.description,
-		...(item.link && { "url": item.link }),
-		"applicationCategory": category.title,
-		"operatingSystem": "Web",
-		"offers": item.pricing ? {
-			"@type": "Offer",
-			"priceCurrency": "USD",
-			"price": item.pricing.type === "free" ? "0" : undefined,
-			"priceSpecification": item.pricing.tiers?.map(tier => ({
-				"@type": "UnitPriceSpecification",
-				"name": tier.name,
-				"price": tier.price
-			}))
-		} : undefined,
-		"breadcrumb": {
-			"@type": "BreadcrumbList",
-			"itemListElement": [
-				{
-					"@type": "ListItem",
-					"position": 1,
-					"name": "Resources",
-					"item": siteUrl
-				},
-				{
-					"@type": "ListItem",
-					"position": 2,
-					"name": category.title,
-					"item": categoryUrl
-				},
-				{
-					"@type": "ListItem",
-					"position": 3,
-					"name": item.name,
-					"item": productUrl
-				}
-			]
-		}
-	})} />
+	<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   <div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
     <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]"></div>
   <div class="mx-auto max-w-4xl px-3 py-10 sm:px-6 lg:px-8">
@@ -144,7 +103,7 @@ const curriculumSummary = isSingleModule
       </ol>
     </nav>
 
-    {filteredItems.length > 0 && <SponsoredProducts items={filteredItems} class="max-w-3xl mx-auto" />}
+    {otherItems.length > 0 && <SponsoredProducts items={otherItems} class="max-w-3xl mx-auto" />}
 
     <main>
       <div class="max-w-3xl mx-auto">
@@ -154,7 +113,7 @@ const curriculumSummary = isSingleModule
               <ResourceIcon item={item} size="lg" />
               <div class="min-w-0">
                 <p class="mb-2 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-neutral-500">
-                  {category.title}
+                  {category.title}{isFree && <><span aria-hidden="true"> · </span>Free</>}
                 </p>
                 <h1 class="break-words text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl md:text-4xl">
                   {item.name}
@@ -162,10 +121,21 @@ const curriculumSummary = isSingleModule
                 <p class="mt-3 text-[15px] leading-6 text-neutral-600 sm:text-base sm:leading-7">
                   {item.description}
                 </p>
+                {headerNote && (
+                  <p class="mt-3 text-sm leading-6 text-neutral-500">
+                    {headerNote}
+                  </p>
+                )}
+                {kind === 'course' && item.link && (
+                  <Button href={item.link} class="mt-5 h-10 px-5">
+                    View course
+                    <ExternalLinkIcon class="w-4 h-4 ml-2" />
+                  </Button>
+                )}
               </div>
             </div>
 
-            {reusableContent && (
+            {reusable && (
               <>
                 {item.tags && item.tags.length > 0 && (
                   <div class="mb-6">
@@ -181,12 +151,12 @@ const curriculumSummary = isSingleModule
                 <Divider class="mb-8" />
                 <div class="space-y-4">
                   <div class="flex items-center justify-between">
-                    <h3 class={sectionHeadingClass}>{reusableContentLabel}</h3>
+                    <SectionHeading>{reusable.label}</SectionHeading>
                     <button
                       id="copy-resource-content-btn"
                       type="button"
                       class:list={[tonalButtonClass, "px-3 py-1.5"]}
-                      title={`Copy ${reusableContentLabel.toLowerCase()} to clipboard`}
+                      title={`Copy ${reusable.label.toLowerCase()} to clipboard`}
                     >
                       <CopyIcon id="copy-icon" class="w-4 h-4" />
                       <CheckIcon id="check-icon" class="w-4 h-4 hidden" />
@@ -198,23 +168,23 @@ const curriculumSummary = isSingleModule
                       id="resource-content"
                       class:list={[
                         "rounded-lg bg-neutral-100 p-6 font-mono text-sm leading-6 text-neutral-800 whitespace-pre-line",
-                        isLongContent && "max-h-[30rem] overflow-hidden"
+                        reusable.isLong && "max-h-[30rem] overflow-hidden"
                       ]}
                     >
-                      {reusableContent}
+                      {reusable.content}
                     </div>
-                    {isLongContent && (
+                    {reusable.isLong && (
                       <div id="resource-content-fade" class="pointer-events-none absolute inset-x-0 bottom-0 h-28 rounded-b-lg bg-gradient-to-t from-neutral-100 to-transparent"></div>
                     )}
                   </div>
-                  {isLongContent && (
+                  {reusable.isLong && (
                     <div class="flex justify-center">
                       <button
                         id="expand-resource-content"
                         type="button"
                         class:list={[tonalButtonClass, "px-3.5 py-1.5"]}
                       >
-                        Show full {reusableContentLabel.toLowerCase()}
+                        Show full {reusable.label.toLowerCase()}
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
@@ -223,7 +193,7 @@ const curriculumSummary = isSingleModule
                   )}
                   {item.example && (
                     <div class="mt-6">
-                      <h3 class={sectionHeadingClass}>Usage Example</h3>
+                      <SectionHeading>Usage Example</SectionHeading>
                       <div
                         class="example-content mt-4 rounded-lg bg-indigo-50 p-6 font-mono text-sm leading-6 text-neutral-800 whitespace-pre-line"
                       >
@@ -244,6 +214,7 @@ const curriculumSummary = isSingleModule
                           >
                             <ExternalLinkIcon class="w-4 h-4" />
                             View source
+                            <span class="sr-only">(opens in new tab)</span>
                           </a>
                         </div>
                       )}
@@ -253,50 +224,17 @@ const curriculumSummary = isSingleModule
               </>
             )}
 
-            {curriculum.length > 0 && (
+            {kind === 'course' && item.curriculum && item.curriculum.length > 0 && (
               <>
                 <Divider class="mb-8" />
-                <section class="space-y-4">
-                  <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                    <h3 class={sectionHeadingClass}>Curriculum</h3>
-                    <span class="text-sm text-neutral-500">{curriculumSummary}</span>
-                  </div>
-                  <ol class="space-y-3">
-                    {curriculum.map((module, moduleIndex) => (
-                      <li class="rounded-lg bg-neutral-100 p-5">
-                        {!isSingleModule && (
-                          <div class="flex items-start gap-3">
-                            <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-indigo-600 text-[11px] font-semibold text-white">
-                              {moduleIndex + 1}
-                            </span>
-                            <div class="min-w-0 flex-1">
-                              <h4 class="text-base font-semibold leading-none text-neutral-900">{module.title}</h4>
-                              {module.description && (
-                                <p class="mt-2 text-sm leading-6 text-neutral-600">{module.description}</p>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                        <ol class:list={["sm:columns-2 sm:gap-x-6", !isSingleModule && "mt-2 pl-9"]}>
-                          {module.lessons.map((lesson, lessonIndex) => (
-                            <li class="flex break-inside-avoid items-baseline gap-2 py-[3px] text-sm leading-6 text-neutral-700">
-                              <span class="font-mono text-[11px] text-neutral-400">
-                                {String(module.firstLessonNumber + lessonIndex).padStart(2, '0')}
-                              </span>
-                              <span>{lesson}</span>
-                            </li>
-                          ))}
-                        </ol>
-                      </li>
-                    ))}
-                  </ol>
-                </section>
+                <CourseCurriculum curriculum={item.curriculum} />
               </>
             )}
 
-            {!reusableContent && item.models && item.models.length > 0 && (
-              <Divider class="my-8" />
-              <h3 class:list={[sectionHeadingClass, "mb-4"]}>Available Models</h3>
+            {kind === 'tool' && item.models && item.models.length > 0 && (
+              <>
+                <Divider class="my-8" />
+                <SectionHeading class="mb-4">Available Models</SectionHeading>
                 <div class="flex flex-wrap gap-2">
                   {item.models.map(model => (
                     <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm text-neutral-600">
@@ -304,62 +242,70 @@ const curriculumSummary = isSingleModule
                     </span>
                   ))}
                 </div>
+              </>
             )}
 
-            {item.pricing && (
+            {pricing && (
               <div class="mt-8 space-y-4">
-                  <div class="flex items-center justify-between gap-4">
-                    <h3 class={sectionHeadingClass}>Pricing</h3>
-                    {showPricingType && (
-                      <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm font-medium text-neutral-600">
-                        {PRICING_LABELS[item.pricing.type]}
-                      </span>
-                    )}
-                  </div>
+                <div class="flex items-center justify-between gap-4">
+                  <SectionHeading>Pricing</SectionHeading>
+                  {!isFree && (
+                    <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm font-medium text-neutral-600">
+                      {PRICING_LABELS[pricing.type]}
+                    </span>
+                  )}
+                </div>
+                {!isFree && (
                   <div class="grid gap-3">
-                    {item.pricing.tiers.map(tier => (
+                    {pricing.tiers.map(tier => (
                       <div class="flex items-center justify-between gap-4 rounded-lg bg-neutral-100 px-4 py-3">
                         <span class="font-medium text-neutral-900">{tier.name}</span>
                         <span class="rounded-md bg-black/[0.06] px-3 py-1.5 text-sm font-semibold text-neutral-900">{tier.price}</span>
                       </div>
                     ))}
                   </div>
-                  {item.pricing.details && (
-                    <div class="flex items-start gap-2.5 rounded-lg bg-neutral-100 p-4 text-sm text-neutral-600">
-                      <InfoIcon class="w-4 h-4 mt-0.5 flex-shrink-0 text-indigo-600" />
-                      <span>{item.pricing.details}</span>
-                    </div>
-                  )}
+                )}
+                {pricing.details && (
+                  <div class="flex items-start gap-2.5 rounded-lg bg-neutral-100 p-4 text-sm text-neutral-600">
+                    <InfoIcon class="w-4 h-4 mt-0.5 flex-shrink-0 text-indigo-600" />
+                    <span>{pricing.details}</span>
+                  </div>
+                )}
               </div>
             )}
 
-            {!reusableContent && (
-            <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div class="flex flex-wrap gap-2">
-                {tags.map(tag => (
+            {kind === 'tool' && (
+              <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex flex-wrap gap-2">
                   <Tag href={`/category/${category.categorySlug}/`} class="whitespace-nowrap">
-                    #{tag.label}
+                    #{item.type ?? 'tool'}
                   </Tag>
-                ))}
+                </div>
+                <Button href={item.link} class="h-10 w-full justify-center whitespace-nowrap px-5 sm:w-auto">
+                  Check out site
+                  <ExternalLinkIcon class="w-4 h-4 ml-2" />
+                </Button>
               </div>
-              <Button href={item.link} class="h-10 w-full justify-center whitespace-nowrap px-5 sm:w-auto">
-                Check out site
-                <ExternalLinkIcon class="w-4 h-4 ml-2" />
-              </Button>
-            </div>
             )}
 
-            {!reusableContent && item.author && (
+            {(kind === 'course' || kind === 'tool') && item.author && (
               <div class="mt-8 border-t border-black/[0.06] pt-8">
                 <ResourceAuthor author={item.author} label={authorLabel} />
               </div>
             )}
           </div>
         </div>
+
+        {related && related.items.length > 0 && (
+          <section class="mt-10">
+            <SectionLabel label={related.label} class="mb-3" />
+            <ResourceList items={related.items} showAuthor={!related.sameAuthor} />
+          </section>
+        )}
       </div>
     </main>
   </div>
-  {reusableContent && (
+  {reusable && (
     <script>
       async function writeClipboardText(text: string) {
         await navigator.clipboard.writeText(text);

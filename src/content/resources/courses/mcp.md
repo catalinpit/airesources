@@ -1,6 +1,7 @@
 ---
 name: MCP
-description: Flavio Copes' free 12-lesson course on what MCP solves, hosts, clients, and servers, tools, resources, and prompts, and connecting, configuring, testing, and troubleshooting an existing server you trust.
+description: What MCP solves, how hosts, clients, servers, tools, resources, and prompts fit together, and how to connect, configure, test, and troubleshoot an existing server you trust.
+accessNote: Readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 categorySlug: courses
 link: "https://flaviocopes.com/courses/mcp/"
 iconUrl: "https://flaviocopes.com/favicon.ico"
@@ -10,7 +11,6 @@ pricing:
   tiers:
     - name: Full Course
       price: $0
-  details: 2 modules and 12 lessons, readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 curriculum:
   - title: Understand MCP
     description: Learn the protocol roles, primitives, lifecycle, and where MCP fits.

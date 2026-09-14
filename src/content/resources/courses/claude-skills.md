@@ -1,6 +1,7 @@
 ---
 name: Claude Skills
-description: Aaron Francis' 12-episode video series on Claude Code's skill system, covering how to run and locate skills, write your own, use the skill marketplace, and chain skills like interview-me, new-tests, deepstack, and GitHub Actions into automated workflows.
+description: Claude Code's skill system, covering how to run and locate skills, write your own, use the skill marketplace, and chain skills like interview-me, new-tests, deepstack, and GitHub Actions into automated workflows.
+accessNote: 1h 51m of video. The first episode is free to watch; the remaining 11 require a faster.dev membership, which unlocks every series on the site.
 categorySlug: courses
 link: "https://faster.dev/series/claude-skills"
 iconUrl: "https://faster.dev/favicon.ico"
@@ -12,7 +13,7 @@ pricing:
       price: $0
     - name: Membership
       price: $299/year
-  details: 12 episodes, 1h 51m of video. The first episode is free to watch; the remaining 11 require a faster.dev membership, which unlocks every series on the site.
+lessonLabel: episodes
 curriculum:
   - title: Episodes
     lessons:

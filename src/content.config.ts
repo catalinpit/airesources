@@ -11,16 +11,47 @@ const categories = defineCollection({
   }),
 });
 
+const RESOURCE_TYPES = [
+  'agent',
+  'app-generator',
+  'audio',
+  'chat',
+  'cli-assistant',
+  'code-review',
+  'course',
+  'desktop-assistant',
+  'documentation',
+  'editor',
+  'extension',
+  'git-client',
+  'image',
+  'openai-plugin',
+  'plugin',
+  'search',
+  'skill',
+  'snippet-generator',
+  'support',
+  'terminal',
+  'testing',
+  'ui-generator',
+  'use-case',
+  'web-assistant',
+] as const;
+
 const resources = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/resources' }),
   schema: z.object({
     name: z.string(),
     description: z.string(),
+    // Rendered under the description. Says how to access the resource, such as the format,
+    // whether signup is needed, or offline options. The page derives lesson counts from
+    // `curriculum`, so don't repeat them here.
+    accessNote: z.string().optional(),
     categorySlug: z.string(),
-    link: z.string().optional(),
+    link: z.string().url().optional(),
     iconUrl: z.string().optional(),
     previewImage: z.string().optional(),
-    type: z.string().optional(),
+    type: z.enum(RESOURCE_TYPES).optional(), // `course` selects the course page layout
     pricing: z.object({
       type: z.enum(['free', 'paid', 'freemium', 'byok', 'top-up']),
       tiers: z.array(z.object({
@@ -45,6 +76,7 @@ const resources = defineCollection({
       description: z.string().optional(),
       lessons: z.array(z.string()),
     })).optional(),
+    lessonLabel: z.enum(['lessons', 'episodes']).default('lessons'), // Noun for curriculum items
     sponsored: z.enum(['small', 'big']).optional(),
     // New fields for enhanced filtering
     techStack: z.array(z.string()).optional(), // e.g., ['Next.js', 'React', 'TypeScript']

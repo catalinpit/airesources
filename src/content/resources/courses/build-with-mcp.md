@@ -1,6 +1,7 @@
 ---
 name: Build with MCP
-description: Flavio Copes' free 26-lesson course on building a TypeScript MCP server with tools, resources, and prompts, moving it to remote HTTP with authorization and security boundaries, and deploying and reviewing it.
+description: Build a TypeScript MCP server with tools, resources, and prompts, move it to remote HTTP with authorization and security boundaries, then deploy and review it.
+accessNote: Readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 categorySlug: courses
 link: "https://flaviocopes.com/courses/build-with-mcp/"
 iconUrl: "https://flaviocopes.com/favicon.ico"
@@ -10,7 +11,6 @@ pricing:
   tiers:
     - name: Full Course
       price: $0
-  details: 4 modules and 26 lessons, readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 curriculum:
   - title: Build a local TypeScript server
     description: Create a typed stdio server with useful tools, errors, and logs.

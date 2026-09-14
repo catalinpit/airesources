@@ -1,6 +1,7 @@
 ---
 name: AI Agent Skills
-description: Flavio Copes' free 25-lesson course on turning a repeated workflow into an Agent Skill, designing its discovery and activation, writing SKILL.md, bundling scripts, references, and assets, and evaluating, securing, and shipping it.
+description: Turn a repeated workflow into an Agent Skill, design its discovery and activation, write SKILL.md, bundle scripts, references, and assets, then evaluate, secure, and ship it.
+accessNote: Readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 categorySlug: courses
 link: "https://flaviocopes.com/courses/ai-agent-skills/"
 iconUrl: "https://flaviocopes.com/favicon.ico"
@@ -10,7 +11,6 @@ pricing:
   tiers:
     - name: Full Course
       price: $0
-  details: 5 modules and 25 lessons, readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 curriculum:
   - title: Choose the right skill
     description: Distinguish skills from nearby AI concepts and extract one useful workflow from real work.

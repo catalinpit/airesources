@@ -1,6 +1,7 @@
 ---
 name: Local AI Models
-description: Flavio Copes' free 34-lesson course on open-weight models, choosing a model that fits your hardware, running it locally with Ollama and Node.js, building a private AI feature with structured output and fallbacks, and operating local AI responsibly.
+description: Choose an open-weight model that fits your hardware, run it locally with Ollama and Node.js, build a private AI feature with structured output and fallbacks, and operate local AI responsibly.
+accessNote: Readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 categorySlug: courses
 link: "https://flaviocopes.com/courses/local-ai-models/"
 iconUrl: "https://flaviocopes.com/favicon.ico"
@@ -10,7 +11,6 @@ pricing:
   tiers:
     - name: Full Course
       price: $0
-  details: 5 modules and 34 lessons, readable online with no signup, or offline as a PDF or EPUB via the free newsletter.
 curriculum:
   - title: Understand open weights
     description: Separate weights, architecture, training, inference, licenses, and the wider meaning of open source AI.

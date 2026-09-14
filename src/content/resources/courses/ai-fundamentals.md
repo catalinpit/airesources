@@ -1,6 +1,7 @@
 ---
 name: AI Fundamentals
-description: Flavio Copes' free 31-lesson course on how language models work, writing prompts and project rules, curating context, agents and tools, verifying AI output, and using AI safely.
+description: How language models work, writing prompts and project rules, curating context, agents and tools, verifying AI output, and using AI safely.
+accessNote: Readable online with no signup, or offline as an ebook via the free newsletter.
 categorySlug: courses
 link: "https://flaviocopes.com/courses/ai-fundamentals/"
 iconUrl: "https://flaviocopes.com/favicon.ico"
@@ -10,7 +11,6 @@ pricing:
   tiers:
     - name: Full Course
       price: $0
-  details: 6 modules and 31 lessons, readable online with no signup, or offline as an ebook via the free newsletter.
 curriculum:
   - title: Understand AI models
     description: Build a useful mental model of generation, tokens, capabilities, and limits.

@@ -1,0 +1,51 @@
+---
+import SectionHeading from './Section-Heading.astro';
+import type { Resource } from '../../lib/resources';
+
+interface Props {
+  curriculum: NonNullable<Resource['curriculum']>;
+}
+
+const { curriculum } = Astro.props;
+
+let lessonCounter = 0;
+const modules = curriculum.map(module => {
+  const firstLessonNumber = lessonCounter + 1;
+  lessonCounter += module.lessons.length;
+  return { ...module, firstLessonNumber };
+});
+const isSingleModule = modules.length === 1;
+---
+
+<section class="space-y-4">
+  <SectionHeading>Curriculum</SectionHeading>
+  <ol class="space-y-3">
+    {modules.map((module, moduleIndex) => (
+      <li class="rounded-lg bg-neutral-100 p-5">
+        {!isSingleModule && (
+          <div class="flex items-start gap-3">
+            <span class="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md bg-indigo-600 text-[11px] font-semibold text-white">
+              {moduleIndex + 1}
+            </span>
+            <div class="min-w-0 flex-1">
+              <h4 class="text-base font-semibold leading-none text-neutral-900">{module.title}</h4>
+              {module.description && (
+                <p class="mt-2 text-sm leading-6 text-neutral-600">{module.description}</p>
+              )}
+            </div>
+          </div>
+        )}
+        <ol class:list={["sm:columns-2 sm:gap-x-6", !isSingleModule && "mt-2 pl-9"]}>
+          {module.lessons.map((lesson, lessonIndex) => (
+            <li class="flex break-inside-avoid items-baseline gap-2 py-[3px] text-sm leading-6 text-neutral-700">
+              <span class="font-mono text-[11px] text-neutral-400">
+                {String(module.firstLessonNumber + lessonIndex).padStart(2, '0')}
+              </span>
+              <span>{lesson}</span>
+            </li>
+          ))}
+        </ol>
+      </li>
+    ))}
+  </ol>
+</section>
