@@ -2,7 +2,7 @@
 name: Blackbox AI
 description: VS Code extension with autocomplete and chat including links to online coding references
 categorySlug: extensions
-link: "https://www.useblackbox.io/"
+link: "https://www.blackbox.ai/"
 iconUrl: "https://www.blackbox.ai/favicons/favicon02.png"
 type: extension
 pricing:
