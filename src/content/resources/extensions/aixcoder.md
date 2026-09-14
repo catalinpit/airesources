@@ -3,7 +3,7 @@ name: aiXcoder
 description: Local or cloud-based assistant with extensions for IntelliJ IDEA, CLion, GoLand, PyCharm, WebStorm, Visual Studio Code, and Eclipse
 categorySlug: extensions
 link: "https://www.aixcoder.com/en/"
-iconUrl: "https://www.aixcoder.com/en/favicon.ico"
+iconUrl: "https://www.aixcoder.com/favicon.ico"
 type: extension
 pricing:
   type: freemium

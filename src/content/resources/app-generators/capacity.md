@@ -3,7 +3,7 @@ name: Capacity
 description: AI powered full-stack web app development that turn prompt in natural language into fully functional web applications
 categorySlug: app-generators
 link: "https://capacity.so"
-iconUrl: "https://capacity.so/favicon.ico"
+iconUrl: "https://capacity.so/icons/icon-192x192.png"
 type: app-generator
 pricing:
   type: freemium
