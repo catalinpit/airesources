@@ -1,9 +1,7 @@
 @import "tailwindcss";
 
-@layer base {
-  html {
-    font-family: var(--font-hanken-grotesk);
-  }
+@theme inline {
+  --font-sans: var(--font-hanken-grotesk);
 }
 
 /* Favicons fade in over the letter fallback only once they have actually loaded,

@@ -12,23 +12,30 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  // The site only uses weights 400-700 and no italics, so a single variable
-  // font file instanced to that range is downloaded at build time and
-  // self-hosted, removing the Google Fonts CSS from the critical path.
+  // Hanken Grotesk (OFL, https://github.com/marcologous/hanken-grotesk) is
+  // vendored as a variable font instanced to the 400-700 weight range the
+  // site uses, so the build has no network dependency and the browser never
+  // touches Google Fonts.
   fonts: [
     {
-      provider: fontProviders.google(),
+      provider: fontProviders.local(),
       name: "Hanken Grotesk",
       cssVariable: "--font-hanken-grotesk",
-      weights: ["400 700"],
-      styles: ["normal"],
-      subsets: ["latin"],
       fallbacks: ["system-ui", "sans-serif"],
+      options: {
+        variants: [
+          {
+            src: ["./src/assets/fonts/hanken-grotesk-latin-400-700.woff2"],
+            weight: "400 700",
+            style: "normal",
+          },
+        ],
+      },
     },
   ],
   build: {
-    // The whole stylesheet is ~9 KiB compressed; inlining it removes a
-    // render-blocking request from every page.
+    // The stylesheet is small enough that a separate render-blocking request
+    // costs more than shipping it inline with every page.
     inlineStylesheets: "always",
   },
   integrations: [sitemap(), partytown()],
