@@ -1,0 +1,147 @@
+<!doctype html>
+<!--
+  Source for public/og-image.png (1200x630). Mirrors the homepage hero:
+  neutral-50 background, indigo glow, Hanken Grotesk, category chips.
+
+  Regenerate after editing (the committed file was additionally
+  palette-quantized with sharp, which roughly halves the size):
+    google-chrome --headless=new --hide-scrollbars --force-device-scale-factor=1 \
+      --window-size=1200,630 --virtual-time-budget=5000 \
+      --screenshot=public/og-image.png scripts/og-image.html
+
+  Social caches key on the URL, so rename the file when the design changes.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preload" href="../src/assets/fonts/hanken-grotesk-latin-400-700.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      @font-face {
+        font-family: "Hanken Grotesk";
+        src: url("../src/assets/fonts/hanken-grotesk-latin-400-700.woff2") format("woff2");
+        font-weight: 400 700;
+        font-style: normal;
+        font-display: block;
+      }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+
+      html, body { width: 1200px; height: 630px; overflow: hidden; }
+
+      body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 64px 72px 60px;
+        font-family: "Hanken Grotesk", system-ui, sans-serif;
+        color: #171717;
+        background:
+          radial-gradient(1000px 480px at 50% -140px, rgba(99, 102, 241, 0.34), transparent 70%),
+          radial-gradient(700px 360px at 92% 112%, rgba(99, 102, 241, 0.12), transparent 70%),
+          #fafafa;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .brand-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        background: #171717;
+        color: #fff;
+      }
+
+      .brand-mark svg { width: 32px; height: 32px; }
+
+      .brand-name {
+        font-size: 28px;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+      }
+
+      .brand-name span { color: #737373; }
+
+      h1 {
+        font-size: 92px;
+        font-weight: 600;
+        line-height: 1;
+        letter-spacing: -0.035em;
+      }
+
+      .tagline {
+        margin-top: 26px;
+        max-width: 930px;
+        font-size: 34px;
+        line-height: 1.35;
+        color: #525252;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 8px;
+      }
+
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        height: 48px;
+        padding: 0 20px;
+        border-radius: 12px;
+        background: rgba(0, 0, 0, 0.055);
+        font-size: 23px;
+        font-weight: 500;
+        color: #404040;
+        white-space: nowrap;
+      }
+
+      .chip.more {
+        background: transparent;
+        color: #737373;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-name">airesources<span>.dev</span></div>
+    </div>
+
+    <div>
+      <h1>AI Resources Directory</h1>
+      <p class="tagline">A curated directory of AI coding tools, agents, extensions, prompts, and courses for developers.</p>
+    </div>
+
+    <div class="chips">
+      <span class="chip">Coding Tools</span>
+      <span class="chip">Extensions</span>
+      <span class="chip">Agents</span>
+      <span class="chip">Code Review</span>
+      <span class="chip">App Generators</span>
+      <span class="chip">Chat Bots</span>
+      <span class="chip">Prompts</span>
+      <span class="chip">Skills</span>
+      <span class="chip">Courses</span>
+      <span class="chip">Testing</span>
+      <span class="chip">Terminals</span>
+      <span class="chip">UI Generators</span>
+      <span class="chip more">+12 more</span>
+    </div>
+  </body>
+</html>

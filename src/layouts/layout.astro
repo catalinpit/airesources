@@ -8,7 +8,7 @@ const { siteTitle = 'AI Resources', description = 'A curated collection of the b
 
 const siteUrl = Astro.site || 'https://airesources.dev';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-const ogImageUrl = new URL('/og_image_final.png', siteUrl).href;
+const ogImageUrl = new URL('/og-image.png', siteUrl).href;
 const fullTitle = pageTitle ? `${siteTitle} - ${pageTitle}` : siteTitle;
 ---
 
