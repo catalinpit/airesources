@@ -162,18 +162,39 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
 
   const resourceRows = Array.from(document.querySelectorAll<HTMLElement>('[data-resource]'));
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const filters = {
-    techStack: urlParams.get('techStack')?.split(',').filter(Boolean) || [],
-    features: urlParams.get('features')?.split(',').filter(Boolean) || [],
-    badges: urlParams.get('badges')?.split(',').filter(Boolean) || [],
-    pricing: urlParams.get('pricing')?.split(',').filter(Boolean) || [],
-    integrations: urlParams.get('integrations')?.split(',').filter(Boolean) || [],
-    search: urlParams.get('search') || '',
-  };
-
   type FilterType = 'techStack' | 'features' | 'badges' | 'pricing' | 'integrations';
   const filterTypes: FilterType[] = ['techStack', 'features', 'badges', 'pricing', 'integrations'];
+  const isFilterType = (value: string | null): value is FilterType => filterTypes.includes(value as FilterType);
+
+  interface FilterChip {
+    el: HTMLElement;
+    type: FilterType;
+    value: string;
+    label: string;
+  }
+
+  // Valid filter values and their labels come from the rendered buttons
+  const chips: FilterChip[] = Array.from(filterBar?.querySelectorAll<HTMLElement>('[data-filter-type]') ?? []).flatMap(el => {
+    const type = el.getAttribute('data-filter-type');
+    const value = el.getAttribute('data-filter-value');
+    return isFilterType(type) && value ? [{ el, type, value, label: el.textContent?.trim() || value }] : [];
+  });
+  const chipFor = (type: FilterType, value: string) => chips.find(chip => chip.type === type && chip.value === value);
+
+  const urlParams = new URLSearchParams(window.location.search);
+  function readFilterParam(type: FilterType): string[] {
+    const values = urlParams.get(type)?.split(',') ?? [];
+    return [...new Set(values.filter(value => chipFor(type, value)))];
+  }
+
+  const filters: Record<FilterType, string[]> & { search: string } = {
+    techStack: readFilterParam('techStack'),
+    features: readFilterParam('features'),
+    badges: readFilterParam('badges'),
+    pricing: readFilterParam('pricing'),
+    integrations: readFilterParam('integrations'),
+    search: urlParams.get('search') || '',
+  };
 
   const activeChipClasses = ['bg-indigo-600', 'text-white', 'hover:bg-indigo-500'];
   const idleChipClasses = ['bg-black/[0.04]', 'text-neutral-700', 'hover:bg-black/[0.08]', 'hover:text-neutral-900'];
@@ -195,17 +216,26 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
     window.history.replaceState({}, '', newURL);
   }
 
+  const REMOVE_ICON_SVG = '<svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>';
+
+  function toggleFilter(type: FilterType, value: string) {
+    const active = filters[type];
+    const index = active.indexOf(value);
+    if (index > -1) {
+      active.splice(index, 1);
+    } else {
+      active.push(value);
+    }
+    applyFilters();
+  }
+
   function renderActiveFilters() {
     if (!activeFiltersContainer) return;
-    activeFiltersContainer.innerHTML = '';
+    activeFiltersContainer.replaceChildren();
 
-    const allActive = [
-      ...filters.techStack.map(t => ({ type: 'techStack', label: t, value: t })),
-      ...filters.features.map(f => ({ type: 'features', label: f, value: f })),
-      ...filters.badges.map(b => ({ type: 'badges', label: b.charAt(0).toUpperCase() + b.slice(1), value: b })),
-      ...filters.pricing.map(p => ({ type: 'pricing', label: p.charAt(0).toUpperCase() + p.slice(1), value: p })),
-      ...filters.integrations.map(i => ({ type: 'integrations', label: i, value: i })),
-    ];
+    const allActive = filterTypes.flatMap(type =>
+      filters[type].map(value => ({ type, value, label: chipFor(type, value)?.label ?? value }))
+    );
 
     if (activeFiltersRow) activeFiltersRow.hidden = allActive.length === 0;
     if (activeFilterCount) {
@@ -216,19 +246,16 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
     allActive.forEach(filter => {
       const chip = document.createElement('span');
       chip.className = 'inline-flex items-center gap-1.5 rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700';
-      chip.innerHTML = `
-        ${filter.label}
-        <button
-          type="button"
-          onclick="removeFilter('${filter.type}', '${filter.value}')"
-          class="rounded p-0.5 transition-colors hover:bg-indigo-100"
-          aria-label="Remove filter ${filter.label}"
-        >
-          <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      `;
+      chip.append(filter.label);
+
+      const removeButton = document.createElement('button');
+      removeButton.type = 'button';
+      removeButton.className = 'rounded p-0.5 transition-colors hover:bg-indigo-100';
+      removeButton.setAttribute('aria-label', `Remove filter ${filter.label}`);
+      removeButton.innerHTML = REMOVE_ICON_SVG;
+      removeButton.addEventListener('click', () => toggleFilter(filter.type, filter.value));
+
+      chip.appendChild(removeButton);
       activeFiltersContainer.appendChild(chip);
     });
   }
@@ -280,13 +307,10 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
   }
 
   function updateFilterButtons() {
-    filterBar?.querySelectorAll('[data-filter-type]').forEach(btn => {
-      const type = btn.getAttribute('data-filter-type') as FilterType | null;
-      const value = btn.getAttribute('data-filter-value');
-      const isActive = type ? filters[type].includes(value || '') : false;
-
-      activeChipClasses.forEach(cls => btn.classList.toggle(cls, isActive));
-      idleChipClasses.forEach(cls => btn.classList.toggle(cls, !isActive));
+    chips.forEach(({ el, type, value }) => {
+      const isActive = filters[type].includes(value);
+      activeChipClasses.forEach(cls => el.classList.toggle(cls, isActive));
+      idleChipClasses.forEach(cls => el.classList.toggle(cls, !isActive));
     });
   }
 
@@ -297,15 +321,8 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
     filterResources();
   }
 
-  (window as any).removeFilter = function(type: string, value: string) {
-    const filterArray = filters[type as FilterType];
-    const index = filterArray.indexOf(value);
-    if (index > -1) filterArray.splice(index, 1);
-    applyFilters();
-  };
-
   toggleFiltersBtn?.addEventListener('click', () => {
-    setPanelOpen(filterPanel?.hidden ?? false);
+    setPanelOpen(Boolean(filterPanel?.hidden));
   });
 
   if (searchInput) {
@@ -320,23 +337,8 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
     });
   }
 
-  filterBar?.querySelectorAll('[data-filter-type]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const type = btn.getAttribute('data-filter-type') as FilterType | null;
-      const value = btn.getAttribute('data-filter-value');
-      if (!type || !value) return;
-
-      const filterArray = filters[type];
-      const index = filterArray.indexOf(value);
-
-      if (index > -1) {
-        filterArray.splice(index, 1);
-      } else {
-        filterArray.push(value);
-      }
-
-      applyFilters();
-    });
+  chips.forEach(({ el, type, value }) => {
+    el.addEventListener('click', () => toggleFilter(type, value));
   });
 
   clearFiltersBtn?.addEventListener('click', () => {
