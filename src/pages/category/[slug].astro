@@ -42,13 +42,6 @@ const categoryItems = items
 	.filter(item => !item.sponsored || item.sponsored === "small")
 	.sort((a, b) => a.name.localeCompare(b.name));
 
-const activeFilters = {
-	techStack: [],
-	features: [],
-	badges: [],
-	pricing: [],
-	integrations: [],
-};
 ---
 
 <Layout description={category.description} pageTitle={category.title}>
@@ -121,7 +114,7 @@ const activeFilters = {
 		<SponsoredProducts items={allItems} class="mb-10" />
 
 		<section class="mb-20">
-			<FilterBar allResources={categoryItems} activeFilters={activeFilters} />
+			<FilterBar allResources={categoryItems} />
 			<ResourceList items={categoryItems} />
 		</section>
 		</div>

@@ -11,8 +11,9 @@ const categories = defineCollection({
   }),
 });
 
-// Filter facets are rendered into the resource list as comma-separated
-// data attributes, so a value containing a comma would silently never match.
+// Filter facets (see src/lib/filters.ts) are rendered into the resource list as
+// comma-separated data attributes, so a value containing a comma would silently
+// never match.
 const facetValue = z.string().refine((value) => !value.includes(','), {
   message: 'Facet values must not contain commas',
 });
@@ -84,16 +85,7 @@ const resources = defineCollection({
     })).optional(),
     lessonLabel: z.enum(['lessons', 'episodes']).default('lessons'), // Noun for curriculum items
     sponsored: z.enum(['small', 'big']).optional(),
-    // New fields for enhanced filtering
-    techStack: z.array(facetValue).optional(), // e.g., ['Next.js', 'React', 'TypeScript']
-    features: z.array(facetValue).optional(), // e.g., ['AI', 'Authentication', 'Blog', 'SEO']
-    badges: z.object({
-      featured: z.boolean().optional(),
-      bestseller: z.boolean().optional(),
-      verified: z.boolean().optional(),
-      new: z.boolean().optional(),
-    }).optional(),
-    integrations: z.array(facetValue).optional(), // e.g., ['Stripe', 'LemonSqueezy', 'Firebase']
+    features: z.array(facetValue).optional(), // Filter facet, e.g. ['use-case', 'plugin']
     createdAt: z.string().optional(), // ISO date string for sorting "latest"
     popularity: z.number().optional(), // For sorting popular items
   }),

@@ -1,77 +1,24 @@
 ---
 import SearchInput from './Search-Input.astro';
-import { PRICING_LABELS } from '../../lib/pricing';
+import { FACETS, FILTER_TYPES, facetsOf } from '../../lib/filters';
+import type { Resource } from '../../lib/resources';
 
 interface Props {
-  allResources: Array<{
-    name: string;
-    techStack?: string[];
-    features?: string[];
-    badges?: {
-      featured?: boolean;
-      bestseller?: boolean;
-      verified?: boolean;
-      new?: boolean;
-    };
-    pricing?: {
-      type: 'free' | 'paid' | 'freemium' | 'byok' | 'top-up';
-    };
-    integrations?: string[];
-    categorySlug: string;
-  }>;
-  activeFilters: {
-    techStack?: string[];
-    features?: string[];
-    badges?: string[];
-    pricing?: string[];
-    integrations?: string[];
-  };
+  allResources: Array<Pick<Resource, 'pricing' | 'features'>>;
   title?: string;
   showSearch?: boolean;
 }
 
-const { allResources, activeFilters, title, showSearch = true } = Astro.props;
+const { allResources, title, showSearch = true } = Astro.props;
 
-const allTechStack = Array.from(new Set(
-  allResources.flatMap(r => r.techStack || [])
-)).sort();
+// Active state is applied on the client from the URL, so chips render idle.
+const filterGroups = FILTER_TYPES.map((type) => ({
+  type,
+  label: FACETS[type].label,
+  options: FACETS[type].options(new Set(allResources.flatMap((resource) => facetsOf(resource)[type]))),
+})).filter((group) => group.options.length > 0);
 
-const allFeatures = Array.from(new Set(
-  allResources.flatMap(r => r.features || [])
-)).sort();
-
-const allIntegrations = Array.from(new Set(
-  allResources.flatMap(r => r.integrations || [])
-)).sort();
-
-const badgeOptions = [
-  { value: 'featured', label: 'Featured' },
-  { value: 'bestseller', label: 'Popular' },
-  { value: 'verified', label: 'Verified' },
-  { value: 'new', label: 'New' },
-];
-
-const pricingOptions = Object.entries(PRICING_LABELS).map(([value, label]) => ({ value, label }));
-
-const availableBadges = badgeOptions.filter(option =>
-  allResources.some(resource => resource.badges?.[option.value as keyof NonNullable<typeof resource.badges>])
-);
-
-const availablePricing = pricingOptions.filter(option =>
-  allResources.some(resource => resource.pricing?.type === option.value)
-);
-
-const filterGroups = [
-  { type: 'pricing', label: 'Pricing', options: availablePricing, active: activeFilters.pricing },
-  { type: 'badges', label: 'Badges', options: availableBadges, active: activeFilters.badges },
-  { type: 'features', label: 'Features', options: allFeatures.map(value => ({ value, label: value })), active: activeFilters.features },
-  { type: 'techStack', label: 'Tech Stack', options: allTechStack.map(value => ({ value, label: value })), active: activeFilters.techStack },
-  { type: 'integrations', label: 'Integrations', options: allIntegrations.map(value => ({ value, label: value })), active: activeFilters.integrations },
-].filter(group => group.options.length > 0);
-
-const chipBase = "inline-flex h-8 items-center rounded-lg px-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40";
-const chipIdle = "bg-black/[0.04] text-neutral-700 hover:bg-black/[0.08] hover:text-neutral-900";
-const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
+const chipClass = "inline-flex h-8 items-center rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40";
 ---
 
 <div id="filter-bar" class="mb-3">
@@ -117,19 +64,16 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
         <div>
           <p class="mb-2 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-neutral-500">{group.label}</p>
           <div class="flex flex-wrap gap-2">
-            {group.options.map(option => {
-              const isActive = group.active?.includes(option.value);
-              return (
-                <button
-                  type="button"
-                  data-filter-type={group.type}
-                  data-filter-value={option.value}
-                  class:list={[chipBase, isActive ? chipActive : chipIdle]}
-                >
-                  {option.label}
-                </button>
-              );
-            })}
+            {group.options.map(option => (
+              <button
+                type="button"
+                data-filter-type={group.type}
+                data-filter-value={option.value}
+                class={chipClass}
+              >
+                {option.label}
+              </button>
+            ))}
           </div>
         </div>
       ))}
@@ -149,6 +93,8 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
 </div>
 
 <script>
+  import { FILTER_TYPES, type FilterType } from '../../lib/filters';
+
   const filterBar = document.getElementById('filter-bar');
   const searchInput = document.getElementById('search-input') as HTMLInputElement | null;
   const clearFiltersBtn = document.getElementById('clear-filters');
@@ -164,19 +110,16 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
   const scope = filterBar?.parentElement ?? document;
   const emptyState = scope.querySelector<HTMLElement>('[data-empty-state]');
 
+  const facetsFrom = (read: (type: FilterType) => string[]) =>
+    Object.fromEntries(FILTER_TYPES.map(type => [type, read(type)])) as Record<FilterType, string[]>;
+
   const resourceRows = Array.from(scope.querySelectorAll<HTMLElement>('[data-resource]')).map(row => ({
     el: row,
     name: row.querySelector('h3')?.textContent?.trim().toLowerCase() ?? '',
-    pricing: row.dataset.pricing,
-    badges: row.dataset.badges?.split(',') ?? [],
-    features: row.dataset.features?.split(',') ?? [],
-    techStack: row.dataset.techStack?.split(',') ?? [],
-    integrations: row.dataset.integrations?.split(',') ?? [],
+    facets: facetsFrom(type => row.dataset[type]?.split(',') ?? []),
   }));
 
-  type FilterType = 'techStack' | 'features' | 'badges' | 'pricing' | 'integrations';
-  const filterTypes: FilterType[] = ['techStack', 'features', 'badges', 'pricing', 'integrations'];
-  const isFilterType = (value: string | null): value is FilterType => filterTypes.includes(value as FilterType);
+  const isFilterType = (value: string | null): value is FilterType => FILTER_TYPES.includes(value as FilterType);
 
   interface FilterChip {
     el: HTMLElement;
@@ -200,11 +143,7 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
   }
 
   const filters: Record<FilterType, string[]> & { search: string } = {
-    techStack: readFilterParam('techStack'),
-    features: readFilterParam('features'),
-    badges: readFilterParam('badges'),
-    pricing: readFilterParam('pricing'),
-    integrations: readFilterParam('integrations'),
+    ...facetsFrom(readFilterParam),
     search: urlParams.get('search') || '',
   };
 
@@ -219,7 +158,7 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
 
   function updateURL() {
     const params = new URLSearchParams();
-    filterTypes.forEach(type => {
+    FILTER_TYPES.forEach(type => {
       if (filters[type].length) params.set(type, filters[type].join(','));
     });
     if (filters.search) params.set('search', filters.search);
@@ -245,7 +184,7 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
     if (!activeFiltersContainer) return;
     activeFiltersContainer.replaceChildren();
 
-    const allActive = filterTypes.flatMap(type =>
+    const allActive = FILTER_TYPES.flatMap(type =>
       filters[type].map(value => ({ type, value, label: chipFor(type, value)?.label ?? value }))
     );
 
@@ -277,31 +216,10 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
     const searchTerm = filters.search.trim().toLowerCase();
 
     resourceRows.forEach(row => {
-      let visible = true;
-
-      if (searchTerm) {
-        visible = row.name.includes(searchTerm);
-      }
-
-      if (filters.techStack.length && visible) {
-        visible = filters.techStack.some(tech => row.techStack.includes(tech));
-      }
-
-      if (filters.features.length && visible) {
-        visible = filters.features.some(feature => row.features.includes(feature));
-      }
-
-      if (filters.badges.length && visible) {
-        visible = filters.badges.some(badge => row.badges.includes(badge));
-      }
-
-      if (filters.pricing.length && visible) {
-        visible = row.pricing !== undefined && filters.pricing.includes(row.pricing);
-      }
-
-      if (filters.integrations.length && visible) {
-        visible = filters.integrations.some(integration => row.integrations.includes(integration));
-      }
+      // Within a facet any selected value matches; across facets all must match.
+      const visible =
+        (!searchTerm || row.name.includes(searchTerm)) &&
+        FILTER_TYPES.every(type => !filters[type].length || filters[type].some(value => row.facets[type].includes(value)));
 
       row.el.style.display = visible ? '' : 'none';
       if (visible) visibleCount++;
@@ -353,13 +271,13 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
   });
 
   clearFiltersBtn?.addEventListener('click', () => {
-    filterTypes.forEach(type => { filters[type] = []; });
+    FILTER_TYPES.forEach(type => { filters[type] = []; });
     filters.search = '';
     if (searchInput) searchInput.value = '';
     applyFilters();
   });
 
-  if (filterTypes.some(type => filters[type].length > 0)) {
+  if (FILTER_TYPES.some(type => filters[type].length > 0)) {
     setPanelOpen(true);
   }
 

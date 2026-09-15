@@ -40,13 +40,6 @@ const smallCategories = categoryLinks.filter(category => category.count < MIN_PR
 
 const chipClass = "inline-flex h-8 items-center gap-1.5 rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40";
 
-const activeFilters = {
-	techStack: [],
-	features: [],
-	badges: [],
-	pricing: [],
-	integrations: [],
-};
 ---
 
 <Layout description={SITE_DESCRIPTION} pageTitle="Vetted AI coding tools, agents and courses">
@@ -94,7 +87,7 @@ const activeFilters = {
 			<SponsoredProducts items={allItems} class="mt-12" />
 
 			<section id="catalog" class="mt-12 scroll-mt-20">
-				<FilterBar title="All resources" showSearch={false} allResources={listedItems} activeFilters={activeFilters} />
+				<FilterBar title="All resources" showSearch={false} allResources={listedItems} />
 				<ResourceList items={listedItems} showCategory />
 			</section>
 		</div>
