@@ -3,8 +3,15 @@ import '../styles/global.css';
 import { Font } from 'astro:assets';
 import Footer from '../components/footer.astro';
 import Navbar from '../components/ui/Navbar.astro';
+import { SITE_DESCRIPTION, SITE_NAME } from '../lib/site';
 
-const { siteTitle = 'AI Resources', description = 'Hand-picked AI coding tools, agents, extensions, prompts, and courses for busy builders.', pageTitle, page } = Astro.props;
+interface Props {
+  siteTitle?: string;
+  description?: string;
+  pageTitle?: string;
+}
+
+const { siteTitle = SITE_NAME, description = SITE_DESCRIPTION, pageTitle } = Astro.props;
 
 const siteUrl = Astro.site || 'https://airesources.dev';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;

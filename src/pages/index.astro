@@ -7,8 +7,7 @@ import ResourceList from '../components/ui/Resource-List.astro';
 import FilterBar from '../components/ui/FilterBar.astro';
 import SponsoredProducts from '../components/ui/Sponsored-Products.astro';
 import { getCollection } from 'astro:content';
-
-const description = 'Hand-picked AI coding tools, agents, extensions, prompts, and courses for busy builders.';
+import { SITE_DESCRIPTION } from '../lib/site';
 
 const allCategories = await getCollection('categories');
 const allResources = await getCollection('resources');
@@ -50,7 +49,7 @@ const activeFilters = {
 };
 ---
 
-<Layout description={description} pageTitle="Vetted AI coding tools, agents and courses">
+<Layout description={SITE_DESCRIPTION} pageTitle="Vetted AI coding tools, agents and courses">
 	<div class="relative isolate overflow-hidden bg-neutral-50 text-neutral-900">
 		<div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(60rem_22rem_at_50%_-6rem,rgba(99,102,241,0.14),transparent_70%)]"></div>
 
@@ -60,7 +59,7 @@ const activeFilters = {
 					Vetted AI resources
 				</h1>
 				<p class="mt-4 text-[15px] leading-6 text-neutral-600 sm:text-lg sm:leading-8">
-					{description}
+					{SITE_DESCRIPTION}
 				</p>
 				<SearchInput size="large" class="mt-8" />
 			</header>
