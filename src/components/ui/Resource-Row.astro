@@ -16,12 +16,15 @@ interface Props {
 
 const { item, showCategory = false, showAuthor = true } = Astro.props;
 
-// Filter facets FilterBar's client script reads, as plain comma-separated
-// attributes (JSON would need `&quot;` escaping in every row). Astro drops
-// attributes whose value is undefined, so rows without a facet carry nothing.
+// FilterBar's client script finds rows via the `data-resource` marker and reads
+// the facets as plain comma-separated attributes (JSON would need `&quot;`
+// escaping in every row; the schema rejects commas in facet values). Astro
+// drops attributes whose value is undefined, so rows without a facet carry
+// nothing.
 const list = (values?: string[]) => (values?.length ? values.join(',') : undefined);
 const badges = Object.entries(item.badges ?? {}).filter(([, on]) => on).map(([name]) => name);
 const filterAttrs = {
+  'data-resource': '',
   'data-pricing': item.pricing?.type,
   'data-badges': list(badges),
   'data-features': list(item.features),

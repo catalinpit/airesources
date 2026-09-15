@@ -158,11 +158,15 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
   const resultsCount = document.getElementById('results-count');
   const toggleFiltersBtn = document.getElementById('toggle-filters');
   const filterPanel = document.getElementById('filter-panel');
-  const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
 
-  const resourceRows = Array.from(document.querySelectorAll<HTMLElement>('.resource-row')).map(row => ({
+  // Only the list this bar sits next to; pages also render a sponsored
+  // ResourceList above it that must not be filtered or counted.
+  const scope = filterBar?.parentElement ?? document;
+  const emptyState = scope.querySelector<HTMLElement>('[data-empty-state]');
+
+  const resourceRows = Array.from(scope.querySelectorAll<HTMLElement>('[data-resource]')).map(row => ({
     el: row,
-    name: row.querySelector('.resource-row-title')?.textContent?.trim().toLowerCase() ?? '',
+    name: row.querySelector('h3')?.textContent?.trim().toLowerCase() ?? '',
     pricing: row.dataset.pricing,
     badges: row.dataset.badges?.split(',') ?? [],
     features: row.dataset.features?.split(',') ?? [],

@@ -35,6 +35,10 @@ src/
 - `src/data/categories.ts` - Resource type definitions and legacy data
 - `astro.config.mjs` - Site config, redirects, integrations
 
+## Styling Conventions
+- Tailwind utilities in markup. The one exception is the resource list row and icon tile (`.resource-row*`, `.resource-icon*` in `src/styles/global.css`), which render ~200 times per page; the component classes exist only to keep the homepage HTML small. Don't add more without the same justification.
+- Client scripts hook onto `data-*` attributes (`data-resource`, `data-empty-state`, ...), never onto style class names.
+
 ## Verifying Changes
 Always run `pnpm build` before committing. The build will fail on:
 - Invalid content collection schemas
