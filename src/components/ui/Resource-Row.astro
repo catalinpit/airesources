@@ -67,6 +67,10 @@ const metaText = [
       transition: background-color var(--default-transition-duration) var(--default-transition-timing-function);
     }
 
+    .resource-row:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--color-indigo-500);
+    }
+
     .resource-row-body {
       @apply min-w-0 flex-1;
     }
