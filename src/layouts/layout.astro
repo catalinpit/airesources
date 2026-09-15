@@ -4,7 +4,7 @@ import { Font } from 'astro:assets';
 import Footer from '../components/footer.astro';
 import Navbar from '../components/ui/Navbar.astro';
 
-const { siteTitle = 'AI Resources', description = 'Hand-picked AI coding tools, agents, extensions, prompts, and courses for busy builders, all of them actually maintained.', pageTitle, page } = Astro.props;
+const { siteTitle = 'AI Resources', description = 'Hand-picked AI coding tools, agents, extensions, prompts, and courses for busy builders.', pageTitle, page } = Astro.props;
 
 const siteUrl = Astro.site || 'https://airesources.dev';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
