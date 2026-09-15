@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { HIGHLIGHT_ICONS } from './lib/highlight-icons';
 
 const categories = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/categories' }),
@@ -67,6 +68,7 @@ const resources = defineCollection({
     highlights: z.array(z.object({
       title: z.string(),
       description: z.string(),
+      icon: z.enum(HIGHLIGHT_ICONS).default('check'),
     })).optional(),
     platforms: z.array(z.string()).optional(), // e.g., ['macOS', 'Windows', 'Linux']; also sets JSON-LD operatingSystem
     tags: z.array(z.string()).optional(),

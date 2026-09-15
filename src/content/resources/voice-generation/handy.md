@@ -15,12 +15,16 @@ pricing:
 highlights:
   - title: Private by default
     description: Your voice never leaves your computer. Transcription runs locally, with no account and no API key.
+    icon: lock
   - title: Speak into any text field
     description: Hold a shortcut, talk, release. Handy pastes the text wherever your cursor is.
+    icon: cursor
   - title: Open source and forkable
     description: MIT-licensed Tauri app in Rust and React, built to be extended rather than locked down.
+    icon: fork
   - title: Works on modest hardware
     description: Parakeet V3 runs on the CPU at about 5× real time with automatic language detection; Whisper uses your GPU when available.
+    icon: cpu
 models:
   - Whisper Small
   - Whisper Medium

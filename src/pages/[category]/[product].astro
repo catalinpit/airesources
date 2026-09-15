@@ -12,6 +12,7 @@ import ResourceAuthor from '../../components/ui/Resource-Author.astro';
 import ResourceList from '../../components/ui/Resource-List.astro';
 import CourseCurriculum from '../../components/ui/Course-Curriculum.astro';
 import AccessNote from '../../components/ui/Access-Note.astro';
+import HighlightIcon from '../../components/ui/Highlight-Icon.astro';
 import CopyIcon from '../../components/icons/CopyIcon.astro';
 import CheckIcon from '../../components/icons/CheckIcon.astro';
 import ExternalLinkIcon from '../../components/icons/ExternalLinkIcon.astro';
@@ -244,14 +245,19 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
                   {highlights.length > 0 && (
                     <section>
                       <SectionHeading class="mb-4">Highlights</SectionHeading>
-                      <dl class="grid gap-x-8 gap-y-5 sm:grid-cols-2">
+                      <ul class="grid gap-x-8 gap-y-5 sm:grid-cols-2">
                         {highlights.map(highlight => (
-                          <div>
-                            <dt class="font-medium text-neutral-900">{highlight.title}</dt>
-                            <dd class="mt-1 text-sm leading-6 text-neutral-600">{highlight.description}</dd>
-                          </div>
+                          <li class="flex gap-3">
+                            <span class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+                              <HighlightIcon name={highlight.icon} class="h-[18px] w-[18px]" />
+                            </span>
+                            <div class="min-w-0">
+                              <h4 class="font-medium leading-6 text-neutral-900">{highlight.title}</h4>
+                              <p class="mt-1 text-sm leading-6 text-neutral-600">{highlight.description}</p>
+                            </div>
+                          </li>
                         ))}
-                      </dl>
+                      </ul>
                     </section>
                   )}
 
