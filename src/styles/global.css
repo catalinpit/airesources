@@ -39,9 +39,13 @@
     @apply mt-0.5 truncate text-sm leading-5 text-neutral-500;
   }
 
-  /* Small tile by default; the "lg" size overrides with utilities. */
+  /* Small tile by default; Resource-Icon sets data-size="lg" on product pages. */
   .resource-icon {
     @apply relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg;
+  }
+
+  .resource-icon > svg {
+    @apply h-[18px] w-[18px];
   }
 
   .resource-icon img[data-favicon] {
@@ -50,6 +54,22 @@
 
   .resource-icon-fallback {
     @apply text-sm font-semibold;
+  }
+
+  .resource-icon[data-size="lg"] {
+    @apply h-14 w-14 rounded-xl;
+  }
+
+  .resource-icon[data-size="lg"] > svg {
+    @apply h-7 w-7;
+  }
+
+  .resource-icon[data-size="lg"] img[data-favicon] {
+    @apply h-8 w-8 rounded-md;
+  }
+
+  .resource-icon[data-size="lg"] .resource-icon-fallback {
+    @apply text-xl;
   }
 }
 

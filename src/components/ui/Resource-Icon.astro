@@ -37,30 +37,18 @@ const typeTint = item.skill
     ? 'bg-indigo-100 text-indigo-700'
     : 'bg-sky-100 text-sky-700';
 
-// The small size is the default in .resource-icon (global.css); only the
-// large variant needs utilities.
-const isLarge = size === 'lg';
-const tileClass = isLarge ? 'h-14 w-14 rounded-xl' : undefined;
-const glyphClass = isLarge ? 'h-7 w-7' : 'h-[18px] w-[18px]';
-const imageClass = isLarge ? 'h-8 w-8 rounded-md' : undefined;
-const letterClass = isLarge ? 'text-xl' : undefined;
+// Both sizes are styled by .resource-icon in global.css; "sm" is the default
+// and "lg" is selected by the data-size attribute.
+const sizeAttr = size === 'lg' ? 'lg' : undefined;
 ---
 
-<div class:list={["resource-icon", tileClass, TypeIcon ? typeTint : hue, className]}>
+<div class:list={["resource-icon", TypeIcon ? typeTint : hue, className]} data-size={sizeAttr}>
   {TypeIcon ? (
-    <TypeIcon class={glyphClass} />
+    <TypeIcon />
   ) : (
     <>
-      <span class:list={["resource-icon-fallback", letterClass]}>{initial}</span>
-      {hasFavicon && (
-        <img
-          src={item.iconUrl}
-          alt=""
-          loading="lazy"
-          data-favicon
-          class={imageClass}
-        />
-      )}
+      <span class="resource-icon-fallback">{initial}</span>
+      {hasFavicon && <img src={item.iconUrl} alt="" loading="lazy" data-favicon />}
     </>
   )}
 </div>
