@@ -19,8 +19,10 @@ const fullTitle = pageTitle ? `${siteTitle} - ${pageTitle}` : siteTitle;
 		<meta name="theme-color" content="#fafafa" />
 		<meta name="robots" content="index, follow" />
 		<Font cssVariable="--font-hanken-grotesk" preload />
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="apple-touch-icon" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
 		<title>{fullTitle}</title>
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalUrl} />

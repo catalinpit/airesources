@@ -1,0 +1,13 @@
+{
+  "name": "AI Resources",
+  "short_name": "AI Resources",
+  "description": "Hand-picked AI coding tools, agents, extensions, prompts, and courses for busy builders, all of them actually maintained.",
+  "start_url": "/",
+  "display": "minimal-ui",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
