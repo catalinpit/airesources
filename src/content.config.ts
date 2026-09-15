@@ -45,7 +45,8 @@ const resources = defineCollection({
     description: z.string(),
     // How to access the resource, such as the format, whether signup is needed, or install
     // options. Courses show it under the description; tools show it in the Platforms section.
-    // The page derives lesson counts from `curriculum`, so don't repeat them here.
+    // Wrap commands in backticks to render them as code. The page derives lesson counts
+    // from `curriculum`, so don't repeat them here.
     accessNote: z.string().optional(),
     categorySlug: z.string(),
     link: z.string().url().optional(),

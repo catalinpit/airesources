@@ -11,6 +11,7 @@ import ResourceIcon from '../../components/ui/Resource-Icon.astro';
 import ResourceAuthor from '../../components/ui/Resource-Author.astro';
 import ResourceList from '../../components/ui/Resource-List.astro';
 import CourseCurriculum from '../../components/ui/Course-Curriculum.astro';
+import AccessNote from '../../components/ui/Access-Note.astro';
 import CopyIcon from '../../components/icons/CopyIcon.astro';
 import CheckIcon from '../../components/icons/CheckIcon.astro';
 import ExternalLinkIcon from '../../components/icons/ExternalLinkIcon.astro';
@@ -129,9 +130,7 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
                   {item.description}
                 </p>
                 {headerNote && (
-                  <p class="mt-3 text-sm leading-6 text-neutral-500">
-                    {headerNote}
-                  </p>
+                  <AccessNote text={headerNote} class="mt-3 text-sm leading-6 text-neutral-500" />
                 )}
                 {kind === 'course' && item.link && (
                   <Button href={item.link} class="mt-5 h-10 px-5">
@@ -282,7 +281,7 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
                         </div>
                       )}
                       {availability && (
-                        <p class="mt-3 text-sm leading-6 text-neutral-600">{availability}</p>
+                        <AccessNote text={availability} class="mt-3 text-sm leading-6 text-neutral-600" />
                       )}
                     </section>
                   )}
