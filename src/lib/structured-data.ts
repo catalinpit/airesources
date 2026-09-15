@@ -75,7 +75,10 @@ export function resourceStructuredData(item: Resource, { categoryTitle }: Struct
         '@type': 'SoftwareApplication',
         ...commonFields(item),
         applicationCategory: categoryTitle,
-        operatingSystem: 'Web',
+        operatingSystem: item.platforms && item.platforms.length > 0 ? item.platforms.join(', ') : 'Web',
+        ...(item.highlights && item.highlights.length > 0 && {
+          featureList: item.highlights.map(highlight => highlight.title).join(', '),
+        }),
         ...(item.pricing && { offers: offerFor(item.pricing) }),
       };
     default: {

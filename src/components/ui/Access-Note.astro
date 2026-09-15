@@ -1,0 +1,22 @@
+---
+interface Props {
+  text: string;
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+
+// Backtick-delimited spans render as inline code. An unbalanced backtick
+// leaves the whole note as plain text rather than styling the tail.
+const parts = text.split('`');
+const segments = parts.length % 2 === 1
+  ? parts.map((segment, index) => ({ segment, isCode: index % 2 === 1 }))
+  : [{ segment: text, isCode: false }];
+---
+
+<p class={className}>
+  {segments.map(({ segment, isCode }) => isCode
+    ? <code class="rounded bg-black/[0.05] px-1.5 py-0.5 font-mono text-[13px] text-neutral-800">{segment}</code>
+    : segment
+  )}
+</p>

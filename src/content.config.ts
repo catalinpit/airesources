@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { HIGHLIGHT_ICONS } from './lib/highlight-icons';
 
 const categories = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/categories' }),
@@ -50,9 +51,10 @@ const resources = defineCollection({
   schema: z.object({
     name: z.string(),
     description: z.string(),
-    // Rendered under the description. Says how to access the resource, such as the format,
-    // whether signup is needed, or offline options. The page derives lesson counts from
-    // `curriculum`, so don't repeat them here.
+    // How to access the resource, such as the format, whether signup is needed, or install
+    // options. Courses show it under the description; tools show it in the Platforms section.
+    // Wrap commands in backticks to render them as code. The page derives lesson counts
+    // from `curriculum`, so don't repeat them here.
     accessNote: z.string().optional(),
     categorySlug: z.string(),
     link: z.string().url().optional(),
@@ -68,6 +70,14 @@ const resources = defineCollection({
       details: z.string().optional(),
     }).optional(),
     models: z.array(z.string()).optional(),
+    // Title + one-liner cards shown under the description on tool pages. Distinct from
+    // `features`, which is a flat filter facet.
+    highlights: z.array(z.object({
+      title: z.string(),
+      description: z.string(),
+      icon: z.enum(HIGHLIGHT_ICONS).default('check'),
+    })).optional(),
+    platforms: z.array(z.string()).optional(), // e.g., ['macOS', 'Windows', 'Linux']; also sets JSON-LD operatingSystem
     tags: z.array(z.string()).optional(),
     prompt: z.string().optional(),
     skill: z.string().optional(),
