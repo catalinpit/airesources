@@ -16,14 +16,18 @@ interface Props {
 
 const { item, showCategory = false, showAuthor = true } = Astro.props;
 
-// Only what FilterBar's client script reads; empty fields are omitted so
-// the attribute stays small across a couple hundred rows.
-const resourceData: Record<string, unknown> = { name: item.name };
-if (item.techStack?.length) resourceData.techStack = item.techStack;
-if (item.features?.length) resourceData.features = item.features;
-if (item.badges && Object.values(item.badges).some(Boolean)) resourceData.badges = item.badges;
-if (item.pricing) resourceData.pricing = item.pricing.type;
-if (item.integrations?.length) resourceData.integrations = item.integrations;
+// Filter facets FilterBar's client script reads, as plain comma-separated
+// attributes (JSON would need `&quot;` escaping in every row). Astro drops
+// attributes whose value is undefined, so rows without a facet carry nothing.
+const list = (values?: string[]) => (values?.length ? values.join(',') : undefined);
+const badges = Object.entries(item.badges ?? {}).filter(([, on]) => on).map(([name]) => name);
+const filterAttrs = {
+  'data-pricing': item.pricing?.type,
+  'data-badges': list(badges),
+  'data-features': list(item.features),
+  'data-tech-stack': list(item.techStack),
+  'data-integrations': list(item.integrations),
+};
 
 const metaText = [
   showCategory ? item.categoryTitle : undefined,
@@ -32,28 +36,20 @@ const metaText = [
 ].filter(Boolean).join(' · ');
 ---
 
-<a
-  href={resourcePath(item)}
-  class="group flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-black/[0.02] focus:outline-none focus-visible:bg-black/[0.04] sm:gap-4"
-  data-resource={JSON.stringify(resourceData)}
->
+<a href={resourcePath(item)} class="resource-row" {...filterAttrs}>
   <ResourceIcon item={item} />
 
-  <div class="min-w-0 flex-1">
-    <div class="flex items-baseline justify-between gap-3">
-      <h3 class="truncate text-[15px] font-medium leading-6 text-neutral-900 transition-colors group-hover:text-indigo-600">
-        {item.name}
-      </h3>
+  <div class="resource-row-body">
+    <div class="resource-row-head">
+      <h3 class="resource-row-title">{item.name}</h3>
       {(item.sponsored || metaText) && (
-        <span class="hidden flex-shrink-0 items-center gap-1.5 text-xs text-neutral-500 sm:flex">
+        <span class="resource-row-meta">
           {item.sponsored && <span class="text-amber-600">Sponsored</span>}
           {item.sponsored && metaText && <span aria-hidden="true">·</span>}
           {metaText}
         </span>
       )}
     </div>
-    <p class="mt-0.5 truncate text-sm leading-5 text-neutral-500">
-      {item.description}
-    </p>
+    <p class="resource-row-description">{item.description}</p>
   </div>
 </a>

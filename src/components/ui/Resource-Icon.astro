@@ -37,19 +37,16 @@ const typeTint = item.skill
     ? 'bg-indigo-100 text-indigo-700'
     : 'bg-sky-100 text-sky-700';
 
+// The small size is the default in .resource-icon (global.css); only the
+// large variant needs utilities.
 const isLarge = size === 'lg';
-const tileClass = isLarge ? 'h-14 w-14 rounded-xl' : 'h-9 w-9 rounded-lg';
+const tileClass = isLarge ? 'h-14 w-14 rounded-xl' : undefined;
 const glyphClass = isLarge ? 'h-7 w-7' : 'h-[18px] w-[18px]';
-const imageClass = isLarge ? 'h-8 w-8 rounded-md' : 'h-5 w-5 rounded-sm';
-const letterClass = isLarge ? 'text-xl font-semibold' : 'text-sm font-semibold';
+const imageClass = isLarge ? 'h-8 w-8 rounded-md' : undefined;
+const letterClass = isLarge ? 'text-xl' : undefined;
 ---
 
-<div class:list={[
-  "resource-icon relative flex flex-shrink-0 items-center justify-center overflow-hidden",
-  tileClass,
-  TypeIcon ? typeTint : hue,
-  className
-]}>
+<div class:list={["resource-icon", tileClass, TypeIcon ? typeTint : hue, className]}>
   {TypeIcon ? (
     <TypeIcon class={glyphClass} />
   ) : (
@@ -61,7 +58,7 @@ const letterClass = isLarge ? 'text-xl font-semibold' : 'text-sm font-semibold';
           alt=""
           loading="lazy"
           data-favicon
-          class:list={["absolute inset-0 m-auto object-contain", imageClass]}
+          class={imageClass}
         />
       )}
     </>

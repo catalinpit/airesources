@@ -4,6 +4,55 @@
   --font-sans: var(--font-hanken-grotesk);
 }
 
+/* The resource list renders a couple hundred rows per page, so the row and
+   icon tile styles live here as component classes instead of repeating
+   ~500 bytes of utilities in every row of the HTML. Sizes and hues that vary
+   per tile stay as utilities in the markup. */
+@layer components {
+  .resource-row {
+    @apply flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-black/[0.02] focus:outline-none focus-visible:bg-black/[0.04] sm:gap-4;
+  }
+
+  .resource-row-body {
+    @apply min-w-0 flex-1;
+  }
+
+  .resource-row-head {
+    @apply flex items-baseline justify-between gap-3;
+  }
+
+  .resource-row-title {
+    @apply truncate text-[15px] font-medium leading-6 text-neutral-900 transition-colors;
+  }
+
+  @media (hover: hover) {
+    .resource-row:hover .resource-row-title {
+      @apply text-indigo-600;
+    }
+  }
+
+  .resource-row-meta {
+    @apply hidden flex-shrink-0 items-center gap-1.5 text-xs text-neutral-500 sm:flex;
+  }
+
+  .resource-row-description {
+    @apply mt-0.5 truncate text-sm leading-5 text-neutral-500;
+  }
+
+  /* Small tile by default; the "lg" size overrides with utilities. */
+  .resource-icon {
+    @apply relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg;
+  }
+
+  .resource-icon img[data-favicon] {
+    @apply absolute inset-0 m-auto h-5 w-5 rounded-sm object-contain;
+  }
+
+  .resource-icon-fallback {
+    @apply text-sm font-semibold;
+  }
+}
+
 /* Favicons fade in over the letter fallback only once they have actually loaded,
    so slow or dead icon hosts never leave an empty tile. */
 .resource-icon img[data-favicon] {

@@ -160,7 +160,15 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
   const filterPanel = document.getElementById('filter-panel');
   const emptyState = document.querySelector<HTMLElement>('[data-empty-state]');
 
-  const resourceRows = Array.from(document.querySelectorAll<HTMLElement>('[data-resource]'));
+  const resourceRows = Array.from(document.querySelectorAll<HTMLElement>('.resource-row')).map(row => ({
+    el: row,
+    name: row.querySelector('.resource-row-title')?.textContent?.trim().toLowerCase() ?? '',
+    pricing: row.dataset.pricing,
+    badges: row.dataset.badges?.split(',') ?? [],
+    features: row.dataset.features?.split(',') ?? [],
+    techStack: row.dataset.techStack?.split(',') ?? [],
+    integrations: row.dataset.integrations?.split(',') ?? [],
+  }));
 
   type FilterType = 'techStack' | 'features' | 'badges' | 'pricing' | 'integrations';
   const filterTypes: FilterType[] = ['techStack', 'features', 'badges', 'pricing', 'integrations'];
@@ -265,34 +273,33 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
     const searchTerm = filters.search.trim().toLowerCase();
 
     resourceRows.forEach(row => {
-      const resourceData = JSON.parse(row.getAttribute('data-resource') || '{}');
       let visible = true;
 
       if (searchTerm) {
-        visible = resourceData.name?.toLowerCase().includes(searchTerm) ?? false;
+        visible = row.name.includes(searchTerm);
       }
 
       if (filters.techStack.length && visible) {
-        visible = filters.techStack.some(tech => resourceData.techStack?.includes(tech));
+        visible = filters.techStack.some(tech => row.techStack.includes(tech));
       }
 
       if (filters.features.length && visible) {
-        visible = filters.features.some(feature => resourceData.features?.includes(feature));
+        visible = filters.features.some(feature => row.features.includes(feature));
       }
 
       if (filters.badges.length && visible) {
-        visible = filters.badges.some(badge => resourceData.badges?.[badge] === true);
+        visible = filters.badges.some(badge => row.badges.includes(badge));
       }
 
       if (filters.pricing.length && visible) {
-        visible = filters.pricing.includes(resourceData.pricing);
+        visible = row.pricing !== undefined && filters.pricing.includes(row.pricing);
       }
 
       if (filters.integrations.length && visible) {
-        visible = filters.integrations.some(integration => resourceData.integrations?.includes(integration));
+        visible = filters.integrations.some(integration => row.integrations.includes(integration));
       }
 
-      row.style.display = visible ? '' : 'none';
+      row.el.style.display = visible ? '' : 'none';
       if (visible) visibleCount++;
     });
 
