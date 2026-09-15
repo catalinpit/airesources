@@ -1,10 +1,10 @@
 ---
 name: Handy
 description: Free, open-source speech-to-text app that runs fully offline. Hold a shortcut, speak, and have the transcription pasted into any text field.
-accessNote: Download from handy.computer or GitHub releases, or install with Homebrew (brew install --cask handy) or winget (winget install cjpais.Handy).
+accessNote: Download from handy.computer or GitHub releases, or install with Homebrew (`brew install --cask handy`) or winget (`winget install cjpais.Handy`).
 categorySlug: voice-generation
 link: "https://handy.computer"
-iconUrl: "https://handy.computer/favicon.png"
+iconUrl: "https://raw.githubusercontent.com/cjpais/Handy/main/src-tauri/icons/128x128.png"
 type: audio
 pricing:
   type: free
