@@ -3,7 +3,7 @@ import '../styles/global.css';
 import { Font } from 'astro:assets';
 import Footer from '../components/footer.astro';
 import Navbar from '../components/ui/Navbar.astro';
-import { SITE_DESCRIPTION, SITE_NAME } from '../lib/site';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '../lib/site';
 
 interface Props {
   siteTitle?: string;
@@ -17,7 +17,7 @@ const { siteTitle = SITE_NAME, description = SITE_DESCRIPTION, pageTitle } = Ast
 const siteUrl = Astro.site || 'https://airesources.dev';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const ogImageUrl = new URL('/og-image.png', siteUrl).href;
-const fullTitle = pageTitle ? `${pageTitle} – ${siteTitle}` : siteTitle;
+const fullTitle = pageTitle ? `${pageTitle} – ${siteTitle}` : `${siteTitle} – ${SITE_TAGLINE}`;
 ---
 
 <html lang="en">
