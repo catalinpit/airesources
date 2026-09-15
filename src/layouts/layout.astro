@@ -10,16 +10,14 @@ interface Props {
   description?: string;
   /** Page-specific part of the title; rendered as "Page – AI Resources". */
   pageTitle?: string;
-  /** Full title override (used by the homepage, where the site name leads). */
-  title?: string;
 }
 
-const { siteTitle = SITE_NAME, description = SITE_DESCRIPTION, pageTitle, title } = Astro.props;
+const { siteTitle = SITE_NAME, description = SITE_DESCRIPTION, pageTitle } = Astro.props;
 
 const siteUrl = Astro.site || 'https://airesources.dev';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const ogImageUrl = new URL('/og-image.png', siteUrl).href;
-const fullTitle = title ?? (pageTitle ? `${pageTitle} – ${siteTitle}` : siteTitle);
+const fullTitle = pageTitle ? `${pageTitle} – ${siteTitle}` : siteTitle;
 ---
 
 <html lang="en">
