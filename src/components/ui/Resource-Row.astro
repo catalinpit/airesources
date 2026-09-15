@@ -51,3 +51,47 @@ const metaText = [
     <p class="resource-row-description">{item.description}</p>
   </div>
 </a>
+
+<style is:global>
+  @reference "../../styles/global.css";
+
+  /* Rendered a couple hundred times per page, so the row's utilities live
+     here once instead of in every row's class attribute. `is:global` keeps
+     Astro from adding a scoping attribute to each element. */
+  @layer components {
+    /* Transitions and the focus ring are written out rather than @apply'd
+       (transition-colors, ring-*) so this stylesheet doesn't re-register
+       Tailwind's --tw-* properties on every page. */
+    .resource-row {
+      @apply flex items-center gap-3 px-5 py-3.5 hover:bg-black/[0.02] focus:outline-none focus-visible:bg-black/[0.04] sm:gap-4;
+      transition: background-color var(--default-transition-duration) var(--default-transition-timing-function);
+    }
+
+    .resource-row-body {
+      @apply min-w-0 flex-1;
+    }
+
+    .resource-row-head {
+      @apply flex items-baseline justify-between gap-3;
+    }
+
+    .resource-row-title {
+      @apply truncate text-[15px] font-medium leading-6 text-neutral-900;
+      transition: color var(--default-transition-duration) var(--default-transition-timing-function);
+    }
+
+    @media (hover: hover) {
+      .resource-row:hover .resource-row-title {
+        @apply text-indigo-600;
+      }
+    }
+
+    .resource-row-meta {
+      @apply hidden flex-shrink-0 items-center gap-1.5 text-xs text-neutral-500 sm:flex;
+    }
+
+    .resource-row-description {
+      @apply mt-0.5 truncate text-sm leading-5 text-neutral-500;
+    }
+  }
+</style>

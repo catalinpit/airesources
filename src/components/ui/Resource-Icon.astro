@@ -66,3 +66,63 @@ const sizeAttr = size === 'lg' ? 'lg' : undefined;
     }
   });
 </script>
+
+<style is:global>
+  @reference "../../styles/global.css";
+
+  /* Rendered once per resource row, so the tile's utilities live here once.
+     Hue classes stay in the markup; "sm" is the default size and Resource-Icon
+     sets data-size="lg" on product pages. */
+  @layer components {
+    .resource-icon {
+      @apply relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg;
+    }
+
+    .resource-icon > svg {
+      @apply h-[18px] w-[18px];
+    }
+
+    .resource-icon img[data-favicon] {
+      @apply absolute inset-0 m-auto h-5 w-5 rounded-sm object-contain;
+    }
+
+    .resource-icon-fallback {
+      @apply text-sm font-semibold;
+    }
+
+    .resource-icon[data-size="lg"] {
+      @apply h-14 w-14 rounded-xl;
+    }
+
+    .resource-icon[data-size="lg"] > svg {
+      @apply h-7 w-7;
+    }
+
+    .resource-icon[data-size="lg"] img[data-favicon] {
+      @apply h-8 w-8 rounded-md;
+    }
+
+    .resource-icon[data-size="lg"] .resource-icon-fallback {
+      @apply text-xl;
+    }
+  }
+
+  /* Favicons fade in over the letter fallback only once they have actually
+     loaded, so slow or dead icon hosts never leave an empty tile. */
+  .resource-icon img[data-favicon] {
+    opacity: 0;
+    transition: opacity 150ms ease;
+  }
+
+  .resource-icon img[data-favicon].is-loaded {
+    opacity: 1;
+  }
+
+  .resource-icon:has(img[data-favicon].is-loaded) {
+    background-color: rgb(0 0 0 / 0.04);
+  }
+
+  .resource-icon:has(img[data-favicon].is-loaded) .resource-icon-fallback {
+    visibility: hidden;
+  }
+</style>
