@@ -16,14 +16,14 @@ interface Props {
 
 const { item, showCategory = false, showAuthor = true } = Astro.props;
 
-const resourceData = {
-  name: item.name,
-  techStack: item.techStack || [],
-  features: item.features || [],
-  badges: item.badges || {},
-  pricing: item.pricing,
-  integrations: item.integrations || [],
-};
+// Only what FilterBar's client script reads; empty fields are omitted so
+// the attribute stays small across a couple hundred rows.
+const resourceData: Record<string, unknown> = { name: item.name };
+if (item.techStack?.length) resourceData.techStack = item.techStack;
+if (item.features?.length) resourceData.features = item.features;
+if (item.badges && Object.values(item.badges).some(Boolean)) resourceData.badges = item.badges;
+if (item.pricing) resourceData.pricing = item.pricing.type;
+if (item.integrations?.length) resourceData.integrations = item.integrations;
 
 const metaText = [
   showCategory ? item.categoryTitle : undefined,

@@ -285,7 +285,7 @@ const chipActive = "bg-indigo-600 text-white hover:bg-indigo-500";
       }
 
       if (filters.pricing.length && visible) {
-        visible = filters.pricing.includes(resourceData.pricing?.type);
+        visible = filters.pricing.includes(resourceData.pricing);
       }
 
       if (filters.integrations.length && visible) {
