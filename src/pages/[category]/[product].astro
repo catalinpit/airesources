@@ -64,7 +64,14 @@ const reusable = kind === 'reusable' && reusableContent
 const isFree = item.pricing !== undefined && isFreeOnly(item.pricing);
 const pricing = item.pricing && (!isFree || item.pricing.details) ? item.pricing : undefined;
 
-const headerNote = [curriculumSummary(item), item.accessNote].filter(Boolean).join('. ');
+// Tools show the access note in the Platforms section instead of the header
+const headerNote = [curriculumSummary(item), kind === 'tool' ? undefined : item.accessNote].filter(Boolean).join('. ');
+
+const highlights = kind === 'tool' ? item.highlights ?? [] : [];
+const models = kind === 'tool' ? item.models ?? [] : [];
+const platforms = kind === 'tool' ? item.platforms ?? [] : [];
+const availability = kind === 'tool' ? item.accessNote : undefined;
+const hasToolDetails = highlights.length > 0 || models.length > 0 || platforms.length > 0 || Boolean(availability);
 
 const related = kind === 'course'
   ? relatedResources(item, allItems, { limit: RELATED_LIMIT, categoryTitle: category.title })
@@ -231,16 +238,54 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
               </>
             )}
 
-            {kind === 'tool' && item.models && item.models.length > 0 && (
+            {hasToolDetails && (
               <>
                 <Divider class="my-8" />
-                <SectionHeading class="mb-4">Available Models</SectionHeading>
-                <div class="flex flex-wrap gap-2">
-                  {item.models.map(model => (
-                    <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm text-neutral-600">
-                      {model}
-                    </span>
-                  ))}
+                <div class="space-y-8">
+                  {highlights.length > 0 && (
+                    <section>
+                      <SectionHeading class="mb-4">Highlights</SectionHeading>
+                      <div class="grid gap-3 sm:grid-cols-2">
+                        {highlights.map(highlight => (
+                          <div class="rounded-lg bg-neutral-100 p-4">
+                            <h4 class="font-medium text-neutral-900">{highlight.title}</h4>
+                            <p class="mt-1 text-sm leading-6 text-neutral-600">{highlight.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {models.length > 0 && (
+                    <section>
+                      <SectionHeading class="mb-4">Available Models</SectionHeading>
+                      <div class="flex flex-wrap gap-2">
+                        {models.map(model => (
+                          <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm text-neutral-600">
+                            {model}
+                          </span>
+                        ))}
+                      </div>
+                    </section>
+                  )}
+
+                  {(platforms.length > 0 || availability) && (
+                    <section>
+                      <SectionHeading class="mb-4">{platforms.length > 0 ? 'Platforms' : 'Availability'}</SectionHeading>
+                      {platforms.length > 0 && (
+                        <div class="flex flex-wrap gap-2">
+                          {platforms.map(platform => (
+                            <span class="inline-flex items-center rounded-md bg-black/[0.04] px-3 py-1 text-sm text-neutral-600">
+                              {platform}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {availability && (
+                        <p class="mt-3 text-sm leading-6 text-neutral-600">{availability}</p>
+                      )}
+                    </section>
+                  )}
                 </div>
               </>
             )}
