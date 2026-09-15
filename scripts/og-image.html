@@ -3,11 +3,12 @@
   Source for public/og-image.png (1200x630). Mirrors the homepage hero:
   neutral-50 background, indigo glow, Hanken Grotesk, category chips.
 
-  Regenerate after editing (the committed file was additionally
-  palette-quantized with sharp, which roughly halves the size):
-    google-chrome --headless=new --hide-scrollbars --force-device-scale-factor=1 \
-      --window-size=1200,630 --virtual-time-budget=5000 \
-      --screenshot=public/og-image.png scripts/og-image.html
+  Regenerate after editing with `pnpm og-image` (see scripts/og-image.mjs;
+  it renders this file with headless Chrome and palette-quantizes the PNG).
+
+  The headline and tagline are snapshots of the copy in src/pages/index.astro
+  and src/lib/site.ts; the chips list categories by hand. Re-render when
+  either changes.
 
   Social caches key on the URL; if a stale card shows up after a change,
   re-scrape (Facebook Sharing Debugger / LinkedIn Post Inspector) or rename

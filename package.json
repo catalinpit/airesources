@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "og-image": "node scripts/og-image.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",
@@ -17,5 +18,8 @@
     "astro": "^6.3.7",
     "canvas-confetti": "^1.9.3",
     "tailwindcss": "^4.0.15"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
   }
 }
