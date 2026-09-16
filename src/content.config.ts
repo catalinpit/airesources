@@ -1,4 +1,4 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { HIGHLIGHT_ICONS } from './lib/highlight-icons';
@@ -101,4 +101,45 @@ const resources = defineCollection({
   }),
 });
 
-export const collections = { categories, resources };
+// A GitHub or X username; a leading "@" is tolerated and dropped.
+const username = z
+  .string()
+  .trim()
+  .regex(/^@?[A-Za-z0-9_-]{1,39}$/, 'Use the bare username, not a profile URL')
+  .transform((value) => value.replace(/^@/, ''));
+
+// One resource in a stack: either the resource id (its path under
+// src/content/resources without the extension, e.g. "coding-tools/cursor") or
+// an object that adds a note. Both forms normalize to the object form.
+const stackItem = z
+  .union([
+    reference('resources'),
+    z.object({
+      resource: reference('resources'),
+      // Replaces the resource's description on the stack page, so it reads in the author's voice.
+      note: z.string().trim().min(1).max(160).optional(),
+    }),
+  ])
+  .transform((item) => ('resource' in item ? item : { resource: item }));
+
+// A person's AI stack, published at /stack/<handle>/. The handle is the file
+// name (src/content/stacks/<handle>.json), validated in src/lib/stacks.ts.
+const stacks = defineCollection({
+  loader: glob({ pattern: '*.json', base: './src/content/stacks' }),
+  schema: z.object({
+    name: z.string().trim().min(1).max(60),
+    bio: z.string().trim().max(200).optional(),
+    avatar: z.string().url().optional(), // Falls back to the GitHub avatar when links.github is set
+    links: z
+      .object({
+        website: z.string().url().optional(),
+        github: username.optional(),
+        x: username.optional(),
+      })
+      .optional(),
+    updatedAt: z.iso.date().optional(), // YYYY-MM-DD
+    stack: z.array(stackItem).min(1),
+  }),
+});
+
+export const collections = { categories, resources, stacks };
