@@ -2,6 +2,9 @@
 import Button from './Button.astro';
 import LogoIcon from '../icons/LogoIcon.astro';
 import CategoryDropdown from './CategoryDropdown.astro';
+import { REPO_URL } from '../../lib/site';
+
+const onStacks = Astro.url.pathname.startsWith('/stack/');
 ---
 
 <header class="sticky top-0 z-40 border-b border-black/[0.06] bg-white/85 backdrop-blur">
@@ -11,8 +14,18 @@ import CategoryDropdown from './CategoryDropdown.astro';
       <span class="hidden truncate text-base font-semibold sm:inline">AI Resources</span>
     </a>
     <div class="flex flex-shrink-0 items-center gap-2 sm:gap-3">
+      <a
+        href="/stack/"
+        class:list={[
+          "inline-flex h-9 items-center rounded-lg px-2.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 sm:px-3",
+          onStacks ? "bg-black/[0.04] text-neutral-900" : "text-neutral-700 hover:bg-black/[0.04] hover:text-neutral-900",
+        ]}
+        aria-current={onStacks ? 'page' : undefined}
+      >
+        Stacks
+      </a>
       <CategoryDropdown />
-      <Button href="https://github.com/catalinpit/airesources" class="h-9 whitespace-nowrap rounded-lg px-3 text-sm sm:px-4">
+      <Button href={REPO_URL} class="h-9 whitespace-nowrap rounded-lg px-3 text-sm sm:px-4">
         <span class="hidden sm:inline">Submit Tool</span>
         <span class="sm:hidden">Submit</span>
       </Button>
