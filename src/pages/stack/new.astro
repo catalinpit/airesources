@@ -1,0 +1,503 @@
+---
+import '../../styles/global.css';
+import Layout from '../../layouts/layout.astro';
+import ResourceIcon from '../../components/ui/Resource-Icon.astro';
+import SectionLabel from '../../components/ui/Section-Label.astro';
+import CheckIcon from '../../components/icons/CheckIcon.astro';
+import CopyIcon from '../../components/icons/CopyIcon.astro';
+import ExternalLinkIcon from '../../components/icons/ExternalLinkIcon.astro';
+import { getCollection } from 'astro:content';
+import { REPO_URL } from '../../lib/site';
+import { compareStackCategories } from '../../lib/stacks';
+
+const categories = (await getCollection('categories')).sort((a, b) => compareStackCategories(a.data, b.data));
+const resources = await getCollection('resources');
+const stacks = await getCollection('stacks');
+
+const groups = categories
+  .map((category) => ({
+    category: category.data,
+    items: resources
+      .filter((resource) => resource.data.categorySlug === category.data.categorySlug)
+      .sort((a, b) => a.data.name.localeCompare(b.data.name)),
+  }))
+  .filter((group) => group.items.length > 0);
+
+const description =
+  'Pick the AI tools, prompts, and skills you use and publish them as a shareable page at airesources.dev/stack/you.';
+
+const profileFields = [
+  { key: 'name', label: 'Name', placeholder: 'Ada Lovelace', required: true, maxlength: 60 },
+  { key: 'bio', label: 'Bio', placeholder: 'One line about what you build.', maxlength: 200 },
+  { key: 'website', label: 'Website', placeholder: 'https://', type: 'url' },
+  { key: 'github', label: 'GitHub username', placeholder: 'octocat', hint: 'Also used for your avatar.' },
+  { key: 'x', label: 'X username', placeholder: 'octocat' },
+  { key: 'avatar', label: 'Avatar URL', placeholder: 'https://', type: 'url', hint: 'Optional. Defaults to your GitHub avatar.' },
+];
+
+const cardClass = 'rounded-xl border border-black/[0.06] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]';
+const inputClass = 'h-10 w-full rounded-lg bg-white px-3 text-sm text-neutral-900 placeholder-neutral-400 shadow-[0_1px_2px_rgba(0,0,0,0.04)] ring-1 ring-inset ring-black/[0.08] transition focus:outline-none focus:ring-2 focus:ring-indigo-500/50';
+const labelClass = 'mb-1.5 block text-sm font-medium text-neutral-800';
+const hintClass = 'mt-1.5 text-xs text-neutral-500';
+const primaryButtonClass = 'inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white transition-colors hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white aria-disabled:pointer-events-none aria-disabled:opacity-50';
+const tonalButtonClass = 'inline-flex h-10 items-center justify-center gap-1.5 rounded-lg bg-black/[0.04] px-4 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40';
+---
+
+<Layout description={description} pageTitle="Create your AI stack">
+  <div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
+    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]"></div>
+    <div class="mx-auto max-w-4xl px-3 py-10 sm:px-6 lg:px-8">
+      <nav class="mb-6" aria-label="Breadcrumb">
+        <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-500">
+          <li class="whitespace-nowrap"><a href="/" class="transition-colors hover:text-neutral-900">Resources</a></li>
+          <span aria-hidden="true">/</span>
+          <li class="whitespace-nowrap"><a href="/stack/" class="transition-colors hover:text-neutral-900">Stacks</a></li>
+          <span aria-hidden="true">/</span>
+          <li><span class="font-medium text-neutral-900" aria-current="page">Create</span></li>
+        </ol>
+      </nav>
+
+      <header class="mb-8 max-w-2xl">
+        <h1 class="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">Create your AI stack</h1>
+        <p class="mt-3 text-[15px] leading-6 text-neutral-600 sm:text-base sm:leading-7">
+          Pick the tools you use, add a few words on why, and we turn it into a pull request. Your page goes live at
+          <span class="whitespace-nowrap font-medium text-neutral-800">airesources.dev/stack/you</span> once it's merged.
+        </p>
+      </header>
+
+      <form
+        data-stack-builder
+        data-new-file-url={`${REPO_URL}/new/main`}
+        data-taken-handles={stacks.map((stack) => stack.id).join(',')}
+        class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start"
+        novalidate
+      >
+        <div class="space-y-8">
+          <section class:list={[cardClass, 'p-6']} aria-labelledby="about-heading">
+            <SectionLabel label="Step 1" class="mb-1" />
+            <h2 id="about-heading" class="text-lg font-semibold text-neutral-900">About you</h2>
+
+            <div class="mt-5 grid gap-5 sm:grid-cols-2">
+              <div class="sm:col-span-2">
+                <label for="field-handle" class={labelClass}>Handle <span class="text-neutral-400">(your URL)</span></label>
+                <div class="flex items-stretch">
+                  <span class="inline-flex items-center rounded-l-lg bg-black/[0.04] px-3 font-mono text-xs text-neutral-500 ring-1 ring-inset ring-black/[0.08]">
+                    airesources.dev/stack/
+                  </span>
+                  <input
+                    id="field-handle"
+                    name="handle"
+                    type="text"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    maxlength="39"
+                    placeholder="you"
+                    class:list={[inputClass, 'rounded-l-none font-mono']}
+                  />
+                </div>
+                <p class={hintClass}>Lowercase letters, digits and hyphens. Your GitHub or X username is a good choice.</p>
+              </div>
+
+              {profileFields.map((field) => (
+                <div class:list={field.key === 'bio' && 'sm:col-span-2'}>
+                  <label for={`field-${field.key}`} class={labelClass}>
+                    {field.label}
+                    {!field.required && <span class="text-neutral-400"> (optional)</span>}
+                  </label>
+                  <input
+                    id={`field-${field.key}`}
+                    name={field.key}
+                    type={field.type ?? 'text'}
+                    placeholder={field.placeholder}
+                    maxlength={field.maxlength}
+                    required={field.required}
+                    autocomplete="off"
+                    class={inputClass}
+                  />
+                  {field.hint && <p class={hintClass}>{field.hint}</p>}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section class={cardClass} aria-labelledby="stack-heading">
+            <div class="p-6 pb-4">
+              <SectionLabel label="Step 2" class="mb-1" />
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h2 id="stack-heading" class="text-lg font-semibold text-neutral-900">Your stack</h2>
+                <p class="text-sm text-neutral-500">
+                  <span data-selected-count class="font-medium text-neutral-900">0</span> selected
+                  <button type="button" data-clear-picks hidden class="ml-2 text-indigo-600 transition-colors hover:text-indigo-500">Clear</button>
+                </p>
+              </div>
+              <p class="mt-1 text-sm text-neutral-500">Tick what you use. Once ticked, you can add a line on why.</p>
+              <div class="relative mt-4">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-neutral-400">
+                  <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                <input
+                  type="search"
+                  data-picker-search
+                  autocomplete="off"
+                  spellcheck="false"
+                  placeholder={`Search ${resources.length} resources...`}
+                  aria-label="Search resources by name"
+                  class:list={[inputClass, 'pl-10']}
+                />
+              </div>
+            </div>
+
+            <div class="border-t border-black/[0.06]">
+              {groups.map((group) => (
+                <fieldset data-picker-group class="min-w-0 border-b border-black/[0.06] last:border-b-0">
+                  <legend class="sr-only">{group.category.title}</legend>
+                  <div class="flex items-baseline justify-between gap-4 bg-neutral-50/80 px-6 py-2.5">
+                    <p class="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-neutral-500" aria-hidden="true">
+                      {group.category.title}
+                    </p>
+                    <p class="text-xs text-neutral-500">
+                      <span data-group-selected hidden class="font-medium text-indigo-600"></span>
+                      <span>{group.items.length}</span>
+                    </p>
+                  </div>
+                  <ul class="divide-y divide-black/[0.05]">
+                    {group.items.map((resource) => (
+                      <li data-pick data-name={resource.data.name.toLowerCase()}>
+                        <label class="flex cursor-pointer items-center gap-3 px-6 py-2.5 transition-colors hover:bg-black/[0.02]">
+                          <input type="checkbox" name="resource" value={resource.id} class="h-4 w-4 flex-shrink-0 accent-indigo-600" />
+                          <ResourceIcon item={resource.data} />
+                          <span class="min-w-0 flex-1">
+                            <span class="block truncate text-sm font-medium text-neutral-900">{resource.data.name}</span>
+                            <span class="block truncate text-xs text-neutral-500">{resource.data.description}</span>
+                          </span>
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </fieldset>
+              ))}
+              <p data-picker-empty hidden class="px-6 py-10 text-center text-sm text-neutral-500">No resources match your search.</p>
+            </div>
+          </section>
+        </div>
+
+        <aside class:list={[cardClass, 'p-5 lg:sticky lg:top-20']} aria-labelledby="preview-heading">
+          <SectionLabel label="Step 3" class="mb-1" />
+          <h2 id="preview-heading" class="text-lg font-semibold text-neutral-900">Publish</h2>
+          <p class="mt-1 break-all font-mono text-xs text-neutral-500">
+            src/content/stacks/<span data-preview-handle>you</span>.json
+          </p>
+          <pre data-preview-json class="mt-3 max-h-72 overflow-auto rounded-lg bg-neutral-100 p-4 font-mono text-xs leading-5 text-neutral-800"></pre>
+          <ul data-problems class="mt-3 space-y-1 text-xs text-amber-700"></ul>
+          <div class="mt-4 grid gap-2">
+            <a data-open-pr href={`${REPO_URL}/new/main`} target="_blank" rel="noopener noreferrer" class={primaryButtonClass} aria-disabled="true">
+              Open pull request on GitHub
+              <ExternalLinkIcon class="h-4 w-4" />
+            </a>
+            <button type="button" data-copy-json class={tonalButtonClass}>
+              <span class="flex" data-copy-idle><CopyIcon class="h-4 w-4" /></span>
+              <span class="flex text-green-600" data-copy-done hidden><CheckIcon class="h-4 w-4" /></span>
+              <span data-copy-label>Copy JSON</span>
+            </button>
+          </div>
+          <p class="mt-4 text-xs leading-5 text-neutral-500">
+            GitHub opens the new file for you and forks the repository if needed. Commit it, open the pull request, and your page is live once it's merged.
+          </p>
+          <p class="mt-3 text-xs text-neutral-500">
+            Your draft is saved in this browser.
+            <button type="button" data-reset-draft class="text-indigo-600 transition-colors hover:text-indigo-500">Start over</button>
+          </p>
+        </aside>
+      </form>
+    </div>
+  </div>
+
+  <template data-note-template>
+    <div class="px-6 pb-3 pl-[4.75rem]">
+      <input
+        type="text"
+        maxlength="160"
+        placeholder="Why do you use it? Optional; shown instead of the description."
+        autocomplete="off"
+        class="h-9 w-full rounded-lg bg-white px-3 text-sm text-neutral-900 placeholder-neutral-400 ring-1 ring-inset ring-black/[0.08] transition focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+      />
+    </div>
+  </template>
+</Layout>
+
+<script>
+  import { HANDLE_PATTERN, RESERVED_HANDLES } from '../../lib/stacks';
+
+  const USERNAME_PATTERN = /^@?[A-Za-z0-9_-]{1,39}$/;
+  const DRAFT_KEY = 'stack-builder-draft';
+  const PROFILE_KEYS = ['handle', 'name', 'bio', 'website', 'github', 'x', 'avatar'] as const;
+  type ProfileKey = (typeof PROFILE_KEYS)[number];
+
+  interface Draft {
+    profile: Partial<Record<ProfileKey, string>>;
+    picks: Record<string, string>; // resource id → note ('' for none)
+  }
+
+  const form = document.querySelector<HTMLFormElement>('[data-stack-builder]');
+  if (!form) throw new Error('Stack builder form missing');
+
+  const newFileUrl = form.dataset.newFileUrl ?? '';
+  const takenHandles = new Set((form.dataset.takenHandles ?? '').split(',').filter(Boolean));
+
+  const profileInputs = Object.fromEntries(
+    PROFILE_KEYS.map((key) => [key, form.elements.namedItem(key) as HTMLInputElement]),
+  ) as Record<ProfileKey, HTMLInputElement>;
+
+  const checkboxes = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="resource"]'));
+  const groups = Array.from(form.querySelectorAll<HTMLElement>('[data-picker-group]'));
+  const searchInput = form.querySelector<HTMLInputElement>('[data-picker-search]');
+  const pickerEmpty = form.querySelector<HTMLElement>('[data-picker-empty]');
+  const selectedCount = form.querySelector<HTMLElement>('[data-selected-count]');
+  const clearPicks = form.querySelector<HTMLButtonElement>('[data-clear-picks]');
+  const previewHandle = form.querySelector<HTMLElement>('[data-preview-handle]');
+  const previewJson = form.querySelector<HTMLElement>('[data-preview-json]');
+  const problemsList = form.querySelector<HTMLElement>('[data-problems]');
+  const openPr = form.querySelector<HTMLAnchorElement>('[data-open-pr]');
+  const copyJson = form.querySelector<HTMLButtonElement>('[data-copy-json]');
+  const resetDraft = form.querySelector<HTMLButtonElement>('[data-reset-draft]');
+  const noteTemplate = document.querySelector<HTMLTemplateElement>('[data-note-template]');
+
+  // Suggesting a handle from the first username stops once the visitor edits the handle.
+  let handleTouched = false;
+
+  const rowOf = (checkbox: HTMLInputElement) => checkbox.closest<HTMLElement>('[data-pick]');
+  const noteInputOf = (checkbox: HTMLInputElement) => rowOf(checkbox)?.querySelector<HTMLInputElement>('input[type="text"]') ?? null;
+
+  function setNoteVisible(checkbox: HTMLInputElement, visible: boolean, note = '') {
+    const row = rowOf(checkbox);
+    if (!row) return;
+    const existing = noteInputOf(checkbox);
+    if (visible && !existing && noteTemplate) {
+      const fragment = noteTemplate.content.cloneNode(true) as DocumentFragment;
+      const input = fragment.querySelector('input');
+      if (input) {
+        input.value = note;
+        input.setAttribute('aria-label', `Note for ${row.dataset.name ?? 'this resource'}`);
+      }
+      row.appendChild(fragment);
+    } else if (!visible && existing) {
+      existing.parentElement?.remove();
+    }
+  }
+
+  function toHandle(username: string): string {
+    return username
+      .toLowerCase()
+      .replace(/^@/, '')
+      .replace(/[^a-z0-9-]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 39);
+  }
+
+  function readProfile(): Record<ProfileKey, string> {
+    return Object.fromEntries(PROFILE_KEYS.map((key) => [key, profileInputs[key].value.trim()])) as Record<ProfileKey, string>;
+  }
+
+  function readPicks(): Array<{ id: string; note: string }> {
+    return checkboxes
+      .filter((checkbox) => checkbox.checked)
+      .map((checkbox) => ({ id: checkbox.value, note: noteInputOf(checkbox)?.value.trim() ?? '' }));
+  }
+
+  function problemsFor(profile: Record<ProfileKey, string>, picks: Array<{ id: string }>): string[] {
+    const problems: string[] = [];
+    if (!profile.handle) problems.push('Choose a handle for your URL.');
+    else if (!HANDLE_PATTERN.test(profile.handle)) problems.push('Handles use lowercase letters, digits and hyphens only.');
+    else if (RESERVED_HANDLES.has(profile.handle)) problems.push(`"${profile.handle}" is reserved. Pick another handle.`);
+    else if (takenHandles.has(profile.handle)) problems.push(`"${profile.handle}" is already taken. Pick another handle.`);
+    if (!profile.name) problems.push('Add your name.');
+    for (const key of ['website', 'avatar'] as const) {
+      if (profile[key] && !/^https?:\/\/\S+$/.test(profile[key])) problems.push(`${key === 'website' ? 'Website' : 'Avatar URL'} must start with https://.`);
+    }
+    for (const key of ['github', 'x'] as const) {
+      if (profile[key] && !USERNAME_PATTERN.test(profile[key])) problems.push(`${key === 'github' ? 'GitHub' : 'X'} username should be the bare username, not a URL.`);
+    }
+    if (picks.length === 0) problems.push('Pick at least one resource.');
+    return problems;
+  }
+
+  function buildStackJson(profile: Record<ProfileKey, string>, picks: Array<{ id: string; note: string }>): string {
+    const links = {
+      ...(profile.website && { website: profile.website }),
+      ...(profile.github && { github: profile.github.replace(/^@/, '') }),
+      ...(profile.x && { x: profile.x.replace(/^@/, '') }),
+    };
+    const stack = {
+      name: profile.name || 'Your name',
+      ...(profile.bio && { bio: profile.bio }),
+      ...(profile.avatar && { avatar: profile.avatar }),
+      ...(Object.keys(links).length > 0 && { links }),
+      updatedAt: new Date().toISOString().slice(0, 10),
+      stack: picks.map(({ id, note }) => (note ? { resource: id, note } : id)),
+    };
+    return `${JSON.stringify(stack, null, 2)}\n`;
+  }
+
+  function saveDraft(profile: Record<ProfileKey, string>, picks: Array<{ id: string; note: string }>) {
+    const draft: Draft = { profile, picks: Object.fromEntries(picks.map(({ id, note }) => [id, note])) };
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    } catch {
+      // Storage may be unavailable (private mode, quota); the builder still works without it.
+    }
+  }
+
+  function restoreDraft() {
+    let draft: Draft | undefined;
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      draft = raw ? (JSON.parse(raw) as Draft) : undefined;
+    } catch {
+      return;
+    }
+    if (!draft) return;
+    for (const key of PROFILE_KEYS) {
+      profileInputs[key].value = draft.profile?.[key] ?? '';
+    }
+    handleTouched = Boolean(draft.profile?.handle);
+    for (const checkbox of checkboxes) {
+      const note = draft.picks?.[checkbox.value];
+      checkbox.checked = note !== undefined;
+      setNoteVisible(checkbox, checkbox.checked, note ?? '');
+    }
+  }
+
+  function updateGroupCounts() {
+    for (const group of groups) {
+      const selected = group.querySelectorAll('input[name="resource"]:checked').length;
+      const badge = group.querySelector<HTMLElement>('[data-group-selected]');
+      if (badge) {
+        badge.hidden = selected === 0;
+        badge.textContent = `${selected} selected · `;
+      }
+    }
+  }
+
+  function update() {
+    const profile = readProfile();
+    const picks = readPicks();
+    const problems = problemsFor(profile, picks);
+    const json = buildStackJson(profile, picks);
+    const handle = profile.handle || 'you';
+
+    if (previewHandle) previewHandle.textContent = handle;
+    if (previewJson) previewJson.textContent = json;
+    if (selectedCount) selectedCount.textContent = String(picks.length);
+    if (clearPicks) clearPicks.hidden = picks.length === 0;
+
+    if (problemsList) {
+      problemsList.replaceChildren(
+        ...problems.map((problem) => {
+          const item = document.createElement('li');
+          item.textContent = problem;
+          return item;
+        }),
+      );
+    }
+
+    if (openPr) {
+      const ready = problems.length === 0;
+      const params = new URLSearchParams({ filename: `src/content/stacks/${handle}.json`, value: json });
+      openPr.href = `${newFileUrl}?${params}`;
+      openPr.setAttribute('aria-disabled', String(!ready));
+      openPr.tabIndex = ready ? 0 : -1;
+    }
+
+    updateGroupCounts();
+    saveDraft(profile, picks);
+  }
+
+  function filterPicker() {
+    const term = searchInput?.value.trim().toLowerCase() ?? '';
+    let visible = 0;
+    for (const group of groups) {
+      let groupVisible = 0;
+      for (const row of group.querySelectorAll<HTMLElement>('[data-pick]')) {
+        const match = !term || (row.dataset.name ?? '').includes(term);
+        row.hidden = !match;
+        if (match) groupVisible++;
+      }
+      group.hidden = groupVisible === 0;
+      visible += groupVisible;
+    }
+    if (pickerEmpty) pickerEmpty.hidden = visible > 0;
+  }
+
+  form.addEventListener('submit', (event) => event.preventDefault());
+
+  form.addEventListener('change', (event) => {
+    const target = event.target;
+    if (target instanceof HTMLInputElement && target.name === 'resource') {
+      setNoteVisible(target, target.checked);
+      if (target.checked) noteInputOf(target)?.focus();
+    }
+    update();
+  });
+
+  form.addEventListener('input', (event) => {
+    const target = event.target;
+    if (target === profileInputs.handle) handleTouched = true;
+    if (!handleTouched && (target === profileInputs.github || target === profileInputs.x)) {
+      profileInputs.handle.value = toHandle(profileInputs.github.value || profileInputs.x.value);
+    }
+    update();
+  });
+
+  searchInput?.addEventListener('input', filterPicker);
+
+  clearPicks?.addEventListener('click', () => {
+    for (const checkbox of checkboxes) {
+      checkbox.checked = false;
+      setNoteVisible(checkbox, false);
+    }
+    update();
+  });
+
+  openPr?.addEventListener('click', (event) => {
+    if (openPr.getAttribute('aria-disabled') === 'true') {
+      event.preventDefault();
+      problemsList?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+
+  resetDraft?.addEventListener('click', () => {
+    form.reset();
+    handleTouched = false;
+    for (const checkbox of checkboxes) setNoteVisible(checkbox, false);
+    filterPicker();
+    update();
+  });
+
+  const copyIdle = copyJson?.querySelector<HTMLElement>('[data-copy-idle]');
+  const copyDone = copyJson?.querySelector<HTMLElement>('[data-copy-done]');
+  const copyLabel = copyJson?.querySelector<HTMLElement>('[data-copy-label]');
+  let copyResetTimer: ReturnType<typeof setTimeout> | undefined;
+
+  function renderCopyState(text: string, copied: boolean) {
+    if (copyLabel) copyLabel.textContent = text;
+    if (copyIdle) copyIdle.hidden = copied;
+    if (copyDone) copyDone.hidden = !copied;
+  }
+
+  copyJson?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(previewJson?.textContent ?? '');
+      renderCopyState('Copied!', true);
+    } catch {
+      renderCopyState('Copy failed', false);
+    }
+    clearTimeout(copyResetTimer);
+    copyResetTimer = setTimeout(() => renderCopyState('Copy JSON', false), 2000);
+  });
+
+  restoreDraft();
+  update();
+</script>
