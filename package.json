@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "check": "astro check",
     "preview": "astro preview",
     "astro": "astro",
     "og-image": "node scripts/og-image.mjs"
@@ -20,6 +21,8 @@
     "tailwindcss": "^4.0.15"
   },
   "devDependencies": {
-    "sharp": "^0.34.5"
+    "@astrojs/check": "^0.9.10",
+    "sharp": "^0.34.5",
+    "typescript": "^5.9.3"
   }
 }
