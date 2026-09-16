@@ -1,46 +1,33 @@
 ---
 import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
 import Button from '../../components/ui/Button.astro';
+import Card from '../../components/ui/Card.astro';
+import CopyButton from '../../components/ui/Copy-Button.astro';
+import PageShell from '../../components/ui/Page-Shell.astro';
 import ResourceList from '../../components/ui/Resource-List.astro';
 import SectionLabel from '../../components/ui/Section-Label.astro';
 import StackAvatar from '../../components/ui/Stack-Avatar.astro';
 import HighlightIcon from '../../components/ui/Highlight-Icon.astro';
-import CheckIcon from '../../components/icons/CheckIcon.astro';
-import CopyIcon from '../../components/icons/CopyIcon.astro';
 import GitHubIcon from '../../components/icons/GitHubIcon.astro';
 import TwitterIcon from '../../components/icons/TwitterIcon.astro';
-import { getCollection } from 'astro:content';
-import { REPO_URL } from '../../lib/site';
+import { formatMonthYear, pluralize } from '../../lib/format';
 import { resourcePath } from '../../lib/resources';
-import { schemaOrgType } from '../../lib/structured-data';
-import {
-  formatMonthYear,
-  pluralize,
-  resolveStacks,
-  stackDescription,
-  stackPath,
-  stackShareText,
-} from '../../lib/stacks';
-import type { Stack } from '../../lib/stacks';
+import { REPO_URL, SITE_URL } from '../../lib/site';
+import { schemaOrgType, toJsonLd } from '../../lib/structured-data';
+import { getStacks, stackDescription, stackPath, stackShareText } from '../../lib/stacks';
+import type { StackSection } from '../../lib/stacks';
 
 export async function getStaticPaths() {
-  const stacks = resolveStacks(
-    await getCollection('stacks'),
-    await getCollection('resources'),
-    await getCollection('categories'),
-  );
+  const stacks = await getStacks();
   return stacks.map((stack) => ({ params: { handle: stack.handle }, props: { stack } }));
-}
-
-interface Props {
-  stack: Stack;
 }
 
 const { stack } = Astro.props;
 const { name, bio, links, updatedAt } = stack.data;
 
-const siteUrl = Astro.site || 'https://airesources.dev';
+const siteUrl = Astro.site ?? SITE_URL;
 const pageUrl = new URL(stackPath(stack.handle), siteUrl).href;
 const pageTitle = `${name}'s AI stack`;
 const description = stackDescription(stack);
@@ -48,12 +35,18 @@ const description = stackDescription(stack);
 const shareUrl = `https://x.com/intent/post?${new URLSearchParams({ text: stackShareText(stack), url: pageUrl })}`;
 const editUrl = `${REPO_URL}/edit/main/src/content/stacks/${stack.handle}.json`;
 
-const websiteLabel = links?.website ? new URL(links.website).hostname.replace(/^www\./, '') : undefined;
+const website = links?.website;
+const github = links?.github ? { href: `https://github.com/${links.github}`, label: links.github } : undefined;
+const x = links?.x ? { href: `https://x.com/${links.x}`, label: `@${links.x}` } : undefined;
+
 const profileLinks = [
-  links?.website && { href: links.website, label: websiteLabel, icon: 'globe' as const },
-  links?.github && { href: `https://github.com/${links.github}`, label: links.github, icon: 'github' as const },
-  links?.x && { href: `https://x.com/${links.x}`, label: `@${links.x}`, icon: 'x' as const },
-].filter((link): link is Exclude<typeof link, false | undefined> => Boolean(link));
+  ...(website ? [{ href: website, label: new URL(website).hostname.replace(/^www\./, ''), icon: 'globe' as const }] : []),
+  ...(github ? [{ ...github, icon: 'github' as const }] : []),
+  ...(x ? [{ ...x, icon: 'x' as const }] : []),
+];
+
+// Social profiles for schema.org `sameAs`; the website is the Person's `url`.
+const sameAs = [github, x].flatMap((profile) => (profile ? [profile.href] : []));
 
 const facts = [
   pluralize(stack.items.length, 'resource'),
@@ -61,8 +54,7 @@ const facts = [
   updatedAt && `Updated ${formatMonthYear(updatedAt)}`,
 ].filter(Boolean).join(' · ');
 
-// A note is the author's take on the resource, so it stands in for the catalog description.
-const listItems = (section: Stack['sections'][number]) =>
+const listItems = (section: StackSection) =>
   section.items.map(({ resource, note }) => (note ? { ...resource, description: note } : resource));
 
 const structuredData = {
@@ -77,8 +69,8 @@ const structuredData = {
     name,
     ...(bio && { description: bio }),
     ...(stack.avatarUrl && { image: stack.avatarUrl }),
-    ...(links?.website && { url: links.website }),
-    sameAs: profileLinks.filter((link) => link.icon !== 'globe').map((link) => link.href),
+    ...(website && { url: website }),
+    ...(sameAs.length > 0 && { sameAs }),
   },
   hasPart: {
     '@type': 'ItemList',
@@ -95,140 +87,81 @@ const structuredData = {
   },
 };
 
-const chipClass = 'inline-flex h-8 items-center gap-1.5 rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40';
-const tonalButtonClass = 'inline-flex h-9 items-center gap-1.5 rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40';
+const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href: '/stack/' }, { label: name }];
 ---
 
 <Layout description={description} pageTitle={pageTitle}>
-  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  <div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
-    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]"></div>
-    <div class="mx-auto max-w-4xl px-3 py-10 sm:px-6 lg:px-8">
-      <nav class="mb-6" aria-label="Breadcrumb">
-        <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
-          <li class="whitespace-nowrap" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a href="/" class="transition-colors hover:text-neutral-900" itemprop="item">
-              <span itemprop="name">Resources</span>
-            </a>
-            <meta itemprop="position" content="1" />
-          </li>
-          <span aria-hidden="true">/</span>
-          <li class="whitespace-nowrap" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <a href="/stack/" class="transition-colors hover:text-neutral-900" itemprop="item">
-              <span itemprop="name">Stacks</span>
-            </a>
-            <meta itemprop="position" content="2" />
-          </li>
-          <span aria-hidden="true">/</span>
-          <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <span class="font-medium text-neutral-900" itemprop="name" aria-current="page">{name}</span>
-            <meta itemprop="position" content="3" />
-          </li>
-        </ol>
-      </nav>
+  <script is:inline type="application/ld+json" set:html={toJsonLd(structuredData)} />
+  <PageShell>
+    <Breadcrumbs class="mb-6" items={breadcrumbs} />
 
-      <header class="rounded-xl border border-black/[0.06] bg-white p-6 shadow-[0_8px_30px_rgba(0,0,0,0.04)] md:p-8">
-        <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
-          <StackAvatar stack={stack} size="lg" />
-          <div class="min-w-0 flex-1">
-            <SectionLabel label={facts} class="mb-2" />
-            <h1 class="break-words text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl md:text-4xl">
-              {pageTitle}
-            </h1>
-            {bio && (
-              <p class="mt-3 max-w-2xl text-[15px] leading-6 text-neutral-600 sm:text-base sm:leading-7">{bio}</p>
-            )}
-            {profileLinks.length > 0 && (
-              <ul class="mt-5 flex flex-wrap gap-2">
-                {profileLinks.map((link) => (
-                  <li>
-                    <a href={link.href} target="_blank" rel="noopener noreferrer me" class={chipClass}>
-                      {link.icon === 'github' && <GitHubIcon class="h-3.5 w-3.5" />}
-                      {link.icon === 'x' && <TwitterIcon class="h-3.5 w-3.5" />}
-                      {link.icon === 'globe' && <HighlightIcon name="globe" class="h-3.5 w-3.5" />}
-                      {link.label}
-                      <span class="sr-only">(opens in new tab)</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <div class="flex flex-shrink-0 gap-2 sm:flex-col">
-            <button type="button" data-copy-link class={tonalButtonClass} title="Copy the link to this stack">
-              <span class="flex" data-copy-idle><CopyIcon class="h-4 w-4" /></span>
-              <span class="flex text-green-600" data-copy-done hidden><CheckIcon class="h-4 w-4" /></span>
-              <span data-copy-label>Copy link</span>
-            </button>
-            <a href={shareUrl} target="_blank" rel="noopener noreferrer" class={tonalButtonClass}>
-              <TwitterIcon class="h-3.5 w-3.5" />
-              Share
-              <span class="sr-only">on X (opens in new tab)</span>
-            </a>
-          </div>
+    <Card as="header" class="p-6 md:p-8">
+      <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
+        <StackAvatar name={name} avatarUrl={stack.avatarUrl} size="lg" />
+        <div class="min-w-0 flex-1">
+          <SectionLabel label={facts} class="mb-2" />
+          <h1 class="break-words text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl md:text-4xl">
+            {pageTitle}
+          </h1>
+          {bio && (
+            <p class="mt-3 max-w-2xl text-[15px] leading-6 text-neutral-600 sm:text-base sm:leading-7">{bio}</p>
+          )}
+          {profileLinks.length > 0 && (
+            <ul class="mt-5 flex flex-wrap gap-2">
+              {profileLinks.map((link) => (
+                <li>
+                  <Button variant="tonal" href={link.href} class="h-8 gap-1.5 px-3">
+                    {link.icon === 'github' && <GitHubIcon class="h-3.5 w-3.5" />}
+                    {link.icon === 'x' && <TwitterIcon class="h-3.5 w-3.5" />}
+                    {link.icon === 'globe' && <HighlightIcon name="globe" class="h-3.5 w-3.5" />}
+                    {link.label}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-      </header>
-
-      {stack.sections.map((section) => (
-        <section class="mt-10" aria-labelledby={`section-${section.category.categorySlug}`}>
-          <div class="mb-3 flex items-baseline justify-between gap-4">
-            <h2 id={`section-${section.category.categorySlug}`} class="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-neutral-500">
-              {section.category.title}
-              <span aria-hidden="true"> · </span>{section.items.length}
-            </h2>
-            <a href={`/category/${section.category.categorySlug}/`} class="text-xs text-neutral-500 transition-colors hover:text-neutral-900">
-              All {section.category.title.toLowerCase()} →
-            </a>
-          </div>
-          <ResourceList items={listItems(section)} />
-        </section>
-      ))}
-
-      <section class="mt-14 rounded-xl border border-dashed border-black/[0.12] px-6 py-8 text-center">
-        <h2 class="text-lg font-semibold text-neutral-900">What's in your stack?</h2>
-        <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-600">
-          Pick your tools, prompts, and skills from the directory and get a page like this one at
-          <span class="whitespace-nowrap font-medium text-neutral-800">airesources.dev/stack/you</span>.
-        </p>
-        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
-          <Button href="/stack/new/" class="h-10 px-5">Create your stack</Button>
-          <a href="/stack/" class={tonalButtonClass}>Browse stacks</a>
+        <div class="flex flex-shrink-0 gap-2 sm:flex-col">
+          <CopyButton text={pageUrl} label="Copy link" title="Copy the link to this stack" class="px-3" />
+          <Button variant="tonal" href={shareUrl} class="gap-1.5 px-3">
+            <TwitterIcon class="h-3.5 w-3.5" />
+            Share<span class="sr-only"> on X</span>
+          </Button>
         </div>
-        <p class="mt-6 text-xs text-neutral-500">
-          Is this your stack?
-          <a href={editUrl} target="_blank" rel="noopener noreferrer" class="text-indigo-600 transition-colors hover:text-indigo-500">Update it on GitHub</a>
-        </p>
+      </div>
+    </Card>
+
+    {stack.sections.map((section) => (
+      <section class="mt-10" aria-labelledby={`section-${section.category.categorySlug}`}>
+        <div class="mb-3 flex items-baseline justify-between gap-4">
+          <h2 id={`section-${section.category.categorySlug}`} class="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-neutral-500">
+            {section.category.title}
+            <span aria-hidden="true"> · </span>{section.items.length}
+          </h2>
+          <a href={`/category/${section.category.categorySlug}/`} class="text-xs text-neutral-500 transition-colors hover:text-neutral-900">
+            All {section.category.title.toLowerCase()} →
+          </a>
+        </div>
+        <ResourceList items={listItems(section)} />
       </section>
-    </div>
-  </div>
+    ))}
+
+    <section class="mt-14 rounded-xl border border-dashed border-black/[0.12] px-6 py-8 text-center">
+      <h2 class="text-lg font-semibold text-neutral-900">What's in your stack?</h2>
+      <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-600">
+        Pick your tools, prompts, and skills from the directory and get a page like this one at
+        <span class="whitespace-nowrap font-medium text-neutral-800">airesources.dev/stack/you</span>.
+      </p>
+      <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+        <Button href="/stack/new/" class="h-10 px-5">Create your stack</Button>
+        <Button variant="tonal" href="/stack/">Browse stacks</Button>
+      </div>
+      <p class="mt-6 text-xs text-neutral-500">
+        Is this your stack?
+        <a href={editUrl} target="_blank" rel="noopener noreferrer" class="text-indigo-600 transition-colors hover:text-indigo-500">
+          Update it on GitHub<span class="sr-only"> (opens in new tab)</span>
+        </a>
+      </p>
+    </section>
+  </PageShell>
 </Layout>
-
-<script>
-  const button = document.querySelector<HTMLButtonElement>('[data-copy-link]');
-  const idleIcon = button?.querySelector<HTMLElement>('[data-copy-idle]');
-  const doneIcon = button?.querySelector<HTMLElement>('[data-copy-done]');
-  const label = button?.querySelector<HTMLElement>('[data-copy-label]');
-  let resetTimer: ReturnType<typeof setTimeout> | undefined;
-
-  function render(text: string, copied: boolean) {
-    if (label) label.textContent = text;
-    if (idleIcon) idleIcon.hidden = copied;
-    if (doneIcon) doneIcon.hidden = !copied;
-  }
-
-  function showFeedback(text: string, copied: boolean) {
-    render(text, copied);
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(() => render('Copy link', false), 2000);
-  }
-
-  button?.addEventListener('click', async () => {
-    const url = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href ?? window.location.href;
-    try {
-      await navigator.clipboard.writeText(url);
-      showFeedback('Copied!', true);
-    } catch {
-      showFeedback('Copy failed', false);
-    }
-  });
-</script>

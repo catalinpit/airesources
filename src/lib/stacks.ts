@@ -1,23 +1,20 @@
+import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-import type { Resource } from './resources';
+import { basename } from 'node:path';
+import { pluralize } from './format';
+import { groupByCategory } from './resources';
+import type { Category, CategoryGroup, Resource } from './resources';
+import { HANDLE_PATTERN, RESERVED_HANDLES } from './stack-rules';
 
-// Only type imports from astro:content: the builder's client script imports the
-// handle rules from this module, so it must stay free of server-only code.
-
-export type Category = CollectionEntry<'categories'>['data'];
 export type StackData = CollectionEntry<'stacks'>['data'];
 type StackEntry = CollectionEntry<'stacks'>;
 
-/** A stack entry with its resource resolved. `note` replaces the description on the stack page. */
 export interface StackItem {
   resource: Resource;
   note?: string;
 }
 
-export interface StackSection {
-  category: Category;
-  items: StackItem[];
-}
+export type StackSection = CategoryGroup<StackItem>;
 
 export interface Stack {
   /** URL segment, taken from the file name: src/content/stacks/<handle>.json → /stack/<handle>/ */
@@ -29,13 +26,6 @@ export interface Stack {
   sections: StackSection[];
   avatarUrl?: string;
 }
-
-// Handles double as URL segments, so they follow GitHub username rules:
-// lowercase letters, digits and inner hyphens, 1–39 characters.
-export const HANDLE_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,37}[a-z0-9])?$/;
-
-// Routes under /stack/ that a handle must not shadow.
-export const RESERVED_HANDLES = new Set(['new', 'index']);
 
 /**
  * Categories in the order a stack page lists them: the tools you live in first,
@@ -71,18 +61,24 @@ export function compareStackCategories(a: Category, b: Category): number {
   return rank(a) - rank(b) || a.title.localeCompare(b.title);
 }
 
-function stackFile(entry: StackEntry): string {
-  return entry.filePath ?? `src/content/stacks/${entry.id}.json`;
+function assertSectionOrderIsCurrent(categories: Category[]) {
+  const slugs = new Set(categories.map((category) => category.categorySlug));
+  const stale = STACK_SECTION_ORDER.filter((slug) => !slugs.has(slug));
+  if (stale.length > 0) {
+    throw new Error(`STACK_SECTION_ORDER in src/lib/stacks.ts names categories that no longer exist: ${stale.join(', ')}`);
+  }
 }
 
-function resolveStack(
-  entry: StackEntry,
-  resourcesById: Map<string, Resource>,
-  categoriesBySlug: Map<string, Category>,
-): Stack {
-  const file = stackFile(entry);
+function resolveStack(entry: StackEntry, resourcesById: Map<string, Resource>, categories: Category[]): Stack {
   const handle = entry.id;
+  const file = entry.filePath;
+  if (!file) throw new Error(`Stack "${handle}" was not loaded from a file.`);
 
+  // The loader derives the id from the file name (lowercasing it, among other
+  // things), so the two can disagree; the URL must come from the literal name.
+  if (basename(file) !== `${handle}.json`) {
+    throw new Error(`${file}: rename the file to "${handle}.json"; the file name is the URL (/stack/${handle}/).`);
+  }
   if (!HANDLE_PATTERN.test(handle)) {
     throw new Error(
       `${file}: the file name becomes the URL /stack/${handle}/, so it must use only lowercase letters, digits and inner hyphens (1–39 characters).`,
@@ -93,32 +89,21 @@ function resolveStack(
   }
 
   const seen = new Set<string>();
-  const items = entry.data.stack.map(({ resource: ref, note }): StackItem => {
-    const resource = resourcesById.get(ref.id);
+  const items = entry.data.stack.map(({ resource: id, note }): StackItem => {
+    const resource = resourcesById.get(id);
     if (!resource) {
       throw new Error(
-        `${file}: unknown resource "${ref.id}". Use the resource's path under src/content/resources without the extension, e.g. "coding-tools/cursor".`,
+        `${file}: unknown resource "${id}". Use the resource's path under src/content/resources without the extension, e.g. "coding-tools/cursor".`,
       );
     }
-    if (seen.has(ref.id)) {
-      throw new Error(`${file}: "${ref.id}" is listed twice.`);
-    }
-    seen.add(ref.id);
+    if (seen.has(id)) throw new Error(`${file}: "${id}" is listed twice.`);
+    seen.add(id);
     return note ? { resource, note } : { resource };
   });
 
-  const bySlug = new Map<string, StackSection>();
-  for (const item of items) {
-    const slug = item.resource.categorySlug;
-    const category = categoriesBySlug.get(slug);
-    if (!category) {
-      throw new Error(`${file}: "${item.resource.name}" belongs to the unknown category "${slug}".`);
-    }
-    const section = bySlug.get(slug) ?? { category, items: [] };
-    section.items.push(item);
-    bySlug.set(slug, section);
-  }
-  const sections = [...bySlug.values()].sort((a, b) => compareStackCategories(a.category, b.category));
+  const sections = groupByCategory(items, (item) => item.resource.categorySlug, categories).sort((a, b) =>
+    compareStackCategories(a.category, b.category),
+  );
 
   const github = entry.data.links?.github;
   const avatarUrl = entry.data.avatar ?? (github ? `https://github.com/${github}.png` : undefined);
@@ -126,17 +111,19 @@ function resolveStack(
   return { handle, data: entry.data, items, sections, avatarUrl };
 }
 
-/** Every stack with its resources resolved, sorted by name. Throws (failing the build) on a bad reference. */
-export function resolveStacks(
-  entries: StackEntry[],
-  resources: CollectionEntry<'resources'>[],
-  categories: CollectionEntry<'categories'>[],
-): Stack[] {
+/** Every stack with its resources resolved, sorted by name. Throws (failing the build) on a bad file. */
+export async function getStacks(): Promise<Stack[]> {
+  const [entries, resources, categories] = await Promise.all([
+    getCollection('stacks'),
+    getCollection('resources'),
+    getCollection('categories'),
+  ]);
+  const categoryData = categories.map((category) => category.data);
+  assertSectionOrderIsCurrent(categoryData);
   const resourcesById = new Map(resources.map((resource) => [resource.id, resource.data]));
-  const categoriesBySlug = new Map(categories.map((category) => [category.data.categorySlug, category.data]));
 
   return entries
-    .map((entry) => resolveStack(entry, resourcesById, categoriesBySlug))
+    .map((entry) => resolveStack(entry, resourcesById, categoryData))
     .sort((a, b) => a.data.name.localeCompare(b.data.name));
 }
 
@@ -150,10 +137,6 @@ export function stackSummary(stack: Stack, shown = 3): string {
   return `${head.slice(0, -1).join(', ')} and ${head[head.length - 1]}`;
 }
 
-export function pluralize(count: number, singular: string, plural = `${singular}s`): string {
-  return `${count} ${count === 1 ? singular : plural}`;
-}
-
 /** Meta description for a stack page. */
 export function stackDescription(stack: Stack): string {
   const scope = `${pluralize(stack.items.length, 'resource')} across ${pluralize(stack.sections.length, 'category', 'categories')}`;
@@ -163,9 +146,4 @@ export function stackDescription(stack: Stack): string {
 /** Text for the share button; the page URL is appended by the share target. */
 export function stackShareText(stack: Stack): string {
   return `${stack.data.name}'s AI stack: ${stackSummary(stack)}`;
-}
-
-/** "Sep 2026" from a YYYY-MM-DD string. */
-export function formatMonthYear(date: string): string {
-  return new Intl.DateTimeFormat('en', { month: 'short', year: 'numeric', timeZone: 'UTC' }).format(new Date(date));
 }

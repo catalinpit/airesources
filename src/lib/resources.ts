@@ -1,6 +1,34 @@
 import type { CollectionEntry } from 'astro:content';
 
 export type Resource = CollectionEntry<'resources'>['data'];
+export type Category = CollectionEntry<'categories'>['data'];
+
+export interface CategoryGroup<T> {
+  category: Category;
+  items: T[];
+}
+
+/**
+ * Buckets items under their category. Items keep their order; groups appear in
+ * the order their category is first seen. An unknown slug fails the build.
+ */
+export function groupByCategory<T>(
+  items: T[],
+  categorySlugOf: (item: T) => string,
+  categories: Category[],
+): CategoryGroup<T>[] {
+  const categoriesBySlug = new Map(categories.map((category) => [category.categorySlug, category]));
+  const groups = new Map<string, CategoryGroup<T>>();
+  for (const item of items) {
+    const slug = categorySlugOf(item);
+    const category = categoriesBySlug.get(slug);
+    if (!category) throw new Error(`Unknown category "${slug}"; add it to src/content/categories/.`);
+    const group = groups.get(slug) ?? { category, items: [] };
+    group.items.push(item);
+    groups.set(slug, group);
+  }
+  return [...groups.values()];
+}
 
 /**
  * How a resource is presented:

@@ -1,16 +1,24 @@
 ---
-interface Props {
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'tonal';
+
+interface Props extends HTMLAttributes<'button'> {
+  /** Renders an anchor. Off-site links open in a new tab; site-relative ones navigate in place. */
   href?: string;
-  type?: 'button' | 'submit' | 'reset';
-  class?: string;
+  variant?: Variant;
 }
 
-const { href, type = 'button', class: className = '' } = Astro.props;
+const { href, type = 'button', variant = 'primary', class: className, ...attrs } = Astro.props;
 
-// Only off-site links open in a new tab; site-relative hrefs navigate in place.
-const isExternal = href !== undefined && /^https?:\/\//.test(href);
+const isExternal = href !== undefined && /^https?:\/\//i.test(href);
 
-const buttonClass = 'inline-flex h-9 items-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white transition-colors hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 disabled:cursor-not-allowed disabled:opacity-50';
+const baseClass = 'inline-flex h-9 items-center justify-center rounded-lg px-4 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50';
+
+const variantClass: Record<Variant, string> = {
+  primary: 'bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50',
+  tonal: 'bg-black/[0.04] text-neutral-700 hover:bg-black/[0.08] hover:text-neutral-900',
+};
 ---
 
 {
@@ -19,13 +27,14 @@ const buttonClass = 'inline-flex h-9 items-center rounded-lg bg-indigo-600 px-4 
       href={href}
       target={isExternal ? '_blank' : undefined}
       rel={isExternal ? 'noopener noreferrer' : undefined}
-      class:list={[buttonClass, className]}
+      class:list={[baseClass, variantClass[variant], className]}
+      {...attrs}
     >
       <slot />
       {isExternal && <span class="sr-only">(opens in new tab)</span>}
     </a>
   ) : (
-    <button type={type} class:list={[buttonClass, className]}>
+    <button type={type} class:list={[baseClass, variantClass[variant], className]} {...attrs}>
       <slot />
     </button>
   )

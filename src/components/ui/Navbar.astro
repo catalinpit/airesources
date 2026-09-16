@@ -4,7 +4,10 @@ import LogoIcon from '../icons/LogoIcon.astro';
 import CategoryDropdown from './CategoryDropdown.astro';
 import { REPO_URL } from '../../lib/site';
 
-const onStacks = Astro.url.pathname.startsWith('/stack/');
+const { pathname } = Astro.url;
+const onStacks = pathname.startsWith('/stack/');
+// "page" only on /stack/ itself; child routes mark the link as the current section.
+const stacksCurrent = pathname === '/stack/' ? 'page' : onStacks ? 'true' : undefined;
 ---
 
 <header class="sticky top-0 z-40 border-b border-black/[0.06] bg-white/85 backdrop-blur">
@@ -20,7 +23,7 @@ const onStacks = Astro.url.pathname.startsWith('/stack/');
           "inline-flex h-9 items-center rounded-lg px-2.5 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 sm:px-3",
           onStacks ? "bg-black/[0.04] text-neutral-900" : "text-neutral-700 hover:bg-black/[0.04] hover:text-neutral-900",
         ]}
-        aria-current={onStacks ? 'page' : undefined}
+        aria-current={stacksCurrent}
       >
         Stacks
       </a>

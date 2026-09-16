@@ -1,7 +1,8 @@
-import { defineCollection, reference } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { HIGHLIGHT_ICONS } from './lib/highlight-icons';
+import { STACK_LIMITS, USERNAME_PATTERN, stripAt } from './lib/stack-rules';
 
 const categories = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/categories' }),
@@ -58,7 +59,7 @@ const resources = defineCollection({
     // from `curriculum`, so don't repeat them here.
     accessNote: z.string().optional(),
     categorySlug: z.string(),
-    link: z.string().url().optional(),
+    link: z.url().optional(),
     iconUrl: z.string().optional(),
     previewImage: z.string().optional(),
     type: z.enum(RESOURCE_TYPES).optional(), // `course` selects the course page layout
@@ -105,38 +106,45 @@ const resources = defineCollection({
   }),
 });
 
-// A GitHub or X username; a leading "@" is tolerated and dropped.
 const username = z
   .string()
   .trim()
-  .regex(/^@?[A-Za-z0-9_-]{1,39}$/, 'Use the bare username, not a profile URL')
-  .transform((value) => value.replace(/^@/, ''));
+  .regex(USERNAME_PATTERN, 'Use the bare username, not a profile URL')
+  .transform(stripAt);
 
-// One resource in a stack: either the resource id (its path under
-// src/content/resources without the extension, e.g. "coding-tools/cursor") or
-// an object that adds a note. Both forms normalize to the object form.
+// These end up in href attributes, so only web URLs are accepted.
+const httpUrl = z.url({ protocol: /^https?$/, hostname: z.regexes.domain });
+
+// A resource's id is its path under src/content/resources without the
+// extension, e.g. "coding-tools/cursor". Existence is checked in src/lib/stacks.ts.
+const resourceId = z.string().trim().min(1);
+
+// One resource in a stack: the bare id, or an object that adds a note. Both
+// forms normalize to the object form.
 const stackItem = z
   .union([
-    reference('resources'),
-    z.object({
-      resource: reference('resources'),
+    resourceId,
+    z.strictObject({
+      resource: resourceId,
       // Replaces the resource's description on the stack page, so it reads in the author's voice.
-      note: z.string().trim().min(1).max(160).optional(),
+      note: z.string().trim().min(1).max(STACK_LIMITS.note).optional(),
     }),
   ])
-  .transform((item) => ('resource' in item ? item : { resource: item }));
+  .transform((item) => (typeof item === 'string' ? { resource: item } : item));
 
 // A person's AI stack, published at /stack/<handle>/. The handle is the file
 // name (src/content/stacks/<handle>.json), validated in src/lib/stacks.ts.
+// Strict objects keep a stray key (a typo, or `slug`, which the loader would
+// otherwise take as the entry id) from slipping through.
 const stacks = defineCollection({
   loader: glob({ pattern: '*.json', base: './src/content/stacks' }),
-  schema: z.object({
-    name: z.string().trim().min(1).max(60),
-    bio: z.string().trim().max(200).optional(),
-    avatar: z.string().url().optional(), // Falls back to the GitHub avatar when links.github is set
+  schema: z.strictObject({
+    name: z.string().trim().min(1).max(STACK_LIMITS.name),
+    bio: z.string().trim().max(STACK_LIMITS.bio).optional(),
+    avatar: httpUrl.optional(), // Falls back to the GitHub avatar when links.github is set
     links: z
-      .object({
-        website: z.string().url().optional(),
+      .strictObject({
+        website: httpUrl.optional(),
         github: username.optional(),
         x: username.optional(),
       })

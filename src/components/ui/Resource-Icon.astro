@@ -37,12 +37,13 @@ const typeTint = item.skill
     ? 'bg-indigo-100 text-indigo-700'
     : 'bg-sky-100 text-sky-700';
 
-// Both sizes are styled by .resource-icon in global.css; "sm" is the default
-// and "lg" is selected by the data-size attribute.
+// Both sizes are styled by .resource-icon below; "sm" is the default and "lg"
+// is selected by the data-size attribute. The tile is a span (displayed flex)
+// rather than a div so it is valid inside inline contexts such as a <label>.
 const sizeAttr = size === 'lg' ? 'lg' : undefined;
 ---
 
-<div class:list={["resource-icon", TypeIcon ? typeTint : hue, className]} data-size={sizeAttr}>
+<span class:list={["resource-icon", TypeIcon ? typeTint : hue, className]} data-size={sizeAttr}>
   {TypeIcon ? (
     <TypeIcon />
   ) : (
@@ -51,7 +52,7 @@ const sizeAttr = size === 'lg' ? 'lg' : undefined;
       {hasFavicon && <img src={item.iconUrl} alt="" loading="lazy" data-favicon />}
     </>
   )}
-</div>
+</span>
 
 <script>
   function markLoaded(img: HTMLImageElement) {

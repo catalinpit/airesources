@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Layout from '../layouts/layout.astro';
+import PageShell from '../components/ui/Page-Shell.astro';
 import LogoIcon from '../components/icons/LogoIcon.astro';
 import { getCollection } from 'astro:content';
 
@@ -21,9 +22,8 @@ const categoryLinks = categories
 ---
 
 <Layout description={description} pageTitle="Resource Not Found">
-  <div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
-    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]"></div>
-    <section class="mx-auto max-w-4xl px-3 py-14 sm:px-6 sm:py-18 lg:px-8">
+  <PageShell class="py-14 sm:py-18">
+    <section>
       <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
         <div class="max-w-3xl">
           <div class="mb-5 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700">
@@ -72,5 +72,5 @@ const categoryLinks = categories
         )}
       </div>
     </section>
-  </div>
+  </PageShell>
 </Layout>
