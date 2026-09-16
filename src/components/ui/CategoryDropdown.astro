@@ -93,21 +93,22 @@ const currentPath = Astro.url.pathname;
 	if (toggle && dropdown) {
 		let isOpen = false;
 
-		function openDropdown() {
+		// Arrow functions rather than hoisted declarations, so the null checks above still apply inside.
+		const openDropdown = () => {
 			isOpen = true;
 			dropdown.classList.remove('opacity-0', 'pointer-events-none', 'scale-[0.98]', 'translate-y-1');
 			dropdown.classList.add('opacity-100', 'pointer-events-auto', 'scale-100', 'translate-y-0');
 			chevron?.classList.add('rotate-180');
 			toggle.setAttribute('aria-expanded', 'true');
-		}
+		};
 
-		function closeDropdown() {
+		const closeDropdown = () => {
 			isOpen = false;
 			dropdown.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100', 'translate-y-0');
 			dropdown.classList.add('opacity-0', 'pointer-events-none', 'scale-[0.98]', 'translate-y-1');
 			chevron?.classList.remove('rotate-180');
 			toggle.setAttribute('aria-expanded', 'false');
-		}
+		};
 
 		toggle.addEventListener('click', (e) => {
 			e.stopPropagation();
