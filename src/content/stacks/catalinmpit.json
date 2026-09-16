@@ -1,0 +1,25 @@
+{
+  "name": "Catalin Pit",
+  "bio": "Software engineer and developer educator. Curates airesources.dev.",
+  "links": {
+    "website": "https://catalins.tech",
+    "github": "catalinpit",
+    "x": "catalinmpit"
+  },
+  "updatedAt": "2026-09-16",
+  "stack": [
+    { "resource": "coding-tools/cursor", "note": "Daily editor. Agent mode and Tab do most of the typing." },
+    { "resource": "coding-tools/claude-code", "note": "For long, multi-file tasks I hand off from the terminal." },
+    "coding-tools/warp",
+    "cli-assistants/gptcomet",
+    "extensions/github-copilot",
+    "code-review/coderabbit",
+    "chat-bots/claude",
+    "chat-bots/chatgpt",
+    "voice-generation/handy",
+    { "resource": "skills/grill-me", "note": "Run before starting anything non-trivial." },
+    "prompts/code-review-git-diff",
+    "prompts/generate-unit-tests",
+    "courses/principled-ai-coding"
+  ]
+}

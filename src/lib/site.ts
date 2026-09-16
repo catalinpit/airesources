@@ -5,3 +5,5 @@ export const SITE_TAGLINE = 'Vetted AI tools';
 
 export const SITE_DESCRIPTION =
   'Hand-picked AI coding tools, agents, extensions, prompts, and courses for busy builders.';
+
+export const REPO_URL = 'https://github.com/catalinpit/airesources';

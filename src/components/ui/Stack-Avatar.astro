@@ -1,0 +1,32 @@
+---
+import type { Stack } from '../../lib/stacks';
+
+interface Props {
+  stack: Pick<Stack, 'data' | 'avatarUrl'>;
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+}
+
+const { stack, size = 'md', class: className } = Astro.props;
+
+const sizeClass = {
+  sm: 'h-8 w-8 text-xs',
+  md: 'h-12 w-12 text-base',
+  lg: 'h-16 w-16 text-xl sm:h-20 sm:w-20 sm:text-2xl',
+}[size];
+
+// The initial sits underneath the image, so a missing or dead avatar URL still
+// leaves a tile. An empty alt keeps browsers from drawing a broken-image glyph.
+const initial = stack.data.name.charAt(0).toUpperCase();
+---
+
+<div class:list={[
+  "relative flex flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-indigo-100 font-semibold text-indigo-700 ring-2 ring-black/[0.06]",
+  sizeClass,
+  className,
+]}>
+  <span aria-hidden="true">{initial}</span>
+  {stack.avatarUrl && (
+    <img src={stack.avatarUrl} alt="" class="absolute inset-0 h-full w-full object-cover" />
+  )}
+</div>
