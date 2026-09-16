@@ -1,0 +1,55 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ResourceIcon from './Resource-Icon.astro';
+
+interface Props {
+  resource: CollectionEntry<'resources'>;
+}
+
+const { resource } = Astro.props;
+---
+
+<li data-pick>
+  <label class="stack-pick">
+    <input type="checkbox" name="resource" value={resource.id} class="stack-pick-box" />
+    <ResourceIcon item={resource.data} />
+    <span class="stack-pick-body">
+      <span class="stack-pick-title" data-pick-title>{resource.data.name}</span>
+      <span class="stack-pick-description">{resource.data.description}</span>
+    </span>
+  </label>
+</li>
+
+<style is:global>
+  @reference "../../styles/global.css";
+
+  /* The builder renders one of these per resource (~200 per page), so like
+     .resource-row the utilities live here once instead of in every row. */
+  @layer components {
+    .stack-pick {
+      @apply flex cursor-pointer items-center gap-3 px-6 py-2.5 hover:bg-black/[0.02];
+      transition: background-color var(--default-transition-duration) var(--default-transition-timing-function);
+    }
+
+    .stack-pick-box {
+      @apply h-4 w-4 flex-shrink-0 accent-indigo-600;
+    }
+
+    .stack-pick-body {
+      @apply min-w-0 flex-1;
+    }
+
+    .stack-pick-title {
+      @apply block truncate text-sm font-medium text-neutral-900;
+    }
+
+    .stack-pick-description {
+      @apply block truncate text-xs text-neutral-500;
+    }
+
+    /* The note field the builder inserts under a ticked row, aligned with its title. */
+    .stack-pick-note {
+      @apply px-6 pb-3 pl-[4.75rem];
+    }
+  }
+</style>

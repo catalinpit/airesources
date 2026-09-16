@@ -1,0 +1,60 @@
+---
+import Button from './Button.astro';
+import CheckIcon from '../icons/CheckIcon.astro';
+import CopyIcon from '../icons/CopyIcon.astro';
+
+interface Props {
+  /** Text to copy. Alternatively set `copyFrom` to a selector whose textContent is copied at click time. */
+  text?: string;
+  copyFrom?: string;
+  label?: string;
+  title?: string;
+  class?: string;
+}
+
+const { text, copyFrom, label = 'Copy', title, class: className } = Astro.props;
+---
+
+<Button
+  variant="tonal"
+  class:list={["gap-1.5", className]}
+  title={title}
+  data-copy-button
+  data-copy-text={text}
+  data-copy-from={copyFrom}
+>
+  <span class="flex" data-copy-idle><CopyIcon class="h-4 w-4" /></span>
+  <span class="flex text-green-600" data-copy-done hidden><CheckIcon class="h-4 w-4" /></span>
+  <span data-copy-label>{label}</span>
+</Button>
+
+<script>
+  const FEEDBACK_MS = 2000;
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy-button]')) {
+    const idle = button.querySelector<HTMLElement>('[data-copy-idle]');
+    const done = button.querySelector<HTMLElement>('[data-copy-done]');
+    const label = button.querySelector<HTMLElement>('[data-copy-label]');
+    const idleText = label?.textContent ?? 'Copy';
+    let resetTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const render = (text: string, copied: boolean) => {
+      if (label) label.textContent = text;
+      if (idle) idle.hidden = copied;
+      if (done) done.hidden = !copied;
+    };
+
+    button.addEventListener('click', async () => {
+      const { copyFrom, copyText } = button.dataset;
+      const text = copyFrom ? document.querySelector(copyFrom)?.textContent : copyText;
+      try {
+        await navigator.clipboard.writeText(text ?? '');
+        render('Copied!', true);
+      } catch {
+        render('Copy failed', false);
+      }
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(() => render(idleText, false), FEEDBACK_MS);
+    });
+  }
+</script>
