@@ -7,6 +7,9 @@ interface Props {
 
 const { href, type = 'button', class: className = '' } = Astro.props;
 
+// Only off-site links open in a new tab; site-relative hrefs navigate in place.
+const isExternal = href !== undefined && /^https?:\/\//.test(href);
+
 const buttonClass = 'inline-flex h-9 items-center rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white transition-colors hover:bg-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50 disabled:cursor-not-allowed disabled:opacity-50';
 ---
 
@@ -14,12 +17,12 @@ const buttonClass = 'inline-flex h-9 items-center rounded-lg bg-indigo-600 px-4 
   href ? (
     <a
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
       class:list={[buttonClass, className]}
     >
       <slot />
-      <span class="sr-only">(opens in new tab)</span>
+      {isExternal && <span class="sr-only">(opens in new tab)</span>}
     </a>
   ) : (
     <button type={type} class:list={[buttonClass, className]}>
