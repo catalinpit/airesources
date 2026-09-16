@@ -18,12 +18,14 @@ pnpm preview      # Preview production build locally
 ## Project Structure
 ```
 src/
-├── content/           # Content collections (categories, resources)
+├── content/           # Content collections (categories, resources, stacks)
 │   ├── categories/    # Category definitions (.json)
-│   └── resources/     # Resource entries (.md) organized by category
+│   ├── resources/     # Resource entries (.md) organized by category
+│   └── stacks/        # Per-person AI stacks (.json); the file name is the /stack/<handle>/ URL
 ├── pages/             # Route handlers
 │   ├── index.astro    # Homepage
 │   ├── category/[slug].astro
+│   ├── stack/         # index (all stacks), new (builder), [handle] (one stack)
 │   └── [category]/[product].astro
 ├── components/        # UI components and icons
 ├── layouts/           # Base layout with SEO
@@ -49,3 +51,4 @@ Always run `pnpm build` before committing. The build will fail on:
 Read these files when working on specific tasks:
 - Adding resources: See schema in `src/content.config.ts:13-42`
 - Category structure: See types in `src/data/categories.ts:1-35`
+- Stacks: schema at the bottom of `src/content.config.ts`; resolution, section order and validation in `src/lib/stacks.ts`

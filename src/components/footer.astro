@@ -26,6 +26,12 @@ const currentYear = new Date().getFullYear();
             >
               All
             </a>
+            <a
+              href="/stack/"
+              class="transition-colors hover:text-neutral-900"
+            >
+              Stacks
+            </a>
             {categories.map((category) => (
               <a
                 href={`/category/${category.data.categorySlug}/`}
