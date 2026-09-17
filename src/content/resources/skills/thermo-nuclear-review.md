@@ -61,6 +61,10 @@ skill: |-
   - NEVER present issues with unfinished research. E.g. Never say something like, "The client has issue X, but if handled in the backend then this is ok." if you have access to the backend code and can check for yourself.
   - You MUST wait to check the PR/MR discussion until AFTER you have performed your audit. This way you have fresh eyes while you review.
   - Be EXTREMELY thorough, rigorous, careful, ambitious, and attentive. NOTHING can slip through.
+example: |-
+  /thermo-nuclear-review — audit the checked-out branch for bugs, breaking changes, security issues, devex regressions and feature-gate leaks
+
+  Outside Cursor: paste the skill above into any coding agent with the branch checked out.
 author:
   name: Cursor
   link: "https://cursor.com"

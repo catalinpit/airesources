@@ -202,6 +202,10 @@ skill: |-
   - the PR duplicates an existing helper or puts logic in the wrong layer when there is a clear canonical home
 
   If those conditions are not met, leave explicit, actionable feedback and push for a cleaner decomposition.
+example: |-
+  /thermo-nuclear-code-quality-review — audit the checked-out branch for structural regressions, spaghetti growth and missed simplifications
+
+  Outside Cursor: paste the skill above into any coding agent with the branch checked out.
 author:
   name: Cursor
   link: "https://cursor.com"

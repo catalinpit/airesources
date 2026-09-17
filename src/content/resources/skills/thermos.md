@@ -33,8 +33,6 @@ skill: |-
 
   If individual background summaries are already visible to the user, do not restate them wholesale. Surface the unified verdict, the highest-signal findings, and any remaining uncertainty.
 example: |-
-  /add-plugin thermos
-
   /thermos — both reviewers in parallel, findings deduplicated into one verdict
   /thermo-nuclear-review — correctness and security audit only
   /thermo-nuclear-code-quality-review — maintainability audit only
