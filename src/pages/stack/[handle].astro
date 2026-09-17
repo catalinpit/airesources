@@ -77,7 +77,7 @@ const structuredData = {
   hasPart: {
     '@type': 'ItemList',
     numberOfItems: stack.items.length,
-    itemListElement: stack.items.map(({ resource }, index) => ({
+    itemListElement: stack.items.map((resource, index) => ({
       '@type': 'ListItem',
       position: index + 1,
       item: {
@@ -151,7 +151,7 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
               </a>
             </div>
             <div class:list={["grid gap-2 p-4", wide && "sm:grid-cols-2 lg:grid-cols-3"]}>
-              {section.items.map((item) => <StackTile item={item} />)}
+              {section.items.map((resource) => <StackTile resource={resource} />)}
             </div>
           </Card>
         );
@@ -161,7 +161,7 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
     <section class="mt-14 rounded-xl border border-dashed border-black/[0.12] px-6 py-8 text-center">
       <h2 class="text-lg font-semibold text-neutral-900">What's in your stack?</h2>
       <p class="mx-auto mt-2 max-w-md text-sm leading-6 text-neutral-600">
-        Pick your tools, prompts, and skills from the directory and get a page like this one at
+        Tick the tools, prompts, and skills you use and get a page like this one at
         <span class="whitespace-nowrap font-medium text-neutral-800">airesources.dev/stack/you</span>.
       </p>
       <div class="mt-5 flex flex-wrap items-center justify-center gap-3">

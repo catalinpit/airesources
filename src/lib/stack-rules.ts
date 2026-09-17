@@ -6,7 +6,6 @@ export const STACK_LIMITS = {
   handle: 39,
   name: 60,
   bio: 200,
-  note: 160,
 } as const;
 
 // Handles double as URL segments, so they follow GitHub username rules:

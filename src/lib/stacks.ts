@@ -9,20 +9,15 @@ import { HANDLE_PATTERN, RESERVED_HANDLES } from './stack-rules';
 export type StackData = CollectionEntry<'stacks'>['data'];
 type StackEntry = CollectionEntry<'stacks'>;
 
-export interface StackItem {
-  resource: Resource;
-  note?: string;
-}
-
-export type StackSection = CategoryGroup<StackItem>;
+export type StackSection = CategoryGroup<Resource>;
 
 export interface Stack {
   /** URL segment, taken from the file name: src/content/stacks/<handle>.json → /stack/<handle>/ */
   handle: string;
   data: StackData;
-  /** Every item in the author's order. */
-  items: StackItem[];
-  /** Items grouped by category, in STACK_SECTION_ORDER. */
+  /** Every resource in the author's order. */
+  items: Resource[];
+  /** Resources grouped by category, in STACK_SECTION_ORDER. */
   sections: StackSection[];
   avatarUrl?: string;
 }
@@ -89,7 +84,7 @@ function resolveStack(entry: StackEntry, resourcesById: Map<string, Resource>, c
   }
 
   const seen = new Set<string>();
-  const items = entry.data.stack.map(({ resource: id, note }): StackItem => {
+  const items = entry.data.stack.map((id): Resource => {
     const resource = resourcesById.get(id);
     if (!resource) {
       throw new Error(
@@ -98,10 +93,10 @@ function resolveStack(entry: StackEntry, resourcesById: Map<string, Resource>, c
     }
     if (seen.has(id)) throw new Error(`${file}: "${id}" is listed twice.`);
     seen.add(id);
-    return note ? { resource, note } : { resource };
+    return resource;
   });
 
-  const sections = groupByCategory(items, (item) => item.resource.categorySlug, categories).sort((a, b) =>
+  const sections = groupByCategory(items, (resource) => resource.categorySlug, categories).sort((a, b) =>
     compareStackCategories(a.category, b.category),
   );
 
@@ -129,7 +124,7 @@ export async function getStacks(): Promise<Stack[]> {
 
 /** "Cursor, Claude Code, Warp and 10 more" */
 export function stackSummary(stack: Stack, shown = 3): string {
-  const names = stack.items.map((item) => item.resource.name);
+  const names = stack.items.map((resource) => resource.name);
   const head = names.slice(0, shown);
   const rest = names.length - head.length;
   if (rest > 0) return `${head.join(', ')} and ${rest} more`;
