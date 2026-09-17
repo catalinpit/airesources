@@ -35,4 +35,5 @@ author:
   name: Can Celik
   link: "https://github.com/herdrdev/herdr"
   iconUrl: "https://github.com/ogulcancelik.png"
+createdAt: "2026-09-17"
 ---

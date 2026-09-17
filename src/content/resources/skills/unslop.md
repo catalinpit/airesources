@@ -1,9 +1,9 @@
 ---
 name: Unslop
 description: Cursor skill that edits text to remove the tells of AI writing. Filler, hedging, em dashes, rule-of-three lists, chatbot phrases, abstract jargon, and vague attributions, with a numbered rule list other skills can cite.
-accessNote: "Ships in the `pstack` Cursor plugin (`/add-plugin pstack`). To use it alone, copy the skill below into `.cursor/skills/unslop/SKILL.md`."
+accessNote: "Part of the pstack Cursor plugin, invoked as `/unslop`. The prompt also works on its own in any coding agent."
 categorySlug: skills
-link: "https://cursor.com/marketplace/skills/unslop"
+link: "https://github.com/cursor/plugins/tree/main/pstack/skills/unslop"
 type: skill
 tags:
   - writing
@@ -80,6 +80,7 @@ skill: |
   33. **Over-compression.** Dropped articles, verbless fragments, symbol-speak, and abbreviations that make the reader decode instead of read. "Parser rejects bad date → exit 2, no write" becomes "The parser rejects a bad date, exits with code 2, and writes nothing." Write whole sentences with their articles and verbs, and spell out arrows and abbreviations.
 author:
   name: Cursor
-  link: "https://github.com/cursor/plugins/tree/main/pstack"
-  iconUrl: "https://www.cursor.com/favicon.ico"
+  link: "https://cursor.com"
+  iconUrl: "https://github.com/cursor.png"
+createdAt: "2026-09-17"
 ---
