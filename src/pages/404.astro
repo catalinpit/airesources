@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Layout from '../layouts/layout.astro';
+import Button from '../components/ui/Button.astro';
 import PageShell from '../components/ui/Page-Shell.astro';
 import LogoIcon from '../components/icons/LogoIcon.astro';
 import { getCollection } from 'astro:content';
@@ -39,12 +40,8 @@ const categoryLinks = categories
           </p>
 
           <div class="mt-8 flex flex-wrap gap-3">
-            <a
-              href="/"
-              class="inline-flex h-10 items-center rounded-lg bg-black/[0.04] px-4 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
-            >
-              Browse all resources
-            </a>
+            <Button href="/" class="h-10">Browse all resources</Button>
+            <Button variant="outline" href="/stack/" class="h-10">See what people use</Button>
           </div>
         </div>
 

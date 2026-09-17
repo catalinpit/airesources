@@ -1,7 +1,8 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-type Variant = 'primary' | 'tonal' | 'outline';
+// `primary` for the one action a view is about; `outline` for everything else.
+type Variant = 'primary' | 'outline';
 
 interface Props extends HTMLAttributes<'button'> {
   /** Renders an anchor. Off-site links open in a new tab; site-relative ones navigate in place. */
@@ -13,12 +14,15 @@ const { href, type = 'button', variant = 'primary', class: className, ...attrs }
 
 const isExternal = href !== undefined && /^https?:\/\//i.test(href);
 
-const baseClass = 'inline-flex h-9 items-center justify-center rounded-lg px-4 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50';
+const baseClass = 'inline-flex h-9 items-center justify-center rounded-lg px-4 text-sm font-medium transition-[background-color,box-shadow,color,transform] duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50';
 
+// Depth comes from a hairline highlight along the top edge plus a soft drop
+// shadow; the primary's shadow is tinted so the button glows a little.
 const variantClass: Record<Variant, string> = {
-  primary: 'bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50',
-  tonal: 'bg-black/[0.04] text-neutral-700 hover:bg-black/[0.08] hover:text-neutral-900',
-  outline: 'bg-white text-neutral-800 shadow-[0_1px_2px_rgba(0,0,0,0.05)] ring-1 ring-inset ring-black/[0.1] hover:bg-indigo-50/60 hover:text-indigo-700 hover:ring-indigo-200',
+  primary:
+    'bg-indigo-600 text-white inset-shadow-[0_1px_0_rgba(255,255,255,0.16)] shadow-[0_1px_2px_rgba(15,23,42,0.18),0_8px_20px_-10px_rgba(79,70,229,0.9)] hover:bg-indigo-500 hover:shadow-[0_1px_2px_rgba(15,23,42,0.18),0_12px_24px_-10px_rgba(79,70,229,1)]',
+  outline:
+    'bg-white text-neutral-800 inset-ring inset-ring-black/[0.1] shadow-[0_1px_2px_rgba(15,23,42,0.06)] hover:bg-indigo-50/60 hover:text-indigo-700 hover:inset-ring-indigo-200',
 };
 ---
 
