@@ -12,10 +12,24 @@ const { resource } = Astro.props;
 
 <a
   href={resourcePath(resource)}
-  class="group flex items-center gap-3 rounded-xl bg-neutral-50/60 p-3 ring-1 ring-black/[0.05] transition hover:bg-indigo-50/70 hover:ring-indigo-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+  class="stack-tile group flex w-[5.75rem] flex-col items-center gap-2 rounded-xl px-1 py-2.5 text-center transition-colors hover:bg-black/[0.03] focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
 >
-  <ResourceIcon item={resource} size="md" />
-  <span class="min-w-0 truncate text-[15px] font-medium leading-5 text-neutral-900 transition-colors group-hover:text-indigo-600">
+  <ResourceIcon item={resource} size="lg" class="transition-transform duration-200 group-hover:-translate-y-0.5" />
+  <span class="line-clamp-2 w-full text-xs font-medium leading-4 text-neutral-700 transition-colors group-hover:text-indigo-600">
     {resource.name}
   </span>
 </a>
+
+<style>
+  /* Favicons normally sit on a grey tile once loaded; here they read as app
+     icons, so the tile turns white with a soft edge and shadow instead. */
+  .stack-tile :global(.resource-icon) {
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.06), 0 6px 16px -8px rgb(0 0 0 / 0.25);
+  }
+
+  .stack-tile :global(.resource-icon:has(img[data-favicon].is-loaded)) {
+    background-color: white;
+    outline: 1px solid rgb(0 0 0 / 0.06);
+    outline-offset: -1px;
+  }
+</style>
