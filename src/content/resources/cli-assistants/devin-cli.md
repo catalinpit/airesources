@@ -43,4 +43,5 @@ models:
   - GPT-5.5
   - SWE-1.7
   - SWE-1.6
+createdAt: "2026-09-17"
 ---

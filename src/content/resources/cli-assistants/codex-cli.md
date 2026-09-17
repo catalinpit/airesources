@@ -46,4 +46,5 @@ models:
   - GPT-5.3-Codex-Spark
 features:
   - open-source
+createdAt: "2026-09-17"
 ---
