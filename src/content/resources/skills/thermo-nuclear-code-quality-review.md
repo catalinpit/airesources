@@ -1,7 +1,7 @@
 ---
 name: Thermo-Nuclear Code Quality Review
 description: Extremely strict maintainability review of a branch's changes. Pushes for code-judo restructurings, blocks files growing past 1,000 lines, and flags spaghetti conditionals, leaky boundaries and thin abstractions.
-accessNote: "Installed with the Thermos Cursor plugin (`/add-plugin thermos`) and invoked as `/thermo-nuclear-code-quality-review`. The prompt also works on its own in any coding agent."
+accessNote: "Part of the Thermos plugin, invoked as `/thermo-nuclear-code-quality-review`. The prompt also works on its own in any coding agent."
 categorySlug: skills
 link: "https://github.com/cursor/plugins/blob/main/thermos/skills/thermo-nuclear-code-quality-review/SKILL.md"
 type: skill

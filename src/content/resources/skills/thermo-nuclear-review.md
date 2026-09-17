@@ -1,7 +1,7 @@
 ---
 name: Thermo-Nuclear Review
 description: Comprehensive security and correctness audit of a branch's changes. Hunts for bugs, breaking changes, security holes, devex regressions and feature-gate leaks, scoped strictly to the diff.
-accessNote: "Installed with the Thermos Cursor plugin (`/add-plugin thermos`) and invoked as `/thermo-nuclear-review`. The prompt also works on its own in any coding agent."
+accessNote: "Part of the Thermos plugin, invoked as `/thermo-nuclear-review`. The prompt also works on its own in any coding agent."
 categorySlug: skills
 link: "https://github.com/cursor/plugins/blob/main/thermos/skills/thermo-nuclear-review/SKILL.md"
 type: skill

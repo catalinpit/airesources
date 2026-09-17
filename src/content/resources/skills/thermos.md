@@ -1,7 +1,6 @@
 ---
 name: Thermos
 description: Thermo-nuclear branch review for Cursor agents. Runs a deep correctness and security audit and a harsh maintainability audit as parallel subagents, then merges their findings into one verdict.
-accessNote: "Ships as a Cursor plugin: run `/add-plugin thermos` to install the orchestrator, both review skills and their subagents. Each review skill also works on its own in any coding agent."
 categorySlug: skills
 link: "https://github.com/cursor/plugins/tree/main/thermos"
 type: skill
