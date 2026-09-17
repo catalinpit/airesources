@@ -33,6 +33,7 @@ const RESOURCE_TYPES = [
   'extension',
   'git-client',
   'image',
+  'model',
   'openai-plugin',
   'plugin',
   'search',
