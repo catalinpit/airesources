@@ -50,7 +50,6 @@ const sameAs = [github, x].flatMap((profile) => (profile ? [profile.href] : []))
 
 const facts = [
   pluralize(stack.items.length, 'resource'),
-  pluralize(stack.sections.length, 'category', 'categories'),
   updatedAt && `Updated ${formatMonthYear(updatedAt)}`,
 ].filter(Boolean).join(' · ');
 
