@@ -63,8 +63,6 @@ skill: |-
   - Be EXTREMELY thorough, rigorous, careful, ambitious, and attentive. NOTHING can slip through.
 example: |-
   /thermo-nuclear-review — audit the checked-out branch for bugs, breaking changes, security issues, devex regressions and feature-gate leaks
-
-  Outside Cursor: paste the skill above into any coding agent with the branch checked out.
 author:
   name: Cursor
   link: "https://cursor.com"
