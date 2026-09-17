@@ -8,7 +8,7 @@ type Resource = Pick<CollectionEntry<'resources'>['data'], 'name' | 'iconUrl' | 
 
 interface Props {
   item: Resource;
-  size?: 'sm' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   class?: string;
 }
 
@@ -37,10 +37,10 @@ const typeTint = item.skill
     ? 'bg-indigo-100 text-indigo-700'
     : 'bg-sky-100 text-sky-700';
 
-// Both sizes are styled by .resource-icon below; "sm" is the default and "lg"
-// is selected by the data-size attribute. The tile is a span (displayed flex)
-// rather than a div so it is valid inside inline contexts such as a <label>.
-const sizeAttr = size === 'lg' ? 'lg' : undefined;
+// All sizes are styled by .resource-icon below; "sm" is the default and the
+// others are selected by the data-size attribute. The tile is a span (displayed
+// flex) rather than a div so it is valid inside inline contexts such as a <label>.
+const sizeAttr = size === 'sm' ? undefined : size;
 ---
 
 <span class:list={["resource-icon", TypeIcon ? typeTint : hue, className]} data-size={sizeAttr}>
@@ -72,8 +72,8 @@ const sizeAttr = size === 'lg' ? 'lg' : undefined;
   @reference "../../styles/global.css";
 
   /* Rendered once per resource row, so the tile's utilities live here once.
-     Hue classes stay in the markup; "sm" is the default size and Resource-Icon
-     sets data-size="lg" on product pages. */
+     Hue classes stay in the markup; "sm" is the default size, "md" is used by
+     stack tiles and "lg" by product pages. */
   @layer components {
     .resource-icon {
       @apply relative flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg;
@@ -89,6 +89,22 @@ const sizeAttr = size === 'lg' ? 'lg' : undefined;
 
     .resource-icon-fallback {
       @apply text-sm font-semibold;
+    }
+
+    .resource-icon[data-size="md"] {
+      @apply h-11 w-11 rounded-[10px];
+    }
+
+    .resource-icon[data-size="md"] > svg {
+      @apply h-6 w-6;
+    }
+
+    .resource-icon[data-size="md"] img[data-favicon] {
+      @apply h-6 w-6 rounded;
+    }
+
+    .resource-icon[data-size="md"] .resource-icon-fallback {
+      @apply text-base;
     }
 
     .resource-icon[data-size="lg"] {

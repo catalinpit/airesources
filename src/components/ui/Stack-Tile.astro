@@ -1,0 +1,35 @@
+---
+import ResourceIcon from './Resource-Icon.astro';
+import { PRICING_LABELS } from '../../lib/pricing';
+import { resourcePath } from '../../lib/resources';
+import type { StackItem } from '../../lib/stacks';
+
+interface Props {
+  item: StackItem;
+}
+
+const { item: { resource, note } } = Astro.props;
+
+// The tile is logo + name; the second line is the author's note when they
+// wrote one, otherwise the same meta the list rows show.
+const meta = [resource.author?.name, resource.pricing ? PRICING_LABELS[resource.pricing.type] : undefined]
+  .filter(Boolean)
+  .join(' · ');
+---
+
+<a
+  href={resourcePath(resource)}
+  class="group flex items-center gap-3 rounded-xl bg-neutral-50/60 p-3 ring-1 ring-black/[0.05] transition hover:bg-indigo-50/70 hover:ring-indigo-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+>
+  <ResourceIcon item={resource} size="md" />
+  <span class="min-w-0">
+    <span class="block truncate text-[15px] font-medium leading-5 text-neutral-900 transition-colors group-hover:text-indigo-600">
+      {resource.name}
+    </span>
+    {note ? (
+      <span class="mt-0.5 line-clamp-2 text-xs leading-4 text-neutral-600">“{note}”</span>
+    ) : (
+      meta && <span class="mt-0.5 block truncate text-xs leading-4 text-neutral-500">{meta}</span>
+    )}
+  </span>
+</a>
