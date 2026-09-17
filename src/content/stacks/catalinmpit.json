@@ -9,6 +9,9 @@
   "updatedAt": "2026-09-17",
   "stack": [
     "coding-tools/cursor",
+    "cli-assistants/cursor-cli",
+    "cli-assistants/codex-cli",
+    "cli-assistants/devin-cli",
     "terminals/herdr",
     "models/claude-fable-5-1",
     "models/grok-4-6",
