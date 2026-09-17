@@ -9,14 +9,15 @@ interface Props {
   copyFrom?: string;
   label?: string;
   title?: string;
+  variant?: 'tonal' | 'outline';
   class?: string;
 }
 
-const { text, copyFrom, label = 'Copy', title, class: className } = Astro.props;
+const { text, copyFrom, label = 'Copy', title, variant = 'tonal', class: className } = Astro.props;
 ---
 
 <Button
-  variant="tonal"
+  variant={variant}
   class:list={["gap-1.5", className]}
   title={title}
   data-copy-button
