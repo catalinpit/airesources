@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import Button from './Button.astro';
 
 const allCategories = await getCollection('categories');
 const allResources = await getCollection('resources');
@@ -19,9 +20,10 @@ const currentPath = Astro.url.pathname;
 ---
 
 <div class="relative">
-	<button
+	<Button
+		variant="outline"
 		id="categories-toggle"
-		class="flex h-9 items-center gap-2 whitespace-nowrap rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+		class="gap-2 whitespace-nowrap px-3"
 		aria-label="Toggle categories"
 		aria-expanded="false"
 	>
@@ -29,7 +31,7 @@ const currentPath = Astro.url.pathname;
 		<svg class="w-4 h-4 transition-transform" id="categories-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
 		</svg>
-	</button>
+	</Button>
 
 	<div
 		id="categories-dropdown"

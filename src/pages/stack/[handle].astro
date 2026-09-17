@@ -129,11 +129,11 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
           )}
         </div>
         <div class="flex flex-shrink-0 gap-2 sm:flex-col">
-          <Button href={shareUrl} class="gap-2 px-4 shadow-[0_6px_16px_-6px_rgba(79,70,229,0.6)]">
+          <Button href={shareUrl} class="gap-2 px-4">
             <TwitterIcon class="h-3.5 w-3.5" />
             Share<span class="sr-only"> on X</span>
           </Button>
-          <CopyButton variant="outline" text={pageUrl} label="Copy link" title="Copy the link to this stack" class="px-3" />
+          <CopyButton text={pageUrl} label="Copy link" title="Copy the link to this stack" class="px-3" />
         </div>
       </div>
     </Card>
