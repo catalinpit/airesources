@@ -29,6 +29,7 @@ export interface Stack {
  */
 export const STACK_SECTION_ORDER = [
   'coding-tools',
+  'models',
   'cli-assistants',
   'agents',
   'extensions',

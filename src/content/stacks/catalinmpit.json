@@ -6,20 +6,19 @@
     "github": "catalinpit",
     "x": "catalinmpit"
   },
-  "updatedAt": "2026-09-16",
+  "updatedAt": "2026-09-17",
   "stack": [
     "coding-tools/cursor",
-    "coding-tools/claude-code",
-    "coding-tools/warp",
-    "cli-assistants/gptcomet",
-    "extensions/github-copilot",
-    "code-review/coderabbit",
-    "chat-bots/claude",
-    "chat-bots/chatgpt",
-    "voice-generation/handy",
+    "terminals/herdr",
+    "models/claude-fable-5-1",
+    "models/grok-4-6",
+    "models/gpt-6-astra",
+    "skills/thermos",
     "skills/grill-me",
-    "prompts/code-review-git-diff",
-    "prompts/generate-unit-tests",
-    "courses/principled-ai-coding"
+    "skills/unslop",
+    "voice-generation/handy",
+    "chat-bots/chatgpt",
+    "agents/hermes-agent",
+    "agents/grok-bot"
   ]
 }
