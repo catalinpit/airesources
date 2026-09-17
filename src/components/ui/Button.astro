@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 
-type Variant = 'primary' | 'tonal';
+type Variant = 'primary' | 'tonal' | 'outline';
 
 interface Props extends HTMLAttributes<'button'> {
   /** Renders an anchor. Off-site links open in a new tab; site-relative ones navigate in place. */
@@ -18,6 +18,7 @@ const baseClass = 'inline-flex h-9 items-center justify-center rounded-lg px-4 t
 const variantClass: Record<Variant, string> = {
   primary: 'bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-50',
   tonal: 'bg-black/[0.04] text-neutral-700 hover:bg-black/[0.08] hover:text-neutral-900',
+  outline: 'bg-white text-neutral-800 shadow-[0_1px_2px_rgba(0,0,0,0.05)] ring-1 ring-inset ring-black/[0.1] hover:bg-indigo-50/60 hover:text-indigo-700 hover:ring-indigo-200',
 };
 ---
 

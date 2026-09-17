@@ -117,10 +117,10 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
             <ul class="mt-5 flex flex-wrap gap-2">
               {profileLinks.map((link) => (
                 <li>
-                  <Button variant="tonal" href={link.href} class="h-8 gap-1.5 px-3">
-                    {link.icon === 'github' && <GitHubIcon class="h-3.5 w-3.5" />}
-                    {link.icon === 'x' && <TwitterIcon class="h-3.5 w-3.5" />}
-                    {link.icon === 'globe' && <HighlightIcon name="globe" class="h-3.5 w-3.5" />}
+                  <Button variant="outline" href={link.href} class="h-8 gap-1.5 px-3">
+                    {link.icon === 'github' && <GitHubIcon class="h-3.5 w-3.5 text-neutral-900" />}
+                    {link.icon === 'x' && <TwitterIcon class="h-3.5 w-3.5 text-neutral-900" />}
+                    {link.icon === 'globe' && <HighlightIcon name="globe" class="h-3.5 w-3.5 text-indigo-600" />}
                     {link.label}
                   </Button>
                 </li>
@@ -129,11 +129,11 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
           )}
         </div>
         <div class="flex flex-shrink-0 gap-2 sm:flex-col">
-          <CopyButton text={pageUrl} label="Copy link" title="Copy the link to this stack" class="px-3" />
-          <Button variant="tonal" href={shareUrl} class="gap-1.5 px-3">
+          <Button href={shareUrl} class="gap-2 px-4 shadow-[0_6px_16px_-6px_rgba(79,70,229,0.6)]">
             <TwitterIcon class="h-3.5 w-3.5" />
             Share<span class="sr-only"> on X</span>
           </Button>
+          <CopyButton variant="outline" text={pageUrl} label="Copy link" title="Copy the link to this stack" class="px-3" />
         </div>
       </div>
     </Card>
@@ -170,7 +170,7 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
       </p>
       <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
         <Button href="/stack/new/" class="h-10 px-5">Create your stack</Button>
-        <Button variant="tonal" href="/stack/">Browse stacks</Button>
+        <Button variant="outline" href="/stack/" class="h-10">Browse stacks</Button>
       </div>
       <p class="mt-6 text-xs text-neutral-500">
         Is this your stack?
