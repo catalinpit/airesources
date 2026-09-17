@@ -37,3 +37,25 @@ export function relatedResources(item: Resource, all: Resource[], { limit, categ
   const rotated = [...pool.slice(start), ...pool.slice(0, start)];
   return { label, items: rotated.slice(0, limit), sameAuthor };
 }
+
+/**
+ * A pack names its parts in `includes`. Pack pages list the parts; part pages link back to
+ * the pack. An unknown name fails the build rather than silently dropping the part.
+ */
+export function packRelations(item: Resource, all: Resource[]): RelatedResources | undefined {
+  const inCategory = all.filter(other => other.categorySlug === item.categorySlug);
+  const sharesAuthor = (items: Resource[]) =>
+    item.author !== undefined && items.every(other => other.author?.name === item.author?.name);
+
+  if (item.includes && item.includes.length > 0) {
+    const parts = item.includes.map(name => {
+      const part = inCategory.find(other => other.name === name);
+      if (!part) throw new Error(`"${item.name}" includes unknown resource "${name}" in ${item.categorySlug}`);
+      return part;
+    });
+    return { label: 'In this pack', items: parts, sameAuthor: sharesAuthor(parts) };
+  }
+
+  const pack = inCategory.find(other => other.includes?.includes(item.name));
+  return pack ? { label: `Part of ${pack.name}`, items: [pack], sameAuthor: sharesAuthor([pack]) } : undefined;
+}

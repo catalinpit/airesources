@@ -81,6 +81,9 @@ const resources = defineCollection({
     tags: z.array(z.string()).optional(),
     prompt: z.string().optional(),
     skill: z.string().optional(),
+    // Names of resources in this category that make up this pack. The page lists them and
+    // each part links back here.
+    includes: z.array(z.string()).optional(),
     useCase: z.string().optional(),
     example: z.string().optional(),
     author: z.object({
