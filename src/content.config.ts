@@ -119,19 +119,6 @@ const httpUrl = z.url({ protocol: /^https?$/, hostname: z.regexes.domain });
 // extension, e.g. "coding-tools/cursor". Existence is checked in src/lib/stacks.ts.
 const resourceId = z.string().trim().min(1);
 
-// One resource in a stack: the bare id, or an object that adds a note. Both
-// forms normalize to the object form.
-const stackItem = z
-  .union([
-    resourceId,
-    z.strictObject({
-      resource: resourceId,
-      // Replaces the resource's description on the stack page, so it reads in the author's voice.
-      note: z.string().trim().min(1).max(STACK_LIMITS.note).optional(),
-    }),
-  ])
-  .transform((item) => (typeof item === 'string' ? { resource: item } : item));
-
 // A person's AI stack, published at /stack/<handle>/. The handle is the file
 // name (src/content/stacks/<handle>.json), validated in src/lib/stacks.ts.
 // Strict objects keep a stray key (a typo, or `slug`, which the loader would
@@ -150,7 +137,7 @@ const stacks = defineCollection({
       })
       .optional(),
     updatedAt: z.iso.date().optional(), // YYYY-MM-DD
-    stack: z.array(stackItem).min(1),
+    stack: z.array(resourceId).min(1),
   }),
 });
 

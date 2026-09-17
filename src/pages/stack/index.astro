@@ -22,7 +22,7 @@ const PREVIEW_ICONS = 6;
 const steps = [
   {
     title: 'Pick your tools',
-    body: `Choose from ${resourceCount} resources in the directory and add a line on why each one earns its place.`,
+    body: `Tick what you use from the ${resourceCount} resources in the directory. Editors, CLI tools, extensions, prompts, skills, courses.`,
   },
   {
     title: 'Open a pull request',
@@ -76,7 +76,7 @@ const steps = [
                   <p class="mt-2 line-clamp-2 text-sm leading-5 text-neutral-600">{stack.data.bio}</p>
                 )}
                 <div class="mt-4 flex items-center gap-1.5">
-                  {stack.items.slice(0, PREVIEW_ICONS).map(({ resource }) => (
+                  {stack.items.slice(0, PREVIEW_ICONS).map((resource) => (
                     <ResourceIcon item={resource} />
                   ))}
                   {hidden > 0 && (

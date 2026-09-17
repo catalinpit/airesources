@@ -13,7 +13,6 @@ import { getCollection } from 'astro:content';
 import { groupByCategory } from '../../lib/resources';
 import { REPO_URL } from '../../lib/site';
 import { PROFILE_FIELDS } from '../../lib/stack-builder';
-import { STACK_LIMITS } from '../../lib/stack-rules';
 import { compareStackCategories, getStacks } from '../../lib/stacks';
 
 const [resources, categories, stacks] = await Promise.all([
@@ -45,7 +44,7 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
     <header class="mb-8 max-w-2xl">
       <h1 class="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">Create your AI stack</h1>
       <p class="mt-3 text-[15px] leading-6 text-neutral-600 sm:text-base sm:leading-7">
-        Pick the tools you use, add a few words on why, and we prefill the file for your pull request. Your page goes live at
+        Tick the tools you use and we prefill the file for your pull request. Your page goes live at
         <span class="whitespace-nowrap font-medium text-neutral-800">airesources.dev/stack/you</span> once it's merged.
       </p>
     </header>
@@ -123,7 +122,7 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
                 <button type="button" data-clear-picks hidden class="ml-2 text-indigo-600 transition-colors hover:text-indigo-500">Clear</button>
               </p>
             </div>
-            <p class="mt-1 text-sm text-neutral-500">Tick what you use. Once ticked, you can add a line on why.</p>
+            <p class="mt-1 text-sm text-neutral-500">Tick what you use. Each one shows up as a tile on your page.</p>
             <div class="relative mt-4">
               <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-neutral-400">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -190,18 +189,6 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
       </Card>
     </form>
   </PageShell>
-
-  <template data-note-template>
-    <div class="stack-pick-note">
-      <input
-        type="text"
-        maxlength={STACK_LIMITS.note}
-        placeholder="Why do you use it? Optional; shown instead of the description."
-        autocomplete="off"
-        class="h-9 w-full rounded-lg bg-white px-3 text-sm text-neutral-900 placeholder-neutral-400 ring-1 ring-inset ring-black/[0.08] transition focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
-      />
-    </div>
-  </template>
 </Layout>
 
 <script>
@@ -211,7 +198,6 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
     prepareSubmission,
     serializeDraft,
     suggestHandle,
-    type PickedResource,
     type Profile,
     type ProfileKey,
   } from '../../lib/stack-builder';
@@ -241,31 +227,9 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
   const problemsList = form.querySelector<HTMLElement>('[data-problems]');
   const openPr = form.querySelector<HTMLAnchorElement>('[data-open-pr]');
   const resetDraft = form.querySelector<HTMLButtonElement>('[data-reset-draft]');
-  const noteTemplate = document.querySelector<HTMLTemplateElement>('[data-note-template]');
 
   // Suggesting a handle from the first username stops once the visitor edits the handle.
   let handleTouched = false;
-
-  const rowOf = (checkbox: HTMLInputElement) => checkbox.closest<HTMLElement>('[data-pick]');
-  const noteInputOf = (checkbox: HTMLInputElement) => rowOf(checkbox)?.querySelector<HTMLInputElement>('input[type="text"]') ?? null;
-
-  function setNoteVisible(checkbox: HTMLInputElement, visible: boolean, note = '') {
-    const row = rowOf(checkbox);
-    if (!row) return;
-    const existing = noteInputOf(checkbox);
-    if (visible && !existing && noteTemplate) {
-      const fragment = noteTemplate.content.cloneNode(true) as DocumentFragment;
-      const input = fragment.querySelector('input');
-      const title = row.querySelector('[data-pick-title]')?.textContent?.trim() ?? 'this resource';
-      if (input) {
-        input.value = note;
-        input.setAttribute('aria-label', `Note for ${title}`);
-      }
-      row.appendChild(fragment);
-    } else if (!visible && existing) {
-      existing.parentElement?.remove();
-    }
-  }
 
   function readProfile(): Profile {
     const profile = {} as Profile;
@@ -275,13 +239,11 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
     return profile;
   }
 
-  function readPicks(): PickedResource[] {
-    return checkboxes
-      .filter((checkbox) => checkbox.checked)
-      .map((checkbox) => ({ id: checkbox.value, note: noteInputOf(checkbox)?.value.trim() ?? '' }));
+  function readPicks(): string[] {
+    return checkboxes.filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value);
   }
 
-  function saveDraft(profile: Profile, picks: PickedResource[]) {
+  function saveDraft(profile: Profile, picks: string[]) {
     try {
       localStorage.setItem(DRAFT_KEY, serializeDraft(profile, picks));
     } catch {
@@ -301,10 +263,9 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
       input.value = draft.profile[key] ?? '';
     }
     handleTouched = Boolean(draft.profile.handle);
+    const picked = new Set(draft.picks);
     for (const checkbox of checkboxes) {
-      const note = draft.picks[checkbox.value];
-      checkbox.checked = note !== undefined;
-      setNoteVisible(checkbox, checkbox.checked, note ?? '');
+      checkbox.checked = picked.has(checkbox.value);
     }
   }
 
@@ -369,13 +330,7 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
 
   form.addEventListener('submit', (event) => event.preventDefault());
 
-  form.addEventListener('change', (event) => {
-    const target = event.target;
-    if (target instanceof HTMLInputElement && target.name === 'resource') {
-      setNoteVisible(target, target.checked);
-    }
-    update();
-  });
+  form.addEventListener('change', update);
 
   form.addEventListener('input', (event) => {
     const target = event.target;
@@ -389,10 +344,7 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
   searchInput?.addEventListener('input', filterPicker);
 
   clearPicks?.addEventListener('click', () => {
-    for (const checkbox of checkboxes) {
-      checkbox.checked = false;
-      setNoteVisible(checkbox, false);
-    }
+    for (const checkbox of checkboxes) checkbox.checked = false;
     update();
   });
 
@@ -406,7 +358,6 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
   resetDraft?.addEventListener('click', () => {
     form.reset();
     handleTouched = false;
-    for (const checkbox of checkboxes) setNoteVisible(checkbox, false);
     filterPicker();
     update();
   });

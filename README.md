@@ -29,7 +29,8 @@ To do it by hand, add `src/content/stacks/<handle>.json` (the file name becomes 
   "updatedAt": "2026-09-16",
   "stack": [
     "coding-tools/cursor",
-    { "resource": "coding-tools/claude-code", "note": "Why you use it, shown instead of the description." }
+    "coding-tools/claude-code",
+    "skills/grill-me"
   ]
 }
 ```

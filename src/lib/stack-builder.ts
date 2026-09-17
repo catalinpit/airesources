@@ -38,15 +38,10 @@ export const PROFILE_FIELDS = defineProfileFields([
 export type ProfileKey = (typeof PROFILE_FIELDS)[number]['key'];
 export type Profile = Record<ProfileKey, string>;
 
-export interface PickedResource {
-  id: string;
-  note: string;
-}
-
 export interface Draft {
   profile: Partial<Profile>;
-  /** Resource id → note ('' for none). */
-  picks: Record<string, string>;
+  /** Resource ids, in picker order. */
+  picks: string[];
 }
 
 // GitHub answers 414 somewhere above ~8,200 characters.
@@ -80,7 +75,7 @@ export function validateProfile(profile: Profile, takenHandles: ReadonlySet<stri
 }
 
 /** The stack file's contents, matching the schema in src/content.config.ts. */
-export function buildStackJson(profile: Profile, picks: PickedResource[], today = new Date()): string {
+export function buildStackJson(profile: Profile, picks: string[], today = new Date()): string {
   const links = {
     ...(profile.website && { website: profile.website }),
     ...(profile.github && { github: stripAt(profile.github) }),
@@ -92,7 +87,7 @@ export function buildStackJson(profile: Profile, picks: PickedResource[], today 
     ...(profile.avatar && { avatar: profile.avatar }),
     ...(Object.keys(links).length > 0 && { links }),
     updatedAt: today.toISOString().slice(0, 10),
-    stack: picks.map(({ id, note }) => (note ? { resource: id, note } : id)),
+    stack: picks,
   };
   return `${JSON.stringify(stack, null, 2)}\n`;
 }
@@ -111,7 +106,7 @@ export interface Submission {
 
 export function prepareSubmission(
   profile: Profile,
-  picks: PickedResource[],
+  picks: string[],
   takenHandles: ReadonlySet<string>,
   repoUrl: string,
 ): Submission {
@@ -125,8 +120,8 @@ export function prepareSubmission(
   return { json, url, problems };
 }
 
-export function serializeDraft(profile: Profile, picks: PickedResource[]): string {
-  const draft: Draft = { profile, picks: Object.fromEntries(picks.map(({ id, note }) => [id, note])) };
+export function serializeDraft(profile: Profile, picks: string[]): string {
+  const draft: Draft = { profile, picks };
   return JSON.stringify(draft);
 }
 
@@ -141,16 +136,13 @@ export function parseDraft(raw: string | null): Draft | undefined {
   } catch {
     return undefined;
   }
-  if (!isRecord(parsed) || !isRecord(parsed.profile) || !isRecord(parsed.picks)) return undefined;
+  if (!isRecord(parsed) || !isRecord(parsed.profile) || !Array.isArray(parsed.picks)) return undefined;
 
   const profile: Partial<Profile> = {};
   for (const field of PROFILE_FIELDS) {
     const value = parsed.profile[field.key];
     if (typeof value === 'string') profile[field.key] = value;
   }
-  const picks: Record<string, string> = {};
-  for (const [id, note] of Object.entries(parsed.picks)) {
-    if (typeof note === 'string') picks[id] = note;
-  }
+  const picks = parsed.picks.filter((id): id is string => typeof id === 'string');
   return { profile, picks };
 }
