@@ -16,11 +16,9 @@ const isExternal = href !== undefined && /^https?:\/\//i.test(href);
 
 const baseClass = 'inline-flex h-9 items-center justify-center rounded-lg px-4 text-sm font-medium transition-[background-color,box-shadow,color,transform] duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50';
 
-// Depth comes from a hairline highlight along the top edge plus a soft drop
-// shadow; the primary's shadow is tinted so the button glows a little.
+// Both variants stay flat; a 1px shadow is all the depth they get.
 const variantClass: Record<Variant, string> = {
-  primary:
-    'bg-indigo-600 text-white inset-shadow-[0_1px_0_rgba(255,255,255,0.16)] shadow-[0_1px_2px_rgba(15,23,42,0.18),0_8px_20px_-10px_rgba(79,70,229,0.9)] hover:bg-indigo-500 hover:shadow-[0_1px_2px_rgba(15,23,42,0.18),0_12px_24px_-10px_rgba(79,70,229,1)]',
+  primary: 'bg-indigo-600 text-white shadow-[0_1px_2px_rgba(15,23,42,0.12)] hover:bg-indigo-500',
   outline:
     'bg-white text-neutral-800 inset-ring inset-ring-black/[0.1] shadow-[0_1px_2px_rgba(15,23,42,0.06)] hover:bg-indigo-50/60 hover:text-indigo-700 hover:inset-ring-indigo-200',
 };
