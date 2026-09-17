@@ -3,7 +3,7 @@ name: ChatGPT
 description: "OpenAI's powerful language model for natural conversations and assistance"
 categorySlug: chat-bots
 link: "https://chat.openai.com/"
-iconUrl: "https://chatgpt.com/favicon.ico"
+iconUrl: "https://icons.duckduckgo.com/ip3/openai.com.ico"
 type: chat
 pricing:
   type: freemium
