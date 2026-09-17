@@ -6,9 +6,9 @@ import Button from '../../components/ui/Button.astro';
 import Card from '../../components/ui/Card.astro';
 import CopyButton from '../../components/ui/Copy-Button.astro';
 import PageShell from '../../components/ui/Page-Shell.astro';
-import ResourceList from '../../components/ui/Resource-List.astro';
 import SectionLabel from '../../components/ui/Section-Label.astro';
 import StackAvatar from '../../components/ui/Stack-Avatar.astro';
+import StackTile from '../../components/ui/Stack-Tile.astro';
 import HighlightIcon from '../../components/ui/Highlight-Icon.astro';
 import GitHubIcon from '../../components/icons/GitHubIcon.astro';
 import TwitterIcon from '../../components/icons/TwitterIcon.astro';
@@ -17,7 +17,6 @@ import { resourcePath } from '../../lib/resources';
 import { REPO_URL, SITE_URL } from '../../lib/site';
 import { schemaOrgType, toJsonLd } from '../../lib/structured-data';
 import { getStacks, stackDescription, stackPath, stackShareText } from '../../lib/stacks';
-import type { StackSection } from '../../lib/stacks';
 
 export async function getStaticPaths() {
   const stacks = await getStacks();
@@ -54,8 +53,11 @@ const facts = [
   updatedAt && `Updated ${formatMonthYear(updatedAt)}`,
 ].filter(Boolean).join(' · ');
 
-const listItems = (section: StackSection) =>
-  section.items.map(({ resource, note }) => (note ? { ...resource, description: note } : resource));
+// Sections with a few tiles take the full width and lead; the one- and two-item
+// sections follow two to a row so the page isn't a column of near-empty cards.
+const WIDE_SECTION_MIN_ITEMS = 3;
+const wideSections = stack.sections.filter((section) => section.items.length >= WIDE_SECTION_MIN_ITEMS);
+const narrowSections = stack.sections.filter((section) => section.items.length < WIDE_SECTION_MIN_ITEMS);
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -95,9 +97,9 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
   <PageShell>
     <Breadcrumbs class="mb-6" items={breadcrumbs} />
 
-    <Card as="header" class="p-6 md:p-8">
+    <Card as="header" class="bg-[linear-gradient(180deg,rgba(99,102,241,0.07),rgba(255,255,255,0)_55%)] p-6 md:p-8">
       <div class="flex flex-col gap-5 sm:flex-row sm:items-start">
-        <StackAvatar name={name} avatarUrl={stack.avatarUrl} size="lg" />
+        <StackAvatar name={name} avatarUrl={stack.avatarUrl} size="xl" class="ring-4 ring-white shadow-[0_8px_24px_rgba(0,0,0,0.08)]" />
         <div class="min-w-0 flex-1">
           <SectionLabel label={facts} class="mb-2" />
           <h1 class="break-words text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl md:text-4xl">
@@ -131,20 +133,30 @@ const breadcrumbs = [{ label: 'Resources', href: '/' }, { label: 'Stacks', href:
       </div>
     </Card>
 
-    {stack.sections.map((section) => (
-      <section class="mt-10" aria-labelledby={`section-${section.category.categorySlug}`}>
-        <div class="mb-3 flex items-baseline justify-between gap-4">
-          <h2 id={`section-${section.category.categorySlug}`} class="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-neutral-500">
-            {section.category.title}
-            <span aria-hidden="true"> · </span>{section.items.length}
-          </h2>
-          <a href={`/category/${section.category.categorySlug}/`} class="text-xs text-neutral-500 transition-colors hover:text-neutral-900">
-            All {section.category.title.toLowerCase()} →
-          </a>
-        </div>
-        <ResourceList items={listItems(section)} />
-      </section>
-    ))}
+    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+      {[...wideSections, ...narrowSections].map((section) => {
+        const wide = section.items.length >= WIDE_SECTION_MIN_ITEMS;
+        const headingId = `section-${section.category.categorySlug}`;
+        return (
+          <Card as="section" class:list={["flex flex-col", wide && "sm:col-span-2"]} aria-labelledby={headingId}>
+            <div class="flex items-baseline justify-between gap-4 px-5 pt-4">
+              <h2 id={headingId} class="flex min-w-0 items-baseline gap-2 text-base font-semibold text-neutral-900">
+                <span class="truncate">{section.category.title}</span>
+                <span class="rounded-md bg-black/[0.05] px-1.5 py-0.5 font-mono text-[11px] font-medium text-neutral-500">
+                  {section.items.length}<span class="sr-only"> {section.items.length === 1 ? 'resource' : 'resources'}</span>
+                </span>
+              </h2>
+              <a href={`/category/${section.category.categorySlug}/`} class="whitespace-nowrap text-xs text-neutral-500 transition-colors hover:text-neutral-900">
+                All<span class="sr-only"> {section.category.title.toLowerCase()}</span> →
+              </a>
+            </div>
+            <div class:list={["grid gap-2 p-4", wide && "sm:grid-cols-2 lg:grid-cols-3"]}>
+              {section.items.map((item) => <StackTile item={item} />)}
+            </div>
+          </Card>
+        );
+      })}
+    </div>
 
     <section class="mt-14 rounded-xl border border-dashed border-black/[0.12] px-6 py-8 text-center">
       <h2 class="text-lg font-semibold text-neutral-900">What's in your stack?</h2>
