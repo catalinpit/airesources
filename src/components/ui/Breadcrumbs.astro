@@ -1,0 +1,37 @@
+---
+interface Crumb {
+  label: string;
+  /** Omitted for the current page. */
+  href?: string;
+}
+
+interface Props {
+  items: Crumb[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<nav class={className} aria-label="Breadcrumb">
+  <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
+    {items.map((item, index) => (
+      <li
+        class:list={["flex items-center gap-x-2", item.href && "whitespace-nowrap"]}
+        itemprop="itemListElement"
+        itemscope
+        itemtype="https://schema.org/ListItem"
+      >
+        {index > 0 && <span aria-hidden="true">/</span>}
+        {item.href ? (
+          <a href={item.href} class="transition-colors hover:text-neutral-900" itemprop="item">
+            <span itemprop="name">{item.label}</span>
+          </a>
+        ) : (
+          <span class="font-medium text-neutral-900" itemprop="name" aria-current="page">{item.label}</span>
+        )}
+        <meta itemprop="position" content={String(index + 1)} />
+      </li>
+    ))}
+  </ol>
+</nav>

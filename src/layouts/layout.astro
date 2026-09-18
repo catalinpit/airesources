@@ -3,7 +3,8 @@ import '../styles/global.css';
 import { Font } from 'astro:assets';
 import Footer from '../components/footer.astro';
 import Navbar from '../components/ui/Navbar.astro';
-import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE } from '../lib/site';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TAGLINE, SITE_URL } from '../lib/site';
+import { toJsonLd } from '../lib/structured-data';
 
 interface Props {
   siteTitle?: string;
@@ -14,7 +15,7 @@ interface Props {
 
 const { siteTitle = SITE_NAME, description = SITE_DESCRIPTION, pageTitle } = Astro.props;
 
-const siteUrl = Astro.site || 'https://airesources.dev';
+const siteUrl = Astro.site ?? SITE_URL;
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const ogImageUrl = new URL('/og-image.png', siteUrl).href;
 const fullTitle = pageTitle ? `${pageTitle} – ${siteTitle}` : `${siteTitle} – ${SITE_TAGLINE}`;
@@ -57,7 +58,7 @@ const fullTitle = pageTitle ? `${pageTitle} – ${siteTitle}` : `${siteTitle} �
 		
 		<link rel="sitemap" href="/sitemap-index.xml" />
 		
-		<script type="application/ld+json" set:html={JSON.stringify({
+		<script is:inline type="application/ld+json" set:html={toJsonLd({
 			"@context": "https://schema.org",
 			"@type": "WebSite",
 			"name": siteTitle,
