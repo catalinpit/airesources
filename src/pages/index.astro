@@ -7,6 +7,7 @@ import ResourceList from '../components/ui/Resource-List.astro';
 import FilterBar from '../components/ui/FilterBar.astro';
 import SponsoredProducts from '../components/ui/Sponsored-Products.astro';
 import Chip from '../components/ui/Chip.astro';
+import PageShell from '../components/ui/Page-Shell.astro';
 import { getCollection } from 'astro:content';
 import { SITE_DESCRIPTION } from '../lib/site';
 
@@ -43,55 +44,51 @@ const countClass = "rounded-md bg-black/[0.05] px-1.5 text-[11px] font-medium te
 ---
 
 <Layout description={SITE_DESCRIPTION}>
-	<div class="relative isolate overflow-hidden bg-neutral-50 text-neutral-900">
-		<div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[32rem] bg-[radial-gradient(60rem_22rem_at_50%_-6rem,rgba(99,102,241,0.14),transparent_70%)]"></div>
+	<PageShell hero class="pb-16 pt-14 sm:pt-20">
+		<header class="mx-auto max-w-2xl text-center">
+			<h1 class="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-5xl">
+				Vetted AI resources
+			</h1>
+			<p class="mt-4 text-[15px] leading-6 text-neutral-600 sm:text-lg sm:leading-8">
+				{SITE_DESCRIPTION}
+			</p>
+			<SearchInput size="large" class="mt-8" />
+		</header>
 
-		<div class="mx-auto max-w-4xl px-3 pb-16 sm:px-6 pt-14 sm:pt-20 lg:px-8">
-			<header class="mx-auto max-w-2xl text-center">
-				<h1 class="text-3xl font-semibold tracking-tight text-neutral-900 sm:text-5xl">
-					Vetted AI resources
-				</h1>
-				<p class="mt-4 text-[15px] leading-6 text-neutral-600 sm:text-lg sm:leading-8">
-					{SITE_DESCRIPTION}
-				</p>
-				<SearchInput size="large" class="mt-8" />
-			</header>
+		<section class="mt-12">
+			<SectionLabel label="Categories" class="mb-3" />
+			<nav class="flex flex-wrap gap-2" aria-label="Categories">
+				{prominentCategories.map((category) => (
+					<Chip href={category.href}>
+						{category.title}
+						<span class={countClass}>{category.count}</span>
+					</Chip>
+				))}
+				{smallCategories.map((category) => (
+					<Chip href={category.href} hidden data-small-category>
+						{category.title}
+						<span class={countClass}>{category.count}</span>
+					</Chip>
+				))}
+				{smallCategories.length > 0 && (
+					<button
+						type="button"
+						id="show-small-categories"
+						class="inline-flex h-8 items-center rounded-lg px-3 text-sm font-medium text-neutral-500 transition-colors hover:bg-black/[0.04] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+					>
+						+{smallCategories.length} more
+					</button>
+				)}
+			</nav>
+		</section>
 
-			<section class="mt-12">
-				<SectionLabel label="Categories" class="mb-3" />
-				<nav class="flex flex-wrap gap-2" aria-label="Categories">
-					{prominentCategories.map((category) => (
-						<Chip href={category.href}>
-							{category.title}
-							<span class={countClass}>{category.count}</span>
-						</Chip>
-					))}
-					{smallCategories.map((category) => (
-						<Chip href={category.href} hidden data-small-category>
-							{category.title}
-							<span class={countClass}>{category.count}</span>
-						</Chip>
-					))}
-					{smallCategories.length > 0 && (
-						<button
-							type="button"
-							id="show-small-categories"
-							class="inline-flex h-8 items-center rounded-lg px-3 text-sm font-medium text-neutral-500 transition-colors hover:bg-black/[0.04] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
-						>
-							+{smallCategories.length} more
-						</button>
-					)}
-				</nav>
-			</section>
+		<SponsoredProducts items={allItems} class="mt-12" />
 
-			<SponsoredProducts items={allItems} class="mt-12" />
-
-			<section id="catalog" class="mt-12 scroll-mt-20">
-				<FilterBar title="All resources" showSearch={false} allResources={listedItems} />
-				<ResourceList items={listedItems} showCategory />
-			</section>
-		</div>
-	</div>
+		<section id="catalog" class="mt-12 scroll-mt-20">
+			<FilterBar title="All resources" showSearch={false} allResources={listedItems} />
+			<ResourceList items={listedItems} showCategory />
+		</section>
+	</PageShell>
 </Layout>
 
 <script>

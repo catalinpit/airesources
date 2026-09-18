@@ -1,0 +1,19 @@
+---
+import type { HTMLAttributes, HTMLTag } from 'astro/types';
+
+type Tag = Extract<HTMLTag, 'div' | 'section' | 'aside' | 'header' | 'a'>;
+
+interface Props extends HTMLAttributes<'div'> {
+  as?: Tag;
+  href?: string;
+}
+
+const { as: Element = 'div', class: className, ...attrs } = Astro.props;
+---
+
+<Element
+  class:list={["rounded-xl border border-black/[0.06] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]", className]}
+  {...attrs}
+>
+  <slot />
+</Element>

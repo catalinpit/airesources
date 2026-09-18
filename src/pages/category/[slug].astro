@@ -1,12 +1,15 @@
 ---
 import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
+import PageShell from '../../components/ui/Page-Shell.astro';
 import ResourceList from '../../components/ui/Resource-List.astro';
 import FilterBar from '../../components/ui/FilterBar.astro';
 import SponsoredProducts from '../../components/ui/Sponsored-Products.astro';
 import { getCollection } from 'astro:content';
 import { resourcePath } from '../../lib/resources';
-import { schemaOrgType } from '../../lib/structured-data';
+import { SITE_URL } from '../../lib/site';
+import { schemaOrgType, toJsonLd } from '../../lib/structured-data';
 
 export async function getStaticPaths() {
   const categories = await getCollection('categories');
@@ -29,7 +32,7 @@ export async function getStaticPaths() {
 
 const { category, items } = Astro.props;
 
-const siteUrl = Astro.site || 'https://airesources.dev';
+const siteUrl = Astro.site ?? SITE_URL;
 const categoryUrl = new URL(`/category/${category.categorySlug}/`, siteUrl).href;
 
 const allResources = await getCollection('resources');
@@ -45,7 +48,7 @@ const categoryItems = items
 ---
 
 <Layout description={category.description} pageTitle={category.title}>
-	<script type="application/ld+json" set:html={JSON.stringify({
+	<script is:inline type="application/ld+json" set:html={toJsonLd({
 		"@context": "https://schema.org",
 		"@type": "CollectionPage",
 		"name": category.title,
@@ -83,24 +86,8 @@ const categoryItems = items
 			}))
 		}
 	})} />
-	<div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
-		<div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]"></div>
-		<div class="mx-auto max-w-4xl px-3 py-10 sm:px-6 lg:px-8">
-		<nav class="mb-8" aria-label="Breadcrumb">
-			<ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
-				<li class="whitespace-nowrap" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-					<a href="/" class="transition-colors hover:text-neutral-900" itemprop="item">
-						<span itemprop="name">Resources</span>
-					</a>
-					<meta itemprop="position" content="1" />
-				</li>
-				<span aria-hidden="true">/</span>
-				<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-					<span class="font-medium text-neutral-900" itemprop="name" aria-current="page">{category.title}</span>
-					<meta itemprop="position" content="2" />
-				</li>
-			</ol>
-		</nav>
+	<PageShell>
+		<Breadcrumbs class="mb-8" items={[{ label: 'Resources', href: '/' }, { label: category.title }]} />
 
 		<header class="mb-8">
 			<h1 class="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-4xl">
@@ -117,6 +104,5 @@ const categoryItems = items
 			<FilterBar allResources={categoryItems} />
 			<ResourceList items={categoryItems} />
 		</section>
-		</div>
-	</div>
+	</PageShell>
 </Layout>

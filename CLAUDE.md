@@ -37,7 +37,9 @@ src/
 
 ## Styling Conventions
 - Tailwind utilities in markup. The one exception is the resource list row and icon tile (`.resource-row*`, `.resource-icon*`, declared in `<style is:global>` blocks inside `Resource-Row.astro` and `Resource-Icon.astro` with `@reference`), which render ~200 times per page; the component classes exist only to keep the homepage HTML small. Don't add more without the same justification.
+- Shared chrome lives in `src/components/ui/`: `Page-Shell` (glow + content column), `Card`, `Breadcrumbs`, `Button` (`variant="primary" | "outline"`; primary is for the one action a view is about), `Chip` (small selectable pills; active state via the `data-active` attribute so scripts can toggle it), `Copy-Button`. Use them instead of copying class strings between pages.
 - Client scripts hook onto `data-*` attributes (`data-resource`, `data-empty-state`, ...), never onto style class names.
+- JSON-LD goes through `toJsonLd()` from `src/lib/structured-data.ts`, never raw `JSON.stringify`, so content can't close the `<script>` tag.
 
 ## Verifying Changes
 Always run `pnpm build` before committing. The build will fail on:
