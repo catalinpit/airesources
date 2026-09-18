@@ -2,7 +2,7 @@
 import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
 import Button from '../../components/ui/Button.astro';
-import Tag from '../../components/ui/Tag.astro';
+import Chip from '../../components/ui/Chip.astro';
 import Divider from '../../components/ui/Divider.astro';
 import SectionHeading from '../../components/ui/Section-Heading.astro';
 import SectionLabel from '../../components/ui/Section-Label.astro';
@@ -186,16 +186,12 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
                   </div>
                   {reusable.isLong && (
                     <div class="flex justify-center">
-                      <button
-                        id="expand-resource-content"
-                        type="button"
-                        class:list={[tonalButtonClass, "px-3.5 py-1.5"]}
-                      >
+                      <Button variant="outline" id="expand-resource-content" class="h-8 gap-1.5 px-3.5">
                         Show full {reusable.label.toLowerCase()}
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
-                      </button>
+                      </Button>
                     </div>
                   )}
                   {item.example && (
@@ -327,9 +323,9 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
             {kind === 'tool' && (
               <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex flex-wrap gap-2">
-                  <Tag href={`/category/${category.categorySlug}/`} class="whitespace-nowrap">
+                  <Chip href={`/category/${category.categorySlug}/`} class="whitespace-nowrap">
                     #{item.type ?? 'tool'}
-                  </Tag>
+                  </Chip>
                 </div>
                 <Button href={item.link} class="h-10 w-full justify-center whitespace-nowrap px-5 sm:w-auto">
                   Check out site

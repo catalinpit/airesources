@@ -6,6 +6,7 @@ import SearchInput from '../components/ui/Search-Input.astro';
 import ResourceList from '../components/ui/Resource-List.astro';
 import FilterBar from '../components/ui/FilterBar.astro';
 import SponsoredProducts from '../components/ui/Sponsored-Products.astro';
+import Chip from '../components/ui/Chip.astro';
 import { getCollection } from 'astro:content';
 import { SITE_DESCRIPTION } from '../lib/site';
 
@@ -38,8 +39,7 @@ const MIN_PROMINENT_CATEGORY_SIZE = 3;
 const prominentCategories = categoryLinks.filter(category => category.count >= MIN_PROMINENT_CATEGORY_SIZE);
 const smallCategories = categoryLinks.filter(category => category.count < MIN_PROMINENT_CATEGORY_SIZE);
 
-const chipClass = "inline-flex h-8 items-center gap-1.5 rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40";
-
+const countClass = "rounded-md bg-black/[0.05] px-1.5 text-[11px] font-medium text-neutral-500";
 ---
 
 <Layout description={SITE_DESCRIPTION}>
@@ -61,16 +61,16 @@ const chipClass = "inline-flex h-8 items-center gap-1.5 rounded-lg bg-black/[0.0
 				<SectionLabel label="Categories" class="mb-3" />
 				<nav class="flex flex-wrap gap-2" aria-label="Categories">
 					{prominentCategories.map((category) => (
-						<a href={category.href} class={chipClass}>
+						<Chip href={category.href}>
 							{category.title}
-							<span class="text-xs text-neutral-600">{category.count}</span>
-						</a>
+							<span class={countClass}>{category.count}</span>
+						</Chip>
 					))}
 					{smallCategories.map((category) => (
-						<a href={category.href} class={chipClass} hidden data-small-category>
+						<Chip href={category.href} hidden data-small-category>
 							{category.title}
-							<span class="text-xs text-neutral-600">{category.count}</span>
-						</a>
+							<span class={countClass}>{category.count}</span>
+						</Chip>
 					))}
 					{smallCategories.length > 0 && (
 						<button
