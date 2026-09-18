@@ -1,4 +1,6 @@
 ---
+import Button from './Button.astro';
+import Chip from './Chip.astro';
 import SearchInput from './Search-Input.astro';
 import { FACETS, FILTER_TYPES, facetsOf } from '../../lib/filters';
 import type { Resource } from '../../lib/resources';
@@ -17,8 +19,6 @@ const filterGroups = FILTER_TYPES.map((type) => ({
   label: FACETS[type].label,
   options: FACETS[type].options(new Set(allResources.flatMap((resource) => facetsOf(resource)[type]))),
 })).filter((group) => group.options.length > 0);
-
-const chipClass = "inline-flex h-8 items-center rounded-lg bg-black/[0.04] px-3 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40";
 ---
 
 <div id="filter-bar" class="mb-3">
@@ -41,19 +41,19 @@ const chipClass = "inline-flex h-8 items-center rounded-lg bg-black/[0.04] px-3 
         </span>
       )}
       {filterGroups.length > 0 && (
-        <button
-          type="button"
+        <Button
+          variant="outline"
           id="toggle-filters"
           aria-expanded="false"
           aria-controls="filter-panel"
-          class="inline-flex h-10 items-center gap-2 rounded-lg bg-black/[0.04] px-3.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+          class="h-10 gap-2 px-3.5"
         >
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M7 12h10M10 18h4" />
           </svg>
           Filters
           <span id="active-filter-count" hidden class="rounded-md bg-indigo-600 px-1.5 py-0.5 text-xs font-semibold text-white"></span>
-        </button>
+        </Button>
       )}
     </div>
   </div>
@@ -65,14 +65,9 @@ const chipClass = "inline-flex h-8 items-center rounded-lg bg-black/[0.04] px-3 
           <p class="mb-2 font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-neutral-500">{group.label}</p>
           <div class="flex flex-wrap gap-2">
             {group.options.map(option => (
-              <button
-                type="button"
-                data-filter-type={group.type}
-                data-filter-value={option.value}
-                class={chipClass}
-              >
+              <Chip data-filter-type={group.type} data-filter-value={option.value}>
                 {option.label}
-              </button>
+              </Chip>
             ))}
           </div>
         </div>
@@ -146,9 +141,6 @@ const chipClass = "inline-flex h-8 items-center rounded-lg bg-black/[0.04] px-3 
     ...facetsFrom(readFilterParam),
     search: urlParams.get('search') || '',
   };
-
-  const activeChipClasses = ['bg-indigo-600', 'text-white', 'hover:bg-indigo-500'];
-  const idleChipClasses = ['bg-black/[0.04]', 'text-neutral-700', 'hover:bg-black/[0.08]', 'hover:text-neutral-900'];
 
   function setPanelOpen(open: boolean) {
     if (!filterPanel || !toggleFiltersBtn) return;
@@ -238,8 +230,8 @@ const chipClass = "inline-flex h-8 items-center rounded-lg bg-black/[0.04] px-3 
   function updateFilterButtons() {
     chips.forEach(({ el, type, value }) => {
       const isActive = filters[type].includes(value);
-      activeChipClasses.forEach(cls => el.classList.toggle(cls, isActive));
-      idleChipClasses.forEach(cls => el.classList.toggle(cls, !isActive));
+      el.toggleAttribute('data-active', isActive);
+      el.setAttribute('aria-pressed', String(isActive));
     });
   }
 
