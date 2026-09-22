@@ -41,6 +41,7 @@ export default defineConfig({
   integrations: [sitemap(), partytown()],
   redirects: {
     "/category/ides": "/category/coding-tools",
+    "/coding-tools/windsurf-ide": "/coding-tools/devin-desktop",
     "/category/people": "/",
     "/people": "/",
     "/people/andrej-karpathy": "/",
