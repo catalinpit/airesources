@@ -1,4 +1,5 @@
 ---
+import Card from './Card.astro';
 import ResourceRow from './Resource-Row.astro';
 import type { ResourceListItem } from './Resource-Row.astro';
 
@@ -12,10 +13,7 @@ interface Props {
 const { items, showCategory = false, showAuthor = true, class: className } = Astro.props;
 ---
 
-<div class:list={[
-  "overflow-hidden rounded-xl border border-black/[0.06] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]",
-  className
-]}>
+<Card class:list={["overflow-hidden", className]}>
   <div class="divide-y divide-black/[0.05]">
     {items.map((item) => (
       <ResourceRow item={item} showCategory={showCategory} showAuthor={showAuthor} />
@@ -24,4 +22,4 @@ const { items, showCategory = false, showAuthor = true, class: className } = Ast
   <p data-empty-state hidden class="px-4 py-10 text-center text-sm text-neutral-500">
     No resources match your search.
   </p>
-</div>
+</Card>

@@ -1,8 +1,12 @@
 ---
 import '../../styles/global.css';
 import Layout from '../../layouts/layout.astro';
+import Breadcrumbs from '../../components/ui/Breadcrumbs.astro';
 import Button from '../../components/ui/Button.astro';
-import Tag from '../../components/ui/Tag.astro';
+import Card from '../../components/ui/Card.astro';
+import Chip from '../../components/ui/Chip.astro';
+import CopyButton from '../../components/ui/Copy-Button.astro';
+import PageShell from '../../components/ui/Page-Shell.astro';
 import Divider from '../../components/ui/Divider.astro';
 import SectionHeading from '../../components/ui/Section-Heading.astro';
 import SectionLabel from '../../components/ui/Section-Label.astro';
@@ -13,15 +17,13 @@ import ResourceList from '../../components/ui/Resource-List.astro';
 import CourseCurriculum from '../../components/ui/Course-Curriculum.astro';
 import AccessNote from '../../components/ui/Access-Note.astro';
 import HighlightIcon from '../../components/ui/Highlight-Icon.astro';
-import CopyIcon from '../../components/icons/CopyIcon.astro';
-import CheckIcon from '../../components/icons/CheckIcon.astro';
 import ExternalLinkIcon from '../../components/icons/ExternalLinkIcon.astro';
 import InfoIcon from '../../components/icons/InfoIcon.astro';
 import { getCollection } from 'astro:content';
 import { PRICING_LABELS, isFreeOnly } from '../../lib/pricing';
 import { curriculumSummary, resourceKind, resourceSlug, reusableContentOf } from '../../lib/resources';
 import { packRelations, relatedResources } from '../../lib/related';
-import { resourceStructuredData } from '../../lib/structured-data';
+import { resourceStructuredData, toJsonLd } from '../../lib/structured-data';
 
 const RELATED_LIMIT = 6;
 
@@ -31,6 +33,9 @@ export async function getStaticPaths() {
 
   return resources.map(resource => {
     const category = categories.find(c => c.data.categorySlug === resource.data.categorySlug);
+    if (!category) {
+      throw new Error(`${resource.filePath ?? resource.id}: unknown category "${resource.data.categorySlug}"; add it to src/content/categories/.`);
+    }
 
     return {
       params: {
@@ -38,7 +43,7 @@ export async function getStaticPaths() {
         product: resourceSlug(resource.data.name),
       },
       props: {
-        category: category?.data,
+        category: category.data,
         item: resource.data,
       },
     };
@@ -81,42 +86,23 @@ const related = kind === 'course'
 
 const structuredData = resourceStructuredData(item, { categoryTitle: category.title });
 
-const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[0.04] text-sm font-medium text-neutral-700 transition-colors hover:bg-black/[0.08] hover:text-neutral-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40';
+const breadcrumbs = [
+  { label: 'Resources', href: '/' },
+  { label: category.title, href: `/category/${category.categorySlug}/` },
+  { label: item.name },
+];
 ---
 
 <Layout description={item.description} pageTitle={item.name}>
-	<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-  <div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
-    <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]"></div>
-  <div class="mx-auto max-w-4xl px-3 py-10 sm:px-6 lg:px-8">
-    <nav class="mx-auto mb-6 max-w-3xl" aria-label="Breadcrumb">
-      <ol class="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-neutral-500" itemscope itemtype="https://schema.org/BreadcrumbList">
-        <li class="whitespace-nowrap" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href="/" class="transition-colors hover:text-neutral-900" itemprop="item">
-            <span itemprop="name">Resources</span>
-          </a>
-          <meta itemprop="position" content="1" />
-        </li>
-        <span aria-hidden="true">/</span>
-        <li class="whitespace-nowrap" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <a href={`/category/${category.categorySlug}/`} class="transition-colors hover:text-neutral-900" itemprop="item">
-            <span itemprop="name">{category.title}</span>
-          </a>
-          <meta itemprop="position" content="2" />
-        </li>
-        <span aria-hidden="true">/</span>
-        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-          <span class="font-medium text-neutral-900" itemprop="name" aria-current="page">{item.name}</span>
-          <meta itemprop="position" content="3" />
-        </li>
-      </ol>
-    </nav>
+  <script is:inline type="application/ld+json" set:html={toJsonLd(structuredData)} />
+  <PageShell>
+    <Breadcrumbs class="mx-auto mb-6 max-w-3xl" items={breadcrumbs} />
 
     {otherItems.length > 0 && <SponsoredProducts items={otherItems} class="max-w-3xl mx-auto" />}
 
     <main>
       <div class="max-w-3xl mx-auto">
-        <div class="rounded-xl border border-black/[0.06] bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+        <Card>
           <div class="p-6 md:p-8">
             <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start">
               <ResourceIcon item={item} size="lg" />
@@ -159,16 +145,11 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
                 <div class="space-y-4">
                   <div class="flex items-center justify-between">
                     <SectionHeading>{reusable.label}</SectionHeading>
-                    <button
-                      id="copy-resource-content-btn"
-                      type="button"
-                      class:list={[tonalButtonClass, "px-3 py-1.5"]}
+                    <CopyButton
+                      copyFrom="#resource-content"
+                      class="h-8 px-3"
                       title={`Copy ${reusable.label.toLowerCase()} to clipboard`}
-                    >
-                      <CopyIcon id="copy-icon" class="w-4 h-4" />
-                      <CheckIcon id="check-icon" class="w-4 h-4 hidden" />
-                      <span id="copy-text">Copy</span>
-                    </button>
+                    />
                   </div>
                   <div class="relative">
                     <div
@@ -186,16 +167,12 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
                   </div>
                   {reusable.isLong && (
                     <div class="flex justify-center">
-                      <button
-                        id="expand-resource-content"
-                        type="button"
-                        class:list={[tonalButtonClass, "px-3.5 py-1.5"]}
-                      >
+                      <Button variant="outline" id="expand-resource-content" class="h-8 gap-1.5 px-3.5">
                         Show full {reusable.label.toLowerCase()}
                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
-                      </button>
+                      </Button>
                     </div>
                   )}
                   {item.example && (
@@ -327,9 +304,9 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
             {kind === 'tool' && (
               <div class="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex flex-wrap gap-2">
-                  <Tag href={`/category/${category.categorySlug}/`} class="whitespace-nowrap">
+                  <Chip href={`/category/${category.categorySlug}/`} class="whitespace-nowrap">
                     #{item.type ?? 'tool'}
-                  </Tag>
+                  </Chip>
                 </div>
                 <Button href={item.link} class="h-10 w-full justify-center whitespace-nowrap px-5 sm:w-auto">
                   Check out site
@@ -344,7 +321,7 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
               </div>
             )}
           </div>
-        </div>
+        </Card>
 
         {related && related.items.length > 0 && (
           <section class="mt-10">
@@ -354,17 +331,9 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
         )}
       </div>
     </main>
-  </div>
-  {reusable && (
+  </PageShell>
+  {reusable?.isLong && (
     <script>
-      async function writeClipboardText(text: string) {
-        await navigator.clipboard.writeText(text);
-      }
-
-      const copyBtn = document.getElementById('copy-resource-content-btn');
-      const copyIcon = document.getElementById('copy-icon');
-      const checkIcon = document.getElementById('check-icon');
-      const copyText = document.getElementById('copy-text');
       const resourceContent = document.getElementById('resource-content');
       const expandBtn = document.getElementById('expand-resource-content');
       const contentFade = document.getElementById('resource-content-fade');
@@ -374,29 +343,6 @@ const tonalButtonClass = 'inline-flex items-center gap-1.5 rounded-lg bg-black/[
         contentFade?.remove();
         expandBtn.remove();
       });
-
-      copyBtn?.addEventListener('click', async () => {
-        const text = resourceContent?.textContent || resourceContent?.innerText || '';
-        try {
-          await writeClipboardText(text);
-          copyIcon?.classList.add('hidden');
-          checkIcon?.classList.remove('hidden');
-          copyText && (copyText.textContent = 'Copied!');
-          copyBtn.classList.remove('text-neutral-700');
-          copyBtn.classList.add('text-green-600');
-          setTimeout(() => {
-            copyIcon?.classList.remove('hidden');
-            checkIcon?.classList.add('hidden');
-            copyText && (copyText.textContent = 'Copy');
-            copyBtn.classList.remove('text-green-600');
-            copyBtn.classList.add('text-neutral-700');
-          }, 2000);
-        } catch {
-          copyText && (copyText.textContent = 'Failed');
-          setTimeout(() => copyText && (copyText.textContent = 'Copy'), 2000);
-        }
-      });
     </script>
   )}
-  </div>
 </Layout>

@@ -7,6 +7,15 @@ type Author = NonNullable<Resource['author']>;
 
 export type SchemaOrgType = 'Course' | 'SoftwareApplication';
 
+/**
+ * Body for a `<script type="application/ld+json">`. JSON.stringify leaves `<`
+ * alone, so a value containing `</script>` would otherwise end the block and
+ * run as markup; escaping it keeps the JSON valid and the script inert.
+ */
+export function toJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
 interface StructuredDataContext {
   categoryTitle: string;
 }

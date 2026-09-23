@@ -1,0 +1,21 @@
+---
+interface Props {
+  /** Taller, brighter glow for landing-style pages. */
+  hero?: boolean;
+  /** Vertical padding for the content column (the horizontal padding and width are fixed). */
+  class?: string;
+}
+
+const { hero = false, class: className = 'py-10' } = Astro.props;
+
+const glowClass = hero
+  ? 'h-[32rem] bg-[radial-gradient(60rem_22rem_at_50%_-6rem,rgba(99,102,241,0.14),transparent_70%)]'
+  : 'h-[24rem] bg-[radial-gradient(50rem_18rem_at_50%_-8rem,rgba(99,102,241,0.12),transparent_70%)]';
+---
+
+<div class="relative isolate min-h-screen overflow-hidden bg-neutral-50 text-neutral-900">
+  <div class:list={["pointer-events-none absolute inset-x-0 top-0 -z-10", glowClass]}></div>
+  <div class:list={["mx-auto max-w-4xl px-3 sm:px-6 lg:px-8", className]}>
+    <slot />
+  </div>
+</div>
